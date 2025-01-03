@@ -1,0 +1,31 @@
+# Ignore node_modules folder (for Angular frontend)
+node_modules/
+
+# Ignore Phalcon's vendor folder (for backend)
+etsbackend/vendor/
+
+# Ignore any build or dist directories (Angular build output)
+ets/dist/
+etsbackend/public/
+
+# Ignore log files
+*.log
+
+# Ignore package-lock.json (optional, not recommended in all cases)
+package-lock.json
+
+# Ignore IDE/editor specific files
+.vscode/
+.idea/
+
+# Ignore environment files (e.g., .env)
+*.env
+
+# Ignore system files (e.g., macOS .DS_Store)
+.DS_Store
+
+# Ignore test coverage output
+coverage/
+
+# Ignore temporary files
+*.tmp
