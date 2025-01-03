@@ -1,0 +1,71 @@
+.request-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: #de4a25;
+  padding: 6px;
+  border-radius: 4px;
+  color: white;
+}
+
+.request-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px; /* Increased to accommodate two columns */
+  gap: 20px;
+}
+
+.form-column {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.half-width {
+  width: 48%; /* Each input will take up half of the available space */
+}
+
+.full-width {
+  width: 100%; /* Full width for the issue/request textarea */
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center; /* Center the button horizontally */
+  align-items: center; /* Center the button vertically, if needed */
+  margin-top: 5px;
+}
+
+button {
+  background-color: green;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 2px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.mat-spinner {
+  margin: 0 auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+

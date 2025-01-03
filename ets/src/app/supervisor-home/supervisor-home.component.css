@@ -1,0 +1,105 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.flex-container {
+    display:flex;
+    justify-content: space-between; /* Space between nav and account */
+    align-items: center;
+    color: rgb(24, 24, 24);
+    padding: 1rem;
+}
+
+.logo {
+    padding-left: 3rem;
+}
+
+.logo img{
+    width: 80px;  
+    height: auto;  
+    max-width: 100%;  
+}
+
+/* Account Link Styles */
+.account-link {
+    border: 1px solid black; /* Black border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 5px 5px 5px 5px; /* Padding around account link */
+    display: inline-block;
+
+}
+
+.account-link p {
+    align-items: center;
+    color: rgb(24, 24, 24); /* Color of account link */
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 220px; /* Width of sidebar */
+    height: 100vh; /* Full height */
+    position: fixed; /* Fixed sidebar */
+    top: 0;
+    left: 0;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.sidebar ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+}
+
+.sidebar ul li {
+    margin: 15px 0; /* Space between links */
+}
+
+.sidebar ul li a {
+    color: rgb(45, 45, 45);
+    text-decoration: none; /* Remove underline */
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+    padding: 10px; /* Add padding for click area */
+    border-radius: 5px; /* Round corners */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+.sidebar ul li a:hover {
+    background-color: #ff86687e; /* Highlight on hover */
+    color: #de4a25;
+}
+
+/* Active link style */
+.sidebar ul li a.active {
+    background-color: #ff86687e; 
+    color: #de4a25; 
+    font-weight: bold; 
+}
+
+
+
+/* Main Content Styles */
+.main-content {
+    background-color: #ebf7fe;
+    margin-left: 240px; /* To avoid overlap with sidebar */
+    padding: 20px; /* Add padding to main content */
+    width: 1230px;
+}
+
+.main-content h1 {
+    color: #1f1f1f; /* Main heading color */
+}
+
+img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+
+
+
+

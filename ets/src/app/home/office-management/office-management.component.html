@@ -1,0 +1,46 @@
+<div class="office-management-container">
+  <div class="flex-sections">
+    <!-- Add New Office Section -->
+    <section>
+      <h2>Add New Office</h2>
+      <form (ngSubmit)="addOffice()">
+        <label for="officeName">Office Name</label>
+        <input
+          id="officeName"
+          [(ngModel)]="officeName"
+          name="officeName"
+          required
+          (keyup)="officeName = officeName.toUpperCase()"
+          [disabled]="isLoadingAdd" 
+        />
+        <button type="submit" [disabled]="isLoadingAdd">
+          <span *ngIf="isLoadingAdd" class="spinner"></span>
+          {{ isLoadingAdd ? 'Adding...' : 'Add Office' }}
+        </button>
+      </form>
+    </section>
+
+    <!-- All Offices Section -->
+    <section>
+      <h2>All Offices</h2>
+      <div *ngIf="isLoadingFetch" class="spinner-container">
+        <div class="spinner"></div>
+        <p>Loading offices...</p>
+      </div>
+      <table *ngIf="!isLoadingFetch">
+        <thead>
+          <tr>
+            <th>Office ID</th>
+            <th>Office Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let office of offices">
+            <td>{{ office.office_id }}</td>
+            <td>{{ office.office_name }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</div>

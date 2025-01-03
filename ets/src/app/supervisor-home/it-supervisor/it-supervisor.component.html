@@ -1,0 +1,79 @@
+<div class="container my-4">
+    <h2 class="mb-4 text-center">Approved IT Repair and Maintenance Reports</h2>
+
+  <div class="filter-container">
+    <label for="search">Search:</label>
+    <input id="search" type="text" [(ngModel)]="searchTerm" (input)="filterReports()" placeholder="Search by name or issue">
+  </div>
+  <!-- Loading Spinner -->
+<div *ngIf="isLoading" class="spinner-container">
+  <div class="spinner"></div>
+  <p>Loading...</p>
+</div>
+  <table class="job-request-task" *ngIf="!isLoading">
+    <thead>
+      <tr>
+        <th class="main-table-head">Name</th>
+        <th class="main-table-head">Issue Request</th>
+        <th class="main-table-head">Date of Request</th>
+        <th class="main-table-head">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let report of filteredReports">
+        <tr *ngIf="report.accept !== '1'">
+          <td class="main-table-row-data">{{ report.name }}</td>
+          <td class="main-table-row-data">{{ report.issue_request }}</td>
+          <td class="main-table-row-data">{{ report.date_of_request | date: 'short' }}</td>
+          <td class="main-table-row-data actions-cell">
+            <div class="actions-container">
+              <button class="btn btn-info action-btn" (click)="openReviewDialog(report)">View</button>
+              <button class="btn btn-success action-btn" (click)="openConfirmDialog(report)">Accept</button>
+            </div>
+          </td>          
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+    
+</div>
+
+  
+  <!-- View Dialog Template -->
+  <ng-template #reviewDialog>
+    <div mat-dialog-content>
+      <h2 mat-dialog-title>Report Details</h2>
+      <mat-divider></mat-divider>
+      <div class="dialog-content">
+        <p><strong>Name:</strong> {{ selectedReport.name }}</p>
+        <p><strong>Contact No:</strong> {{ selectedReport.contact_no }}</p>
+        <p><strong>Office Name:</strong> {{ selectedReport.office_name }}</p>
+        <p><strong>Issue Request:</strong> {{ selectedReport.issue_request }}</p>
+        <p><strong>Date of Request:</strong> {{ selectedReport.date_of_request }}</p>
+      </div>
+    </div>
+    <mat-dialog-actions align="end">
+      <button mat-button color="primary" (click)="closeDialog()">Close</button>
+    </mat-dialog-actions>
+  </ng-template>
+
+  <!-- Confirmation Dialog -->
+  <ng-template #confirmDialog>
+    <h2 mat-dialog-title>Confirm Action</h2>
+    <mat-dialog-content>
+      <p>Accept this job request?</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>No</button>
+      <button mat-raised-button color="primary" (click)="acceptJobRequest()" [disabled]="isLoading">
+        <ng-container *ngIf="!isLoading; else spinnerTemplate">
+          <span>Yes</span>
+        </ng-container>
+        <ng-template #spinnerTemplate>
+          <mat-spinner diameter="20" color="primary"></mat-spinner>
+        </ng-template>
+      </button>
+    </mat-dialog-actions>
+  </ng-template>
+
+  

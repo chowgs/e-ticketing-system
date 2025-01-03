@@ -1,0 +1,95 @@
+<div *ngIf="isLoading" class="loading-overlay">
+  <div class="spinner"></div>
+</div>
+<div class="settings-container">
+  <div class="top-sections">
+    <section *ngIf="showAccountSettingsSection">
+      <h2>My Account</h2>
+      <form [formGroup]="myAccountForm">
+        <label>ID No.</label>
+        <input formControlName="idNumber" type="text" />
+
+        <label>Name</label>
+        <input formControlName="name" type="text" />
+
+        <label>Designation</label>
+        <input formControlName="designation" type="text" />
+
+        <label>Office/Department</label>
+        <input formControlName="office" type="text" />
+
+        <label>Division</label>
+        <input formControlName="division" type="text" />
+
+        <button type="button" (click)="saveChanges()" [disabled]="isSaving">
+          <span *ngIf="isSaving" class="button-spinner"></span>
+          <span *ngIf="!isSaving">Save Changes</span>
+        </button>
+      </form>
+    </section>
+
+    <section *ngIf="showChangePasswordSection">
+      <h2>Change Password</h2>
+      <form [formGroup]="passwordForm">
+        <label>Current Password</label>
+        <input formControlName="currentPassword" type="password" />
+
+        <label>New Password</label>
+        <input formControlName="newPassword" type="password" />
+
+        <label>Confirm New Password</label>
+        <input formControlName="confirmPassword" type="password" />
+
+        <button type="button" (click)="changePassword()" [disabled]="isChangingPassword">
+          <span *ngIf="isChangingPassword" class="button-spinner"></span>
+          <span *ngIf="!isChangingPassword">Save New Password</span>
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <section *ngIf="showPermissionsSection">
+    <h2>Manage Permissions</h2>
+    <div class="permissions">
+      <div class="permission-column">
+        <label *ngFor="let permission of allPermissions; let i = index" [ngStyle]="{'display': (i % 3 == 0) ? 'block' : 'none'}">
+          <input
+            type="checkbox"
+            [checked]="selectedPermissions.includes(permission.id)"
+            (change)="togglePermission(permission.id)"
+          />
+          {{ permission.label }}
+        </label>
+      </div>
+      <div class="permission-column">
+        <label *ngFor="let permission of allPermissions; let i = index" [ngStyle]="{'display': (i % 3 == 1) ? 'block' : 'none'}">
+          <input
+            type="checkbox"
+            [checked]="selectedPermissions.includes(permission.id)"
+            (change)="togglePermission(permission.id)"
+          />
+          {{ permission.label }}
+        </label>
+      </div>
+      <div class="permission-column">
+        <label *ngFor="let permission of allPermissions; let i = index" [ngStyle]="{'display': (i % 3 == 2) ? 'block' : 'none'}">
+          <input
+            type="checkbox"
+            [checked]="selectedPermissions.includes(permission.id)"
+            (change)="togglePermission(permission.id)"
+          />
+          {{ permission.label }}
+        </label>
+      </div>
+    </div>
+    <button type="button" (click)="savePermissions()" [disabled]="isAddingPerms">
+      <span *ngIf="isAddingPerms" class="button-spinner"></span>
+      <span *ngIf="!isAddingPerms">Add Permissions</span>
+    </button>
+  </section>
+
+</div>
+
+
+
+

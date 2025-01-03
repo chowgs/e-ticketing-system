@@ -1,0 +1,77 @@
+/* Table Styles */
+.job-request-task {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .main-table-head, .main-table-row-data {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .main-table-head {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: 600;
+  }
+  
+  /* Action buttons Styling */
+  .action-btn {
+    margin-right: 5px; /* Adds spacing between buttons */
+    padding: 5px 5px;  /* Adjusts button size */
+    font-size: 0.85rem; /* Slightly smaller font for compact appearance */
+    border-radius: 5px; /* Rounded corners for a modern look */
+  }
+  
+  .action-btn:last-child {
+    margin-right: 0; /* Removes margin for the last button */
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+  .btn-success:hover {
+    background-color: #218838;
+  }
+  
+  /* No Reports Message Styling */
+  div.no-reports-message {
+    display: none;
+  }
+  
+
+/* Spinner Styles */
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    flex-direction: column;
+  }
+  
+  .spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  mat-paginator {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  

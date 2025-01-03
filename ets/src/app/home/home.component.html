@@ -1,0 +1,98 @@
+<header>
+  <div class="flex-container">
+    <div class="logo">
+      <img src="assets/ets logo2.png" alt="ETS Logo">
+    </div>
+    <div class="account-link">
+      <div class="user-name-container">
+        <div class="dropdown">
+          <button class="dropbtn" [disabled]="isLoggingOut">
+            {{ userInfo.name }}
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-content">
+            <button *ngIf="userInfo.permissions.length === 1 && userInfo.permissions[0] === 0" class="dropdown-item" (click)="changePassword()">Change Password</button>
+            <button class="dropdown-item logout-btn" (click)="logout()" [disabled]="isLoggingOut">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div> 
+
+  <!-- Loading animation -->
+  <div *ngIf="isLoggingOut" class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Logging out...</p>
+  </div>
+</header>
+
+  <div class="sidebar">
+    <ul>
+      <br>
+      <!-- Dashboard Section  -->
+      <li *ngIf="showItPersonnelSection">
+        <p style="font-size: 12px;">Home</p>
+        <a routerLink="dashboard" routerLinkActive="active-link">
+          Dashboard
+        </a>
+      </li>
+      <!-- Monitoring Section -->
+      <li *ngIf="showMonitoringSection">
+        <p style="font-size: 12px;">Monitoring</p>
+        <a routerLink="unassigned" routerLinkActive="active-link">
+          Pending Request
+        </a>
+      </li>
+      <!-- IT Personnel Section -->
+      <li *ngIf="showItPersonnelSection">
+        <p style="font-size: 12px;">Task Management</p>
+        <a routerLink="task" routerLinkActive="active-link">
+          Job Request
+        </a>
+      </li>
+      <li *ngIf="showItPersonnelSection">
+        <a routerLink="maintenance-log" routerLinkActive="active-link">
+          IT Repair & Maintenance Log
+        </a>
+      </li>
+
+      <!-- Supervisor Section -->
+      <li *ngIf="showSupervisorSection">
+        <p style="font-size: 12px;">Office Supervisor</p>
+        <a routerLink="job-request" routerLinkActive="active-link">
+          Client Request
+        </a>
+      </li>
+
+      <li *ngIf="showItSupervisorSection">
+        <p style="font-size: 12px;">IT Supervisor</p>
+        <a routerLink="it-supervisor" routerLinkActive="active-link">
+          Incoming Request
+        </a>
+      </li>
+
+      <!-- Administrator Section -->
+      <li *ngIf="showAdminSection">
+        <p style="font-size: 12px;">Admin Management</p>
+        <a routerLink="user-settings" routerLinkActive="active-link">
+          User Settings
+        </a>
+        <a *ngIf="showUserManagement" routerLink="user-management" routerLinkActive="active-link">
+          User Management
+        </a>
+        <a *ngIf="showOfficeManagement" routerLink="office-management" routerLinkActive="active-link">
+          Office Management
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+    <div class="main-content">
+        <app-notification></app-notification>
+        <router-outlet></router-outlet>
+    </div>
+

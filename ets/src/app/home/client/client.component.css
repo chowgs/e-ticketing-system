@@ -1,0 +1,417 @@
+.clients-container {
+    background-image: url('/assets/BG.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+#Logo {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    height: 5rem;
+}
+
+/* LOGIN STYLE */
+.login-section {
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.login-form {
+    display: flex;
+    align-items: center;
+}
+
+.login-input {
+    padding: 5px;
+    margin-right: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.login-button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}
+
+/* Adjust button styles when loading */
+.login-button:disabled {
+    background-color: #007bff;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/* Search Section */
+.search-section {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.search-bar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-bar {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+}
+
+.search-button {
+    background-color: #de4a25;
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    padding: 10px 12px;
+    cursor: pointer;
+}
+
+.search-button i {
+    margin: 0;
+    font-size: 20px;
+}
+
+.search-button:hover {
+    background-color: #ff86687e;
+}
+
+/* Request Section */
+.request-section {
+    margin-top: 20px;
+}
+
+.new-request-button {
+    padding: 12px 24px;
+    background-color: #de4a25;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.new-request-button:hover {
+    background-color: #ff86687e;
+}
+
+.results-table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  
+  .results-table th,
+  .results-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  .results-table th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .results-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+/* White background for table rows */
+.results-table tbody tr {
+    background-color: white;
+  }
+  
+  /* Loading spinner styles */
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+  }
+
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff; /* Blue spinner color */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  
+  .error {
+    text-align: center;
+    color: red;
+  }
+  .view-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+/* Dialog Box */
+.view-dialog {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 60%;
+    width: 400px;
+  
+}
+
+.landscape-dialog {
+  width: 1200px;
+}
+
+/* Flexbox container for logo and form head */
+.logo-form-head-container {
+    display: flex;
+    align-items: flex-start; /* Align logo and text at the top */
+    justify-content: space-between; /* Push job order section to the right */
+    margin-bottom: 20px;
+}
+
+/* Logo container */
+.logo-container {
+    flex-shrink: 0; /* Prevent shrinking of the logo */
+    margin-right: 15px;
+  }
+  
+.form-logo {
+   width: 50px; /* Adjust logo size */
+   height: auto;
+}
+
+/* Form head content */
+.form-head {
+  flex-grow: 1; /* Allow form head to grow and fill available space */
+  text-align: left;
+}
+
+.form-head b {
+  font-size: 12px;
+  color: #333;
+}
+
+.form-head p {
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove any padding */
+  font-size: 12px;
+  color: #666;
+  line-height: 1.2; /* Adjust line height to make text closer */
+}
+
+/* Job order section */
+.job-order-section {
+  text-align: right;
+  margin-left: auto;
+}
+
+.job-order-section h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #de4a25;
+  margin: 0;
+}
+
+.job-order-section p {
+  font-size: 12px;
+  color: #ffffff;
+  background-color: #0847ad;
+  border-radius: 8px;
+  margin: 0;
+  padding: 3px 15px;
+}
+
+#barcode {
+  width: 200px; /* Adjust barcode width */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.barcode-container {
+  margin-top: 2px;
+  text-align: center;
+  font-size: 8;
+}
+
+.control_no_text{
+    font-size: 12px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.view-dialog button {
+    margin-top: 20px;
+}
+
+.title-form {
+ text-align: center;
+ font-weight: bold;
+}
+
+.sub-title-form {
+  font-size: 14px;
+  text-align: center;
+}
+
+.padding-container {
+  padding: 3px;
+}
+
+.details-table {
+  border: none; /* Removes table border */
+  border-collapse: collapse; /* Ensures no space between cells */
+  background-color: transparent;
+}
+
+.details-table td {
+  border: none; /* Removes cell borders */
+  background-color: transparent;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.label-column, .value-column {
+  background-color: #f9f9f9;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.client-table-data {
+  padding: 3px 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+/* Styled Container for Services */
+.textarea-like {
+  display: block;
+  width: 100%;
+  min-height: 80px; /* Mimics a textarea height */
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  white-space: pre-wrap; /* Maintains line breaks if present */
+  overflow-y: auto; /* Allows scrolling for overflow content */
+}
+
+/* Optional: Highlight Background */
+.textarea-like:empty {
+  background-color: #fff5f5;
+  color: #999;
+  font-style: italic;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  flex: 1; /* Equal width for both columns */
+  margin-bottom: 5px;
+}
+
+p {
+  margin: 0;
+  color: #333;
+  font-size: 14px;
+}
+
+/* Make sure clicking outside closes the dialog */
+/* .view-dialog-overlay {
+    cursor: pointer;
+}
+
+.view-dialog-overlay .view-dialog {
+    cursor: auto;
+} */
+
+/* Optional: Style the button to make it more noticeable */
+button {
+    padding: 5px 5px;
+    background-color: #de4a25;
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ff86687e;
+}
+
+

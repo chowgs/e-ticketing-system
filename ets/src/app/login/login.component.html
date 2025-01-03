@@ -1,0 +1,18 @@
+<div class="main-container">
+  <div class="login-container">
+      <img src="/assets/ets logo.png" alt="ETS Logo" id="Logo"><br>
+  
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <div>
+              <label for="id_number">ID Number</label>
+              <input id="id_number" formControlName="id_number" type="text" required>
+          </div>
+          <div>
+              <label for="password">Password</label>
+              <input id="password" formControlName="password" type="password" required>
+          </div>
+          <button type="submit" [disabled]="loginForm.invalid">Login</button>
+      </form>
+      <div *ngIf="errorMessage">{{ errorMessage }}</div>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="request-form-container">
+  <div class="request-form-container">
+    <ng-container *ngIf="isLoading; else formTemplate">
+      <div class="loading-container">
+        <mat-spinner></mat-spinner>
+        <p>Loading...</p>
+      </div>
+    </ng-container>
+
+    <ng-template #formTemplate>
+      <h2 class="form-title">New Service Request</h2>
+    
+      <div class="select-search-type">
+        <label for="request">Request to:</label><br>
+        <select id="select_request" [(ngModel)]="selectedDivision" required>
+          <option value="" disabled selected>Select a Division</option>
+          <option *ngFor="let division of divisions" [value]="division.division_id">{{ division.division_name }}</option>
+        </select>
+      </div>
+      <br>
+    
+      <form (ngSubmit)="submitRequest()" #requestForm="ngForm" class="request-form">
+        <div class="form-column">
+          <!-- Name Field -->
+          <mat-form-field class="half-width">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" [(ngModel)]="name" name="name" required>
+          </mat-form-field>
+    
+          <!-- Property Number Field -->
+          <mat-form-field class="half-width">
+            <mat-label>Property Number (ICS/PAR)</mat-label>
+            <input matInput type="property_no" [(ngModel)]="property_no" name="property_no">
+          </mat-form-field>
+    
+          <!-- Contact Number Field -->
+          <mat-form-field class="half-width">
+            <mat-label>Contact No</mat-label>
+            <input matInput type="tel" [(ngModel)]="contact_no" name="contact_no" required>
+          </mat-form-field>
+    
+          <!-- Department Head -->
+          <mat-form-field class="half-width">
+            <mat-label>Department Head/Immediate Supervisor</mat-label>
+            <input matInput type="text" [(ngModel)]="dept_head" name="dept_head" required>
+          </mat-form-field>
+        </div>
+    
+        <div class="form-column">
+          <!-- Office Selection Field -->
+          <mat-form-field class="half-width">
+            <mat-label>Department</mat-label>
+            <select matNativeControl [(ngModel)]="office_name" name="office_id" required>
+              <option value="" disabled selected>Select an Office</option>
+              <option *ngFor="let office of offices" [value]="office.office_id">{{ office.office_name }}</option>
+            </select>
+          </mat-form-field>
+    
+          <!-- Issue/Request Field -->
+          <mat-form-field class="full-width">
+            <mat-label>Issue/Request</mat-label>
+            <textarea matInput [(ngModel)]="issue_request" name="issue_request" required></textarea>
+          </mat-form-field>
+        </div>
+    
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button mat-raised-button type="submit" [disabled]="requestForm.invalid || isSubmitting">
+            <ng-container *ngIf="!isSubmitting; else loadingSpinner">
+              Submit
+            </ng-container>
+            <ng-template #loadingSpinner>
+              <mat-spinner diameter="20" color="accent"></mat-spinner>
+            </ng-template>
+          </button>
+        </div>
+    
+      </form>
+    </ng-template>
+    
+
+</div>

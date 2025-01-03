@@ -1,0 +1,220 @@
+<div class="clients-container">
+    <img src="/assets/ets logo.png" alt="ETS Logo" id="Logo"><br>
+
+  <!-- Login Section -->
+  <div class="login-section">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+      <input type="text" placeholder="ID Number" class="login-input" formControlName="id_number" required>
+      <input type="password" placeholder="Password" class="login-input" formControlName="password" required>
+
+      <!-- Add the loading spinner within the login button -->
+      <button type="submit" class="login-button" [disabled]="isLoginLoading">
+        <span *ngIf="!isLoginLoading">Login</span>
+        <div *ngIf="isLoginLoading" class="spinner"></div> <!-- Spinner when loading -->
+      </button>
+    </form>
+  </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <label for="search-type">Search Control No. / Name</label>
+        <div class="search-bar-container">
+          <input
+            type="text"
+            [(ngModel)]="search_box"
+            placeholder="Search..."
+            class="search-bar"
+            (keydown.enter)="onSearch()"
+          />
+          <button type="button" class="search-button" (click)="onSearch()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              style="fill: rgba(255, 255, 255, 1)"
+            >
+              <path
+                d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <div *ngIf="isSearchLoading" class="loading">
+        <div class="spinner"></div>
+      </div>
+      
+      <div *ngIf="error" class="error">{{ error }}</div>
+      
+      <table *ngIf="searchResults.length > 0" class="results-table">
+        <thead>
+          <tr>
+            <th>Control No.</th>
+            <th>Name</th>
+            <th>Contact No.</th>
+            <th>Issue/Request</th>
+            <th>Date of Request</th>
+            <th>Request Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let result of searchResults">
+            <td>{{ result.control_no }}</td>
+            <td>{{ result.name }}</td>
+            <td>{{ result.contact_no }}</td>
+            <td>{{ result.issue_request }}</td>
+            <td>{{ result.date_of_request | date }}</td>
+            <td>{{ result.request_status }}</td>
+            <td>
+              <button (click)="openViewDialog(result)">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+    <!-- Request Section -->
+    <div class="request-section">
+        <button class="new-request-button" (click)="openRequestDialog()">Make New Request</button>
+    </div>
+    
+    <router-outlet></router-outlet>
+
+    <!-- View Dialog -->
+    <div *ngIf="isViewDialogOpen" class="view-dialog-overlay" (click)="closeViewDialog()">
+      <div class="view-dialog landscape-dialog" (click)="$event.stopPropagation()">
+        <!-- View Dialog Header -->
+        <div class="logo-form-head-container">
+          <div class="logo-container">
+            <img src="assets/quezon logo.png" alt="Quezon-Official-Seal" class="form-logo">
+          </div>
+            <div class="form-head">
+              <b>Provincial Information and Communications Technology Office</b>
+              <p>Address: 2nd Floor Finance Building, Provincial Capitol Compound, Lucena City</p>
+              <p>Tel. Number: (042) 719 - 1324</p>
+              <p>Email Address: picto&#64;quezon.gov.ph</p>
+            </div>
+            <div class="job-order-section">
+              <!-- Barcode Section -->
+              <div class="barcode-container">
+                <label class="control_no_text">Control No:</label>
+                <svg id="barcode"></svg>
+              </div>
+            </div>
+        </div>
+        <h4 class="title-form">IT REPAIR & MAINTENANCE</h4>
+        <p class="sub-title-form">Service Request Details</p>
+        <hr>  
+        <!-- Dialog Content -->
+        <div class="dialog-content">
+          <div class="padding-container">
+            <table class="details-table full-width">
+              <tr>
+                <td class="label-column">
+                  <label>Date of Request:&nbsp;</label>
+                </td>
+                <td>
+                  <span>{{ selectedReport?.date_of_request | date }}</span>
+                </td>
+
+                <td class="label-column">
+                  <label>Date Released:&nbsp;</label>
+                </td>
+                <td class="value-column">
+                  <span>{{ selectedReport?.date_released | date: 'MM/dd/yy' }}</span>
+                </td>
+
+              </tr>
+              <tr>
+                <td class="label-column">
+                  <label>CLIENT INFO</label>
+                </td>
+                <td class="value-column">
+                  <span></span>
+                </td>
+
+                <td class="label-column">
+                  <label>Released To:</label>
+                </td>
+                <td class="value-column">
+                  <span>{{ selectedReport?.released_to }}</span>
+                </td>
+              </tr>
+            </table>
+        </div>
+      <!-- CLIENT INFO        -->
+        <div class="padding-container">
+          <table class="client-table full-width">
+            <tr>
+              <td class="client-table-data label-column">
+                <label>Name:</label>
+              </td>
+              <td class="client-table-data value-column">
+                <span>{{ selectedReport?.name }}</span>
+              </td>
+              <td class="client-table-data label-column">
+                <label>Contact No:</label>
+              </td>
+              <td class="client-table-data value-column">
+                <span>{{ selectedReport?.contact_no }}</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="client-table-data label-column">
+                <label>Property No (ICS/PAR):</label>
+              </td>
+              <td class="client-table-data value-column">
+                <span>{{ selectedReport?.property_no }}</span>
+              </td>
+              <td class="client-table-data label-column">
+                <label>Signature:</label>
+              </td>
+              <td class="client-table-data value-column">
+                <span *ngIf="selectedReport?.signature">
+                  <img [src]="selectedReport?.signature" alt="Signature" style="max-width: 150px; max-height: 50px;" />
+                </span>
+                <span *ngIf="!selectedReport?.signature">Waiting for client's approval</span>
+              </td>
+            </tr>
+          </table>
+        </div><br>
+      <!-- DESCRIPTION  -->
+      <div class="padding-container">
+        <label>Description of Issue/Problem:</label>
+        <div class="textarea-like">
+          <span>{{ selectedReport?.issue_request }}</span>
+        </div>
+      </div>              
+      <!-- Action Taken  -->
+      <div class="padding-container">
+        <label>Action Taken:</label>
+        <div class="textarea-like">
+          {{ selectedReport?.action_taken }}
+        </div>
+      </div>      
+      <!-- Remarks  -->
+      <div class="padding-container">
+        <label>Remarks:</label>
+        <div class="textarea-like">
+          {{ selectedReport?.remarks }}
+        </div>
+      </div>      
+      <!-- DATES INFO  -->
+      <div class="padding-container">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date Started:</label>
+            <span>{{ selectedReport?.date_started | date: 'MM/dd/yy' }}</span>
+          </div>
+          <div class="form-group">
+            <label>Date & time Accomplished:</label>
+            <span>{{ selectedReport?.datetime_accomplished | date: 'short' }}</span>
+          </div>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+</div>

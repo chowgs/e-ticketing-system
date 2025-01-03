@@ -1,0 +1,64 @@
+<div class="container my-2">
+  <h2 class="mb-2 text-center">Service Job Request</h2>
+
+  <!-- Search and Sort Controls -->
+  <div class="d-flex justify-content-between mb-3">
+    <input
+      type="text"
+      placeholder="Search by Name"
+      [(ngModel)]="searchFilters.name"
+      (input)="applyFilters()"
+      class="form-control me-2"
+    />
+    <select [(ngModel)]="sortOption" (change)="applySorting()" class="form-select">
+      <option value="date_of_request">Sort by Date</option>
+      <option value="name">Sort by Name</option>
+    </select>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="spinner-container">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <table class="job-request-task" *ngIf="!isLoading">
+    <thead>
+      <tr>
+        <th class="main-table-head">Name</th>
+        <th class="main-table-head">Issue/Request</th>
+        <th class="main-table-head">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let request of paginatedJobRequests">
+        <tr *ngIf="request.approval_status !== '1'">
+          <td class="main-table-row-data">{{ request.name }}</td>
+          <td class="main-table-row-data">{{ request.issue_request }}</td>
+          <td class="main-table-row-data">
+            <button
+              class="btn btn-success btn-sm action-btn"
+              [disabled]="loadingRequests[request.id]"
+              (click)="openConfirmationDialog(request)"
+            >
+              <ng-container *ngIf="!loadingRequests[request.id]; else loading">
+                For Approval
+              </ng-container>
+              <ng-template #loading>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Processing...
+              </ng-template>
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <!-- Angular Material Paginator -->
+  <mat-paginator
+    [length]="jobRequests.length"
+    [pageSize]="5"
+    (page)="onPageChange($event)">
+  </mat-paginator>
+</div>
