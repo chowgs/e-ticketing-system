@@ -42,7 +42,7 @@
       <!-- Monitoring Section -->
       <li *ngIf="showMonitoringSection">
         <p style="font-size: 12px;">Monitoring</p>
-        <a routerLink="unassigned" routerLinkActive="active-link">
+        <a routerLink="monitoring" routerLinkActive="active-link">
           Pending Request
         </a>
       </li>
@@ -62,14 +62,14 @@
       <!-- Supervisor Section -->
       <li *ngIf="showSupervisorSection">
         <p style="font-size: 12px;">Office Supervisor</p>
-        <a routerLink="job-request" routerLinkActive="active-link">
+        <a routerLink="supervisor/head-supervisor" routerLinkActive="active-link">
           Client Request
         </a>
       </li>
 
       <li *ngIf="showItSupervisorSection">
         <p style="font-size: 12px;">IT Supervisor</p>
-        <a routerLink="it-supervisor" routerLinkActive="active-link">
+        <a routerLink="supervisor/technical-supervisor" routerLinkActive="active-link">
           Incoming Request
         </a>
       </li>

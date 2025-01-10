@@ -8,6 +8,7 @@ import { NotificationComponent } from './shared/notification/notification.compon
   imports: [
     RouterOutlet,
     NotificationComponent,
+    
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

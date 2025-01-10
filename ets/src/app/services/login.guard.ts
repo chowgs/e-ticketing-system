@@ -1,18 +1,26 @@
+// This will prevent user from going back to client page if they're currently logged in 
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanMatch, Route, Router, UrlSegment, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LoginGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+export class LoginGuard implements CanMatch {
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  canActivate(): boolean {
+  canMatch(
+    route:Route,
+    segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/dashboard']); // Redirect to the dashboard or home route
+      this.router.navigate(['/']); // Redirect to the dashboard or home route
       return false;
     }
     return true;
+    
   }
 }

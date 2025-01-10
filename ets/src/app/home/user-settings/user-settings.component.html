@@ -51,35 +51,27 @@
   <section *ngIf="showPermissionsSection">
     <h2>Manage Permissions</h2>
     <div class="permissions">
-      <div class="permission-column">
-        <label *ngFor="let permission of allPermissions; let i = index" [ngStyle]="{'display': (i % 3 == 0) ? 'block' : 'none'}">
+      <div *ngFor="let permission of allPermissions">
+        <label>
           <input
             type="checkbox"
             [checked]="selectedPermissions.includes(permission.id)"
-            (change)="togglePermission(permission.id)"
+            (change)="togglePermission(permission.id, permission.children)"
           />
           {{ permission.label }}
         </label>
-      </div>
-      <div class="permission-column">
-        <label *ngFor="let permission of allPermissions; let i = index" [ngStyle]="{'display': (i % 3 == 1) ? 'block' : 'none'}">
-          <input
-            type="checkbox"
-            [checked]="selectedPermissions.includes(permission.id)"
-            (change)="togglePermission(permission.id)"
-          />
-          {{ permission.label }}
-        </label>
-      </div>
-      <div class="permission-column">
-        <label *ngFor="let permission of allPermissions; let i = index" [ngStyle]="{'display': (i % 3 == 2) ? 'block' : 'none'}">
-          <input
-            type="checkbox"
-            [checked]="selectedPermissions.includes(permission.id)"
-            (change)="togglePermission(permission.id)"
-          />
-          {{ permission.label }}
-        </label>
+  
+        <!-- Render child checkboxes if they exist -->
+        <div *ngIf="permission.children" class="nested-permissions">
+          <label *ngFor="let child of permission.children">
+            <input
+              type="checkbox"
+              [checked]="selectedPermissions.includes(child.id)"
+              (change)="togglePermission(child.id)"
+            />
+            {{ child.label }}
+          </label>
+        </div>
       </div>
     </div>
     <button type="button" (click)="savePermissions()" [disabled]="isAddingPerms">
@@ -87,6 +79,7 @@
       <span *ngIf="!isAddingPerms">Add Permissions</span>
     </button>
   </section>
+  
 
 </div>
 

@@ -16,6 +16,14 @@ export class OfficeManagementComponent implements OnInit {
   offices: any[] = []; // To store the list of offices
   isLoadingFetch: boolean = false; // Loading state for fetching offices
   isLoadingAdd: boolean = false; // Loading state for adding an office
+  isLoadingUpdate: boolean = false; // Loading state for updating an office
+
+  isModalOpen = false;
+  isEditModalOpen = false; // For edit modal
+  selectedOffice: any = null; // Store the office being edited
+
+  currentPage: number = 1; // Track the current page
+  rowsPerPage: number = 8; // Maximum rows per page
 
   constructor(private authService: AuthService, private notificationService: NotificationService) {}
 
@@ -40,6 +48,16 @@ export class OfficeManagementComponent implements OnInit {
         this.isLoadingFetch = false; // Stop loading
       }
     );
+  }
+
+  // Function to open the modal
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  // Function to close the modal
+  closeModal() {
+    this.isModalOpen = false;
   }
 
   addOffice(): void {
@@ -77,4 +95,69 @@ export class OfficeManagementComponent implements OnInit {
       // alert('Please enter an office name.');
     }
   }
+
+  openEditModal(office: any) {
+    this.selectedOffice = { ...office }; // Create a copy to edit
+    this.isEditModalOpen = true;
+  }
+
+  closeEditModal() {
+    this.selectedOffice = null;
+    this.isEditModalOpen = false;
+  }
+
+  updateOffice(): void {
+    if (this.selectedOffice && this.selectedOffice.office_name.trim()) {
+      this.selectedOffice.office_name = this.selectedOffice.office_name.toUpperCase();
+      this.isLoadingUpdate = true;
+
+      this.authService.updateOffice(this.selectedOffice).subscribe(
+        (response: any) => {
+          if (response.status === 'success') {
+            this.notificationService.showNotification(
+              'Office updated successfully!',
+              'success'
+            );
+            this.fetchOffices(); // Refresh the list
+            this.closeEditModal();
+          } else {
+            this.notificationService.showNotification(
+              `Failed to update office: ${response.message}`,
+              'error'
+            );
+          }
+        },
+        (error) => {
+          console.error('Error updating office:', error);
+          this.notificationService.showNotification(
+            'An error occurred while updating office',
+            'error'
+          );
+        },
+        () => {
+          this.isLoadingUpdate = false;
+        }
+      );
+    } else {
+      this.notificationService.showNotification(
+        'Please enter a valid office name',
+        'error'
+      );
+    }
+  }
+
+  // Method to handle pagination
+  getPaginatedOffices(): any[] {
+    const startIndex = (this.currentPage - 1) * this.rowsPerPage;
+    return this.offices.slice(startIndex, startIndex + this.rowsPerPage);
+  }
+
+  changePage(direction: string): void {
+    if (direction === 'next' && (this.currentPage * this.rowsPerPage) < this.offices.length) {
+      this.currentPage++;
+    } else if (direction === 'prev' && this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
 }

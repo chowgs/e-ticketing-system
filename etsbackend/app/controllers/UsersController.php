@@ -393,59 +393,6 @@ class UsersController extends \Phalcon\Mvc\Controller
         return $this->response->send();
     }
 
-    // add new office to table 'office' 
-    // public function addOfficeAction()
-    // {
-    //     $this->view->disable();
-    //     $rawData = $this->request->getJsonRawBody(true);
-    
-    //     $factory = new FilterFactory();
-    //     $locator = $factory->newInstance();
-    
-    //     $response_array = [];
-    
-    //     if (isset($rawData['office_name'])) {
-    //         // Sanitize and convert to uppercase
-    //         $office_name = strtoupper($locator->sanitize($rawData['office_name'], ['striptags', 'string']));
-    
-    //         // Check if office already exists
-    //         $existingOffice = Office::findFirst([
-    //             'conditions' => 'office_name = :office_name:',
-    //             'bind'       => ['office_name' => $office_name]
-    //         ]);
-    
-    //         if ($existingOffice) {
-    //             $response_array[] = [
-    //                 'status' => 'fail',
-    //                 'message' => 'Office already exists.'
-    //             ];
-    //         } else {
-    //             // Create and save new office
-    //             $office = new Office();
-    //             $office->office_name = $office_name;
-    
-    //             if ($office->save() == false) {
-    //                 $response_array[] = [
-    //                     'status' => 'fail',
-    //                     'message' => 'Office registration unsuccessful.'
-    //                 ];
-    //             } else {
-    //                 $response_array[] = [
-    //                     'status' => 'success',
-    //                     'message' => 'Office added successfully.'
-    //                 ];
-    //             }
-    //         }
-    //     } else {
-    //         $response_array[] = [
-    //             'status' => 'fail',
-    //             'message' => 'Office name is required.'
-    //         ];
-    //     }
-    
-    //     $this->response->setJsonContent($response_array);
-    //     return $this->response->send();
-    // }
     public function addOfficeAction()
     {
         $this->view->disable();
@@ -589,37 +536,40 @@ class UsersController extends \Phalcon\Mvc\Controller
         return $this->response->send();
     }    
 
-    // fetch data job request from itrmservicereport, sysdev, cw if already needed and display it on office supervisor job-request 
-    // public function getJobRequestsAction()
-    // {
-    //     $this->view->disable();
+    public function updateOfficeAction()
+    {
+        $request = $this->request->getJsonRawBody();
+        $officeId = $request->office_id ?? null;
+        $officeName = $request->office_name ?? null;
     
-    //     // Get logged-in user's office_id (assume office_id is stored in session)
-    //     $officeId = $this->session->get('auth')['office_id'];
+        if (!$officeId || !$officeName) {
+            return $this->response->setJsonContent([
+                'status' => 'error',
+                'message' => 'Invalid input data',
+            ]);
+        }
     
-    //     // Fetch data from all service report tables where office_id matches
-    //     $itrmReports = ItrmServiceReport::find([
-    //         'conditions' => 'office_id = :office_id:',
-    //         'bind' => ['office_id' => $officeId],
-    //     ]);
+        $office = Office::findFirst($officeId);
+        if (!$office) {
+            return $this->response->setJsonContent([
+                'status' => 'error',
+                'message' => 'Office not found',
+            ]);
+        }
     
-    //     // $sysdevReports = SysdevServiceReport::find([
-    //     //     'conditions' => 'office_id = :office_id:',
-    //     //     'bind' => ['office_id' => $officeId],
-    //     // ]);
+        $office->office_name = $officeName;
+        if ($office->save()) {
+            return $this->response->setJsonContent(['status' => 'success']);
+        }
     
-    //     // $cwReports = CwServiceReport::find([
-    //     //     'conditions' => 'office_id = :office_id:',
-    //     //     'bind' => ['office_id' => $officeId],
-    //     // ]);
+        return $this->response->setJsonContent([
+            'status' => 'error',
+            'message' => 'Failed to update office',
+            'errors' => $office->getMessages(),
+        ]);
+    }
     
-    //     // Combine the results
-    //     // $allReports = array_merge($itrmReports->toArray(), $sysdevReports->toArray(), $cwReports->toArray());
-    //     $allReports = array_merge($itrmReports->toArray());
 
-    //     $this->response->setJsonContent(['status' => 'success', 'data' => $allReports]);
-    //     return $this->response->send();
-    // }
     public function getJobRequestsAction()
     {
         $this->view->disable();

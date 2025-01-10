@@ -13,6 +13,7 @@ const httpOptions = {
 })
 export class AuthService {
   private readonly AUTH_TOKEN_KEY = 'authToken'; // Store token locally (or session)
+  private userPermissions: number[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -111,6 +112,10 @@ export class AuthService {
   getOffices() {
     return this.http.get(API_URL + '/users/getOffice', httpOptions);
   }
+
+  updateOffice(office: any): Observable<any> {
+    return this.http.post(API_URL + '/users/updateOffice', office);
+  }  
 
   getAllOffices(): Observable<any> {
     return this.http.post(API_URL + '/users/getAllOffices', {}, httpOptions);

@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { NotificationComponent } from '../shared/notification/notification.component';
 import { MatBadgeModule } from '@angular/material/badge';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -37,8 +38,8 @@ export class HomeComponent implements OnInit {
           this.userInfo.permissions = response.data.permissions || [];
 
           // Evaluate permissions
-          this.showItPersonnelSection = this.hasPermission(0);
-          this.showOfficeManagement = this.hasPermission(1.4);
+          this.showItPersonnelSection = this.hasPermission(0); //dashboard, task, maintenance log, change pass
+          this.showOfficeManagement = this.hasPermission(1.4); 
           this.showAdminSection = this.hasPermission(1.6);
           this.showUserManagement = this.hasPermission(1.7);
           this.showMonitoringSection = this.hasPermission(2.1);

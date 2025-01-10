@@ -26,8 +26,8 @@ export class ClientComponent {
   isViewDialogOpen: boolean = false;
   selectedReport: any = null;
 
-  isLoginLoading: boolean = false; // Separate loading state for login
-  isSearchLoading: boolean = false; // Separate loading state for search
+  isLoginLoading: boolean = false; // loading state for login
+  isSearchLoading: boolean = false; // loading state for search
   error: string = '';
   
   constructor(
@@ -117,7 +117,7 @@ export class ClientComponent {
         });
       }
     });
-}
+  }
 
   closeViewDialog(): void {
     this.isViewDialogOpen = false;

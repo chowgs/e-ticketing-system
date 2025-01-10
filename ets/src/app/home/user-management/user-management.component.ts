@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } 
 import { AuthService } from '../../services/auth.service';
 import { CommonModule} from '@angular/common';
 import { NotificationService } from '../../shared/notification.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-management',
@@ -12,7 +13,6 @@ import { NotificationService } from '../../shared/notification.service';
   styleUrls: ['./user-management.component.css']
 })  
 export class UserManagementComponent implements OnInit {
-
   myAccountForm!: FormGroup;
   addUserForm!: FormGroup;
   addPersonnelForm!: FormGroup;
@@ -21,14 +21,44 @@ export class UserManagementComponent implements OnInit {
   selectedPermissions: number[] = [];
   users: any[] = []; // Store fetched users
   currentPage: number = 1; // Track the current page
-  rowsPerPage: number = 5; // Maximum rows per page
+  rowsPerPage: number = 8; // Maximum rows per page
 
   isLoadingFetch: boolean = false;
   isRegistering: boolean = false;
   isAddingPersonnel: boolean = false;
 
+  isAddUserModalOpen = false; 
+  isAddPersonnelModalOpen = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private notificationService: NotificationService) {}
+  // Administrator Sub-Permissions
+  adminSubPermissions = [
+    { id: 1.1, label: 'Edit User' },
+    { id: 1.2, label: 'Change User Password' },
+    { id: 1.3, label: 'Add User' },
+    { id: 1.4, label: 'Office Management' },
+    { id: 1.5, label: 'Add/Edit Permissions' },
+  ];
+
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private notificationService: NotificationService
+  ) {
+    this.addUserForm = this.fb.group({
+      id_number: ['', Validators.required],
+      name: ['', Validators.required],
+      password: ['', Validators.required],
+      designation: ['', Validators.required],
+      division: ['', Validators.required],
+      office: ['', Validators.required]
+    });
+    this.addPersonnelForm = this.fb.group({
+      personnel_id: ['', Validators.required],
+      personnel_name: ['', Validators.required],
+      division: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     // Initialize forms with FormBuilder
@@ -158,44 +188,77 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
-  // changePassword(): void {
-  //   if (this.myAccountForm.valid) {
-  //     const currentPassword = this.myAccountForm.value.currentPassword;
-  //     const newPassword = this.myAccountForm.value.newPassword;
-  //     const confirmPassword = this.myAccountForm.value.confirmPassword;
+  // Function to open the modal
+  openAddUserModal() {
+    this.isAddUserModalOpen = true;
+  }
 
-  //     if (newPassword !== confirmPassword) {
-  //       console.error("New password and confirm password do not match.");
-  //       return;
-  //     }
-      
-  //     const passwordData = {
-  //       id_number: this.myAccountForm.value.idNumber,
-  //       current_password: currentPassword,
-  //       new_password: newPassword
-  //     };
+  // Function to open the modal
+  openAddPersonnelModal() {
+    this.isAddPersonnelModalOpen = true;
+  }
 
-  //     this.authService.changePassword(passwordData).subscribe(
-  //       (response: any) => {
-  //         if (response.status === 'success') {
-  //           console.log('Password changed successfully.');
-  //         } else {
-  //           console.error('Failed to change password:', response.message);
-  //         }
-  //       },
-  //       (error) => {
-  //         console.error('Error changing password', error);
-  //       }
-  //     );
-  //   }
-  // }
+  // Function to close the modal
+  closeAddUserModal() {
+    this.isAddUserModalOpen = false;
+  }
+
+  // Function to close the modal
+  closeAddPersonnelModal() {
+    this.isAddPersonnelModalOpen = false;
+  }
 
   togglePermission(permission: number): void {
     const index = this.selectedPermissions.indexOf(permission);
     if (index > -1) {
+      // Remove permission and its sub-permissions (if Administrator)
       this.selectedPermissions.splice(index, 1);
+      if (permission === 1.6) {
+        this.adminSubPermissions.forEach((subPerm) => {
+          const subIndex = this.selectedPermissions.indexOf(subPerm.id);
+          if (subIndex > -1) {
+            this.selectedPermissions.splice(subIndex, 1);
+          }
+        });
+      }
     } else {
+      // Add permission and automatically check all sub-permissions if Administrator
       this.selectedPermissions.push(permission);
+      if (permission === 1.6) {
+        this.adminSubPermissions.forEach((subPerm) => {
+          if (!this.selectedPermissions.includes(subPerm.id)) {
+            this.selectedPermissions.push(subPerm.id);
+          }
+        });
+      }
+    }
+  }
+
+  toggleSubPermission(subPermission: number): void {
+    const index = this.selectedPermissions.indexOf(subPermission);
+
+    if (index > -1) {
+      // Remove sub-permission
+      this.selectedPermissions.splice(index, 1);
+
+      // Uncheck Administrator if no sub-permissions are selected
+      const anySubPermissionSelected = this.adminSubPermissions.some((subPerm) =>
+        this.selectedPermissions.includes(subPerm.id)
+      );
+      if (!anySubPermissionSelected) {
+        const adminIndex = this.selectedPermissions.indexOf(1.6);
+        if (adminIndex > -1) {
+          this.selectedPermissions.splice(adminIndex, 1);
+        }
+      }
+    } else {
+      // Add sub-permission
+      this.selectedPermissions.push(subPermission);
+
+      // Ensure Administrator is checked if any sub-permission is selected
+      if (!this.selectedPermissions.includes(1.6)) {
+        this.selectedPermissions.push(1.6);
+      }
     }
   }
 
@@ -211,18 +274,17 @@ export class UserManagementComponent implements OnInit {
         if (response.status === 'success') {
           this.isRegistering = false;
           this.notificationService.showNotification('User registered successfully.', 'success');
-          // alert('User registered successfully.');
           this.selectedPermissions = [];
+          this.addUserForm.reset();
+          this.closeAddUserModal();
         } else {
           this.isRegistering = false;
           this.notificationService.showNotification('User registration failed. ' ,'error', + response.message);
-          // alert(response.message || 'User registration failed.');
         }
       });
     } else {
       this.isRegistering = false; 
       this.notificationService.showNotification('Please fill out all required fields.', 'error');
-      // alert('Please fill out all required fields.');
     }
   }
 
@@ -253,29 +315,22 @@ export class UserManagementComponent implements OnInit {
           if (response.status === 'success') {
             this.isAddingPersonnel = false;
             this.notificationService.showNotification('Personnel has been added!', 'success');
-            // alert('Personnel saved successfully.');
             this.addPersonnelForm.reset();
+            this.closeAddPersonnelModal();
           } else {
             this.isAddingPersonnel = false;
             this.notificationService.showNotification('Failed to save personnel.', 'error');
-            // alert(response.message || 'Failed to save personnel.');
           }
         },
         (error) => {
           this.isAddingPersonnel = false;
           console.error('Error saving personnel:', error);
           this.notificationService.showNotification('An error occured while saving personnel ' ,'error');
-          // alert('An error occurred while saving personnel.');
         }
       );
     } else {
       this.isAddingPersonnel = false;
       this.notificationService.showNotification('Please fill out all required fields.', 'error');
-      // alert('Please fill out all required fields.');
     }
   }
-  
-  
-
-  
 }
