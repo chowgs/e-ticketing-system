@@ -76,13 +76,13 @@
 
       <!-- Administrator Section -->
       <li *ngIf="showAdminSection">
-        <p style="font-size: 12px;">Admin Management</p>
+        <p style="font-size: 12px;">Admin Control</p>
         <a routerLink="user-settings" routerLinkActive="active-link">
           User Settings
         </a>
-        <a *ngIf="showUserManagement" routerLink="user-management" routerLinkActive="active-link">
+        <!-- <a *ngIf="showUserManagement" routerLink="user-management" routerLinkActive="active-link">
           User Management
-        </a>
+        </a> -->
         <a *ngIf="showOfficeManagement" routerLink="office-management" routerLinkActive="active-link">
           Office Management
         </a>

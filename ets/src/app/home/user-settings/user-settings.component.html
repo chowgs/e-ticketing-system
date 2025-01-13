@@ -1,88 +1,273 @@
-<div *ngIf="isLoading" class="loading-overlay">
-  <div class="spinner"></div>
-</div>
-<div class="settings-container">
-  <div class="top-sections">
-    <section *ngIf="showAccountSettingsSection">
-      <h2>My Account</h2>
-      <form [formGroup]="myAccountForm">
-        <label>ID No.</label>
-        <input formControlName="idNumber" type="text" />
-
-        <label>Name</label>
-        <input formControlName="name" type="text" />
-
-        <label>Designation</label>
-        <input formControlName="designation" type="text" />
-
-        <label>Office/Department</label>
-        <input formControlName="office" type="text" />
-
-        <label>Division</label>
-        <input formControlName="division" type="text" />
-
-        <button type="button" (click)="saveChanges()" [disabled]="isSaving">
-          <span *ngIf="isSaving" class="button-spinner"></span>
-          <span *ngIf="!isSaving">Save Changes</span>
-        </button>
-      </form>
-    </section>
-
-    <section *ngIf="showChangePasswordSection">
-      <h2>Change Password</h2>
-      <form [formGroup]="passwordForm">
-        <label>Current Password</label>
-        <input formControlName="currentPassword" type="password" />
-
-        <label>New Password</label>
-        <input formControlName="newPassword" type="password" />
-
-        <label>Confirm New Password</label>
-        <input formControlName="confirmPassword" type="password" />
-
-        <button type="button" (click)="changePassword()" [disabled]="isChangingPassword">
-          <span *ngIf="isChangingPassword" class="button-spinner"></span>
-          <span *ngIf="!isChangingPassword">Save New Password</span>
-        </button>
+<div class="settings-container" *ngIf="showAccountSettingsSection">
+  <div class="top-section">
+    <section>
+      <p style="text-align: center; font-weight: bold; font-size: 20px; background-color: #3f3f3f; padding: 10px; color: #fff; border-radius: 4px;">Account Settings</p>
+      <form [formGroup]="myAccountForm" class="settings-form">
+        <div class="form-column">
+          <label>ID No.</label>
+          <input formControlName="idNumber" type="text" readonly />
+          <label>Name</label>
+          <input formControlName="name" type="text" />
+          <label>Designation</label>
+          <input formControlName="designation" type="text" />
+        </div>
+        <div class="form-column">
+          <label>Department</label>
+          <input formControlName="office" type="text" />
+          <label>Division</label>
+          <input formControlName="division" type="text" />
+        </div>
+        <div class="form-column full-width">
+          <button type="button" (click)="saveChanges()" [disabled]="isSaving">
+            <span *ngIf="isSaving" class="button-spinner"></span>
+            <span *ngIf="!isSaving">Save Changes</span>
+          </button>
+          <button type="button" (click)="openChangePasswordDialog()" *ngIf="showChangePasswordSection">Change Password</button>
+          <button type="button" (click)="openPermissionsDialog()" *ngIf="showPermissionsSection">Manage Permissions</button>
+        </div>
       </form>
     </section>
   </div>
 
-  <section *ngIf="showPermissionsSection">
-    <h2>Manage Permissions</h2>
-    <div class="permissions">
-      <div *ngFor="let permission of allPermissions">
-        <label>
-          <input
-            type="checkbox"
-            [checked]="selectedPermissions.includes(permission.id)"
-            (change)="togglePermission(permission.id, permission.children)"
-          />
-          {{ permission.label }}
-        </label>
-  
-        <!-- Render child checkboxes if they exist -->
-        <div *ngIf="permission.children" class="nested-permissions">
-          <label *ngFor="let child of permission.children">
+  <!-- Change Password Modal -->
+  <div class="modal" *ngIf="isPasswordModalVisible">
+    <div class="modal-content">
+      <span class="close" (click)="closeChangePasswordDialog()">×</span>
+      <h2>Change Password</h2>
+      <form [formGroup]="passwordForm">
+        <div class="form-column">
+          <label>Current Password</label>
+          <input formControlName="currentPassword" type="password" />
+          <label>New Password</label>
+          <input formControlName="newPassword" type="password" />
+        </div>
+        <div class="form-column">
+          <label>Confirm New Password</label>
+          <input formControlName="confirmPassword" type="password" />
+        </div>
+        <div class="form-column full-width">
+          <button type="button" (click)="changePassword()" [disabled]="isChangingPassword">
+            <span *ngIf="isChangingPassword" class="button-spinner"></span>
+            <span *ngIf="!isChangingPassword">Change Password</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Permissions Modal -->
+  <div class="modal-I" *ngIf="isPermissionsModalVisible">
+    <div class="modal-I-content" (click)="$event.stopPropagation()">
+      <span class="close" (click)="closePermissionsDialog()">×</span>
+      <h2>Manage Permissions</h2>
+      <div class="permissions">
+        <div *ngFor="let permission of allPermissions">
+          <label>
             <input
               type="checkbox"
-              [checked]="selectedPermissions.includes(child.id)"
-              (change)="togglePermission(child.id)"
+              [checked]="selectedPermissions.includes(permission.id)"
+              (change)="togglePermission(permission.id, permission.children)"
             />
-            {{ child.label }}
+            {{ permission.label }}
           </label>
+
+          <div *ngIf="permission.children" class="nested-permissions">
+            <label *ngFor="let child of permission.children">
+              <input
+                type="checkbox"
+                [checked]="selectedPermissions.includes(child.id)"
+                (change)="togglePermission(child.id)"
+              />
+              {{ child.label }}
+            </label>
+          </div>
         </div>
       </div>
+      <button type="button" (click)="savePermissions()" [disabled]="isAddingPerms">
+        <span *ngIf="isAddingPerms" class="button-spinner"></span>
+        <span *ngIf="!isAddingPerms">Add Permissions</span>
+      </button>
     </div>
-    <button type="button" (click)="savePermissions()" [disabled]="isAddingPerms">
-      <span *ngIf="isAddingPerms" class="button-spinner"></span>
-      <span *ngIf="!isAddingPerms">Add Permissions</span>
-    </button>
-  </section>
-  
-
+  </div>
 </div>
 
+<div class="user-management-container" *ngIf="showUserManagement" >
+  <!-- Existing Users Section -->
+  <div class="flex-sections-I">
+    <section>
+      <p style="text-align: center; font-weight: bold; font-size: 20px; background-color: #3f3f3f; padding: 10px; color: #fff; border-radius: 4px;">Manage User</p>
+      <!-- Add New User and Personnel Button -->
+      <div class="add-user-btn-container">
+        <button (click)="openAddUserModal()" class="open-addusermodal-btn">Add User</button>
+        <button (click)="openAddPersonnelModal()" class="open-addpersonnelmodal-btn">Add Personnel</button>
+      </div>
+      <div *ngIf="isLoadingFetch" class="spinner-container">
+        <div class="spinner"></div>
+        <p>Loading data...</p>
+      </div>
+      <table *ngIf="!isLoadingFetch" class="custom-table">
+        <thead>
+          <tr>
+            <th>ID No.</th>
+            <th>Name of the User</th>
+            <th>Designation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of getPaginatedUsers()">
+            <td>{{ user.id_number }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.designation }}</td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <!-- Pagination Controls -->
+      <div class="pagination">
+        <button class="pagination-buttons" (click)="changePage('prev')" [disabled]="currentPage === 1">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="16px" fill="#FFFFFF">
+            <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/>
+          </svg>
+        </button>
+        <span>Page {{ currentPage }}</span>
+        <button class="pagination-buttons" (click)="changePage('next')" [disabled]="(currentPage * rowsPerPage) >= users.length">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="16px" fill="#FFFFFF">
+            <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+  </div>
+  
+  <!-- Add New User Modal -->
+  <div *ngIf="isAddUserModalOpen" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" (click)="closeAddUserModal()">×</span>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="addUserForm">
+          <!-- Form Fields: 2 Column Layout -->
+          <div class="form-fields">
+            <div class="">
+              <!-- <label for="id_number">ID No.</label> -->
+              <input formControlName="id_number" type="text" placeholder="ID No." />
+
+              <!-- <label for="password">Password</label> -->
+              <input formControlName="password" type="password" placeholder="Password" />
+
+              <!-- <label for="division">Division</label> -->
+              <select formControlName="division" class="userSelect">
+                <option value="" disabled>Select Division</option>
+                <option *ngFor="let division of divisions" [value]="division.division_id">
+                  {{ division.division_name }}
+                </option>
+              </select>
+            </div>
+            <div class="">
+              <!-- <label for="name">Name</label>  -->
+              <input formControlName="name" type="text" placeholder="Name"/>
+
+              <!-- <label for="designation">Designation</label> -->
+              <input formControlName="designation" type="text" placeholder="Designation"/>
+
+              <!-- <label for="office">Office</label> -->
+              <select formControlName="office" class="userSelect">
+                <option value="" disabled>Select Department</option>
+                <option *ngFor="let office of offices" [value]="office.office_id">
+                  {{ office.office_name }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Permissions Section -->
+          <div class="newuser-permissions">
+            <div class="newuser-permission-header">
+              <h4>Manage Permissions</h4>
+            </div>
+            <div class="newuser-permission-columns">
+              <div class="newuser-permission-column">
+                <h5>Administrator</h5>
+                <label>
+                  <input type="checkbox" [checked]="selectedAddPermissions.includes(1.6)" (change)="toggleUserPermission(1.6)" />
+                  Enable Administrator
+                </label>
+                <div class="newuser-sub-permissions">
+                  <label *ngFor="let adminPermission of adminSubPermissions">
+                    <input
+                      type="checkbox"
+                      [checked]="selectedAddPermissions.includes(adminPermission.id)"
+                      (change)="toggleSubPermission(adminPermission.id)"
+                    />
+                    {{ adminPermission.label }}
+                  </label>
+                </div>
+              </div>
+          
+              <div class="newuser-permission-column">
+                <h5>Other Permissions</h5>
+                <label>
+                  <input type="checkbox" [checked]="selectedAddPermissions.includes(0)" (change)="toggleUserPermission(0)" />
+                  Technical Support
+                </label>
+                <label>
+                  <input type="checkbox" [checked]="selectedAddPermissions.includes(2.1)" (change)="toggleUserPermission(2.1)" />
+                  Monitoring
+                </label>
+                <label>
+                  <input type="checkbox" [checked]="selectedAddPermissions.includes(3.1)" (change)="toggleUserPermission(3.1)" />
+                  IT Supervisor
+                </label>
+                <label>
+                  <input type="checkbox" [checked]="selectedAddPermissions.includes(4.1)" (change)="toggleUserPermission(4.1)" />
+                  Office Supervisor
+                </label>
+              </div>
+            </div>
+          </div>
+          
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="save-btn" (click)="registerUser()" [disabled]="isRegistering">
+          <span *ngIf="isRegistering" class="button-spinner-I"></span>
+          <span *ngIf="!isRegistering">Save Changes</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Personnel Modal -->
+  <div *ngIf="isAddPersonnelModalOpen" class="addusermodal-overlay" (click)="closeAddPersonnelModal()">
+    <div class="addusermodal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header-personnel">
+        <h3>New Personnel</h3>
+      </div>
+      <form [formGroup]="addPersonnelForm">
+        <div class="form-group">
+          <label for="personnel_id">Personnel ID No.</label>
+          <input formControlName="personnel_id" type="text" />
+  
+          <label for="personnel_name">Name of Personnel</label>
+          <input formControlName="personnel_name" type="text" />
+  
+          <label for="division">Division</label>
+          <select formControlName="division" class="userSelect">
+            <option *ngFor="let division of divisions" [value]="division.division_id">
+              {{ division.division_name }}
+            </option>
+          </select>
+        </div>
+      </form>
+  
+      <button type="button" class="add-user-button" (click)="saveAsPersonnel()" [disabled]="isAddingPersonnel">
+        <span *ngIf="isAddingPersonnel" class="button-spinner"></span>
+        <span *ngIf="!isAddingPersonnel">Save New Personnel</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 
 

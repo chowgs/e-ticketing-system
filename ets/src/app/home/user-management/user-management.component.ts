@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } 
 import { AuthService } from '../../services/auth.service';
 import { CommonModule} from '@angular/common';
 import { NotificationService } from '../../shared/notification.service';
-import { MatDialog } from '@angular/material/dialog';
+// import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-management',
@@ -13,7 +13,6 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./user-management.component.css']
 })  
 export class UserManagementComponent implements OnInit {
-  myAccountForm!: FormGroup;
   addUserForm!: FormGroup;
   addPersonnelForm!: FormGroup;
   divisions: any[] = [];
@@ -61,18 +60,6 @@ export class UserManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Initialize forms with FormBuilder
-    this.myAccountForm = this.fb.group({
-      idNumber: [{ value: '', disabled: true }], // Display only
-      name: [''], 
-      designation: [''],
-      division: [''],
-      office: [''],
-      currentPassword: ['', Validators.required],
-      newPassword: ['', Validators.required],
-      confirmPassword: ['', Validators.required]
-    });
-
     this.addUserForm = this.fb.group({
       id_number: ['', Validators.required],
       name: ['', Validators.required],
@@ -101,13 +88,6 @@ export class UserManagementComponent implements OnInit {
         if (response.status === 'success') {
           this.isLoadingFetch = false;
           const userData = response.data;
-          this.myAccountForm.patchValue({
-            idNumber: userData.id_number,
-            name: userData.name,
-            designation: userData.designation,
-            office: userData.office_name,
-            division: userData.division_name
-          });
         } else {
           this.isLoadingFetch = false;
           this.notificationService.showNotification('Failed to retrieve user info.', 'error');

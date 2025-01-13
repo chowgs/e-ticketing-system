@@ -41,7 +41,7 @@ form {
 
 /* Form Buttons */
 .add-user-button {
-  background-color: #4CAF50;
+  background-color: #2572de;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -247,6 +247,7 @@ button .spinner {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 500px;
   width: 100%;
+  animation: slide-down 0.3s ease-out;
 }
 
 @keyframes slideIn {
@@ -283,7 +284,7 @@ button .spinner {
 }
 
 .add-user-button:hover {
-  background-color: #45a049;
+  background-color: #4085e5;
 }
 
 /* Button spinner styles */
@@ -306,7 +307,7 @@ button .spinner {
 }
 
 .save-btn {
-  background-color: #de4a25; /* Button background */
+  background-color: #2572de; /* Button background */
   color: #fff;
   border: none;
   padding: 12px 24px;
@@ -317,6 +318,10 @@ button .spinner {
   align-items: center;
   justify-content: center;
   gap: 10px; /* Space between spinner and text */
+}
+
+.save-btn:hover {
+  background-color: #4085e5;
 }
 
 .save-btn:disabled {

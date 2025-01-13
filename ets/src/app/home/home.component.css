@@ -173,7 +173,7 @@ body {
 
 .active-link {
   color: #de4a25; /* Highlight color */
-  font-weight: bold; /* Make it bold */
+  background-color: #ff86687e;
   border-left: 4px solid #ff86687e; /* Add a border */
   padding-left: 8px; /* Adjust padding for alignment */
 }
