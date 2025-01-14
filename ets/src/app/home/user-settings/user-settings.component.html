@@ -15,7 +15,11 @@
           <label>Department</label>
           <input formControlName="office" type="text" />
           <label>Division</label>
-          <input formControlName="division" type="text" />
+          <select formControlName="division">
+            <option *ngFor="let division of divisions" [value]="division.division_id">
+              {{ division.division_name }}
+            </option>
+          </select>
         </div>
         <div class="form-column full-width">
           <button type="button" (click)="saveChanges()" [disabled]="isSaving">
@@ -98,11 +102,11 @@
       <p style="text-align: center; font-weight: bold; font-size: 20px; background-color: #3f3f3f; padding: 10px; color: #fff; border-radius: 4px;">Manage User</p>
       <!-- Add New User and Personnel Button -->
       <div class="add-user-btn-container">
-        <button (click)="openAddUserModal()" class="open-addusermodal-btn">Add User</button>
-        <button (click)="openAddPersonnelModal()" class="open-addpersonnelmodal-btn">Add Personnel</button>
+        <button (click)="openAddUserModal()" class="open-addusermodal-btn" *ngIf="showAddUser">Add User +</button>
+        <button (click)="openAddPersonnelModal()" class="open-addpersonnelmodal-btn" *ngIf="showAddPersonnel">Add Personnel +</button>
       </div>
       <div *ngIf="isLoadingFetch" class="spinner-container">
-        <div class="spinner"></div>
+        <div class="loader"></div>
         <p>Loading data...</p>
       </div>
       <table *ngIf="!isLoadingFetch" class="custom-table">
@@ -266,6 +270,99 @@
         <span *ngIf="!isAddingPersonnel">Save New Personnel</span>
       </button>
     </div>
+  </div>
+</div>
+
+<div class="office-management-container" *ngIf="showOfficeManagement">
+  <div class="flex-sections">
+      <section>
+        <p style="text-align: center; font-weight: bold; font-size: 20px; background-color: #3f3f3f; padding: 10px; color: #fff; border-radius: 4px;">Manage Department</p>
+          <!-- Add New Office Button -->
+        <div class="add-user-btn-container">
+          <button (click)="openModal()" class="open-modal-btn">Add Department +</button>
+        </div>
+          <div *ngIf="isLoadingFetch" class="spinner-container">
+            <div class="loader"></div>
+            <p>Loading data...</p>
+          </div>
+            <table *ngIf="!isLoadingFetch" class="custom-table-I">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Department</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let office of getPaginatedOffices()">
+                  <td>{{ office.office_id }}</td>
+                  <td>{{ office.office_name }}</td>
+                  <td class="actions-column">
+                    <a (click)="openEditModal(office)" class="edit-btn">
+                      Edit
+                    </a>
+                  </td>
+                </tr>
+              </tbody>              
+            </table>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+          <button class="pagination-buttons" (click)="changeDeptPage('prev')" [disabled]="currentDeptPage === 1">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="16px" fill="#FFFFFF">
+              <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/>
+            </svg>
+          </button>
+          <span>Page {{ currentDeptPage }}</span>
+          <button class="pagination-buttons" (click)="changeDeptPage('next')" [disabled]="(currentDeptPage * rowsPerDeptPage) >= departments.length">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="16px" fill="#FFFFFF">
+              <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+    </div>
+</div>
+
+<!-- Add New Office Modal -->
+<div *ngIf="isModalOpen" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>New Department</h3>
+    <form (ngSubmit)="addOffice()">
+      <label for="officeName">Department Abbreviation</label>
+      <input
+        id="officeName"
+        [(ngModel)]="officeName"
+        name="officeName"
+        required
+        (keyup)="officeName = officeName.toUpperCase()"
+        [disabled]="isChangingPassword"
+      />
+      <button type="submit" class="submit-btn" [disabled]="isChangingPassword">
+        <span *ngIf="isChangingPassword" class="spinner"></span>
+        {{ isChangingPassword ? 'Adding...' : 'Save' }}
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Office Modal -->
+<div *ngIf="isEditModalOpen" class="modal-overlay" (click)="closeEditModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Edit Department</h3>
+    <form (ngSubmit)="updateOffice()">
+      <label for="editOfficeName">Department</label>
+      <input
+        id="editOfficeName"
+        [(ngModel)]="selectedOffice.office_name"
+        name="editOfficeName"
+        required
+      />
+      <button type="submit" class="submit-btn" [disabled]="isChangingPassword">
+        <span *ngIf="isChangingPassword" class="spinner"></span>
+        {{ isChangingPassword ? 'Updating...' : 'Save Changes' }}
+      </button>
+    </form>
   </div>
 </div>
 

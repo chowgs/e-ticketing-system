@@ -1,11 +1,9 @@
-<div class="user-management-container">
-  <!-- Add New User and Personnel Button -->
+<!-- <div class="user-management-container">
   <div class="add-user-btn-container">
     <button (click)="openAddUserModal()" class="open-addusermodal-btn">Add User</button>
     <button (click)="openAddPersonnelModal()" class="open-addpersonnelmodal-btn">Add Personnel</button>
   </div>
 
-  <!-- Existing Users Section -->
   <div class="flex-sections-I">
     <section>
       <div *ngIf="isLoadingFetch" class="spinner-container">
@@ -29,7 +27,6 @@
         </tbody>
       </table>
 
-      <!-- Pagination Controls -->
       <div class="pagination">
         <button class="pagination-buttons" (click)="changePage('prev')" [disabled]="currentPage === 1">
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="16px" fill="#FFFFFF"><path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/></svg>             
@@ -42,7 +39,6 @@
     </section>
   </div>
 
-  <!-- Add New User Modal -->
   <div *ngIf="isAddUserModalOpen" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-header">
@@ -51,7 +47,6 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="addUserForm">
-          <!-- Form Fields -->
           <div class="form-fields">
             <div class="form-column">
               <label for="id_number">ID No.</label>
@@ -83,11 +78,9 @@
             </div>
           </div>
   
-          <!-- Permissions Section -->
           <div class="permissions">
             <h4>Permissions</h4>
             <div class="permission-columns">
-              <!-- First Column: Administrator and Sub-permissions -->
               <div class="permission-column">
                 <label>
                   <input type="checkbox" [checked]="selectedPermissions.includes(1.6)" (change)="togglePermission(1.6)" />
@@ -104,7 +97,6 @@
                   </label>
                 </div>
               </div>
-              <!-- Second Column: Other Permissions -->
               <div class="permission-column">
                 <label>
                   <input type="checkbox" [checked]="selectedPermissions.includes(0)" (change)="togglePermission(0)" />
@@ -137,7 +129,6 @@
     </div>
   </div>
   
-  <!-- Add New Personnel Modal -->
   <div *ngIf="isAddPersonnelModalOpen" class="addusermodal-overlay" (click)="closeAddPersonnelModal()">
     <div class="addusermodal-content" (click)="$event.stopPropagation()">
       <div class="modal-header-personnel">
@@ -166,4 +157,4 @@
       </button>
     </div>
   </div>
-</div>
+</div> -->

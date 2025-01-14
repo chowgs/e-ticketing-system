@@ -1,3 +1,5 @@
+<div *ngIf="isLoading" class="loader"></div>
+
 <header>
   <div class="flex-container">
     <div class="logo">
@@ -19,8 +21,7 @@
         </div>
       </div>
     </div>
-    
-  </div> 
+  </div>
 
   <!-- Loading animation -->
   <div *ngIf="isLoggingOut" class="loading-overlay">
@@ -29,70 +30,75 @@
   </div>
 </header>
 
-  <div class="sidebar">
-    <ul>
-      <br>
-      <!-- Dashboard Section  -->
-      <li *ngIf="showItPersonnelSection">
-        <p style="font-size: 12px;">Home</p>
-        <a routerLink="dashboard" routerLinkActive="active-link">
-          Dashboard
-        </a>
-      </li>
-      <!-- Monitoring Section -->
-      <li *ngIf="showMonitoringSection">
-        <p style="font-size: 12px;">Monitoring</p>
-        <a routerLink="monitoring" routerLinkActive="active-link">
-          Pending Request
-        </a>
-      </li>
-      <!-- IT Personnel Section -->
-      <li *ngIf="showItPersonnelSection">
-        <p style="font-size: 12px;">Task Management</p>
-        <a routerLink="task" routerLinkActive="active-link">
-          Job Request
-        </a>
-      </li>
-      <li *ngIf="showItPersonnelSection">
-        <a routerLink="maintenance-log" routerLinkActive="active-link">
-          IT Repair & Maintenance Log
-        </a>
-      </li>
+<div class="sidebar">
+  <ul>
+    <br>
+    <!-- Dashboard Section  -->
+    <li *ngIf="showItPersonnelSection">
+      <a routerLink="dashboard" routerLinkActive="active-link">
+        <span class="material-icons">dashboard</span>
+        Dashboard
+      </a>
+    </li>
+    <!-- Monitoring Section -->
+    <li *ngIf="showMonitoringSection">
+      <p style="font-size: 12px;">Monitor</p>
+      <a routerLink="monitoring" routerLinkActive="active-link">
+        <span class="material-icons">visibility</span>
+        Incoming Request
+      </a>
+    </li>
+    <!-- IT Personnel Section -->
+    <li *ngIf="showItPersonnelSection">
+      <p style="font-size: 12px;">Manage Task</p>
+      <a routerLink="task" routerLinkActive="active-link">
+        <span class="material-icons">assignment</span>
+        Job Request
+      </a>
+    </li>
+    <li *ngIf="showItPersonnelSection">
+      <a routerLink="maintenance-log" routerLinkActive="active-link">
+        <span class="material-icons">build</span>
+        IPMS Log
+      </a>
+    </li>
 
-      <!-- Supervisor Section -->
-      <li *ngIf="showSupervisorSection">
-        <p style="font-size: 12px;">Office Supervisor</p>
-        <a routerLink="supervisor/head-supervisor" routerLinkActive="active-link">
-          Client Request
-        </a>
-      </li>
+    <!-- Supervisor Section -->
+    <li *ngIf="showSupervisorSection">
+      <p style="font-size: 12px;">Office Supervisor</p>
+      <a routerLink="supervisor/head-supervisor" routerLinkActive="active-link">
+        <span class="material-icons">supervisor_account</span>
+        Client Request
+      </a>
+    </li>
 
-      <li *ngIf="showItSupervisorSection">
-        <p style="font-size: 12px;">IT Supervisor</p>
-        <a routerLink="supervisor/technical-supervisor" routerLinkActive="active-link">
-          Incoming Request
-        </a>
-      </li>
+    <li *ngIf="showItSupervisorSection">
+      <p style="font-size: 12px;">Technical Supervisor</p>
+      <a routerLink="supervisor/technical-supervisor" routerLinkActive="active-link">
+        <span class="material-icons">settings_input_svideo</span>
+        Incoming Request
+      </a>
+    </li>
 
-      <!-- Administrator Section -->
-      <li *ngIf="showAdminSection">
-        <p style="font-size: 12px;">Admin Control</p>
-        <a routerLink="user-settings" routerLinkActive="active-link">
-          User Settings
-        </a>
-        <!-- <a *ngIf="showUserManagement" routerLink="user-management" routerLinkActive="active-link">
-          User Management
-        </a> -->
-        <a *ngIf="showOfficeManagement" routerLink="office-management" routerLinkActive="active-link">
-          Office Management
-        </a>
-      </li>
-    </ul>
-  </div>
+    <!-- Administrator Section -->
+    <li *ngIf="showAdminSection">
+      <p style="font-size: 12px;">Admin Control</p>
+      <a routerLink="user-settings" routerLinkActive="active-link">
+        <span class="material-icons">settings</span>
+        User Settings
+      </a>
+      <!-- <a *ngIf="showUserManagement" routerLink="user-management" routerLinkActive="active-link">
+        User Management
+      </a> -->
+      <!-- <a *ngIf="showOfficeManagement" routerLink="office-management" routerLinkActive="active-link">
+        Office Management
+      </a> -->
+    </li>
+  </ul>
+</div>
 
-
-    <div class="main-content">
-        <app-notification></app-notification>
-        <router-outlet></router-outlet>
-    </div>
+<div class="main-content">
+  <app-notification></app-notification>
+  <router-outlet></router-outlet>
+</div>
 

@@ -94,6 +94,7 @@ class UsersController extends \Phalcon\Mvc\Controller
                     'name' => $user->name,
                     'designation' => $user->designation,
                     'office_name' => $office ? $office->office_name : null,
+                    'division_id' => $division ? $division->division_id : null,
                     'division_name' => $division ? $division->division_name : null,
                     'permissions' => $permissions
                 ]

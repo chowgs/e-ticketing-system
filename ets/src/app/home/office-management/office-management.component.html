@@ -1,10 +1,6 @@
-<div class="office-management-container">
-
-
+<!-- <div class="office-management-container">
   <div class="flex-sections">
-      <!-- All Offices Section -->
       <section>
-            <!-- Add New Office Button -->
     <div class="add-user-btn-container">
       <button (click)="openModal()" class="open-modal-btn">Add Department</button>
     </div>
@@ -33,7 +29,6 @@
           </tbody>
         </table>
 
-        <!-- Pagination Controls -->
         <div class="pagination">
           <button class="pagination-buttons" (click)="changePage('prev')" [disabled]="currentPage === 1">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="16px" fill="#FFFFFF"><path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/></svg>          </button>
@@ -46,7 +41,6 @@
     </div>
 </div>
 
-<!-- Add New Office Modal -->
 <div *ngIf="isModalOpen" class="modal-overlay">
   <div class="modal-content">
     <h3>New Department</h3>
@@ -69,7 +63,6 @@
   </div>
 </div>
 
-<!-- Edit Office Modal -->
 <div *ngIf="isEditModalOpen" class="modal-overlay">
   <div class="modal-content">
     <h3>Edit Department</h3>
@@ -88,4 +81,4 @@
       <button type="button" (click)="closeEditModal()" class="close-modal-btn">Cancel</button>
     </form>
   </div>
-</div>
+</div> -->

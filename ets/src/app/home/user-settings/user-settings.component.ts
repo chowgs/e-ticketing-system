@@ -13,7 +13,7 @@ import { NotificationService } from '../../shared/notification.service';
   styleUrl: './user-settings.component.css'
 })
 export class UserSettingsComponent implements OnInit{
-  // User Settings 
+  /////////// User Settings 
   myAccountForm: FormGroup;
   passwordForm: FormGroup;
   selectedPermissions: number[] = [];
@@ -24,10 +24,11 @@ export class UserSettingsComponent implements OnInit{
     { id: 1.6, label: 'Administrator', children: [
       { id: 1.1, label: 'Edit User' },
       { id: 1.2, label: 'Change Password' },
-      { id: 1.3, label: 'Add User' },
-      { id: 1.4, label: 'Office Management' },
+      { id: 1.3, label: 'Add User (User Management Required!)' },
+      { id: 1.4, label: 'Department Management' },
       { id: 1.5, label: 'Add/Edit Permissions' },
       { id: 1.7, label: 'User Management' },
+      { id: 1.8, label: 'Add Personnel (User Management Required!)' },
     ]},
     { id: 0, label: 'Technical Support' },
     { id: 2.1, label: 'Monitoring' },
@@ -35,17 +36,22 @@ export class UserSettingsComponent implements OnInit{
     { id: 4.1, label: 'Office Supervisor' },
   ];
   
+  // For showing the appropriate section based on permissions 
   showPermissionsSection: boolean = false;  
   showAccountSettingsSection: boolean = true;
   showChangePasswordSection: boolean = true;
   showUserManagement: boolean = true;
+  showOfficeManagement: boolean = true;
+  showAddUser: boolean = true;
+  showAddPersonnel: boolean = true;
 
+  // for loading account settings data 
   isLoading: boolean = false;
   isSaving: boolean = false;
   isChangingPassword: boolean = false;
   isAddingPerms: boolean = false;
 
-  // User Management 
+  /////////// User Management 
   addUserForm!: FormGroup;
   addPersonnelForm!: FormGroup;
   divisions: any[] = [];
@@ -64,6 +70,7 @@ export class UserSettingsComponent implements OnInit{
     { id: 1.5, label: 'Add/Edit Permissions' },
   ];
   
+  // for loading users 
   isLoadingFetch: boolean = false;
   isRegistering: boolean = false;
   isAddingPersonnel: boolean = false;
@@ -71,6 +78,15 @@ export class UserSettingsComponent implements OnInit{
   isAddUserModalOpen = false; 
   isAddPersonnelModalOpen = false;
 
+  // Office Management 
+  officeName: string = '';
+  departments: any[] = [];
+  isModalOpen = false;
+  isEditModalOpen = false; // For edit modal
+  selectedOffice: any = null; 
+  currentDeptPage: number = 1; // Track the current page
+  rowsPerDeptPage: number = 8; // Maximum rows per page
+  
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private notificationService: NotificationService) {
     this.myAccountForm = this.fb.group({
       idNumber: [{ value: '', disabled: true }],
@@ -103,18 +119,18 @@ export class UserSettingsComponent implements OnInit{
   }
 
   ngOnInit(): void {
-      this.isLoading = true;
       // Get current user details from the backend and populate the form
       this.fetchPermissions();
+      this.fetchDepartments();
+      
       this.authService.getUserInfo().subscribe((response: any) => {
         if (response.status === 'success') {
-          this.isLoading = false;
           this.myAccountForm.patchValue({
             idNumber: response.data.id_number, 
             name: response.data.name,
             designation: response.data.designation,
             office: response.data.office_name,  
-            division: response.data.division_name,  
+            division: response.data.division_id,  
           });
           
           // Disable the idNumber control after setting the value
@@ -195,6 +211,7 @@ export class UserSettingsComponent implements OnInit{
         this.isChangingPassword = false;
         if (response.status === 'success') {
           this.notificationService.showNotification('Password updated successfully.', 'success');
+          this.closeChangePasswordDialog();
           this.passwordForm.reset();
         } else {
           this.notificationService.showNotification('Failed to update user password: ', 'error', + response.message);
@@ -225,8 +242,11 @@ export class UserSettingsComponent implements OnInit{
           // Check if any of the required permissions are present
           this.showAccountSettingsSection = this.selectedPermissions.includes(1.1);
           this.showChangePasswordSection =  this.selectedPermissions.includes(1.2); 
+          this.showAddUser =  this.selectedPermissions.includes(1.3); 
+          this.showOfficeManagement =  this.selectedPermissions.includes(1.4); 
           this.showPermissionsSection = this.selectedPermissions.includes(1.5);
           this.showUserManagement = this.selectedPermissions.includes(1.7);
+          this.showAddPersonnel =  this.selectedPermissions.includes(1.8); 
         } else {
           alert('Failed to fetch permissions.');
         }
@@ -281,6 +301,11 @@ export class UserSettingsComponent implements OnInit{
         if (response.status === 'success') {
           this.isAddingPerms = false;
           this.notificationService.showNotification('Permissions updated successfully.', 'success');
+          this.closePermissionsDialog();
+          setTimeout(() => {
+            // Trigger a page refresh after success
+            window.location.reload();
+          }, 1500);
         } else {
           this.isAddingPerms = false;
           this.notificationService.showNotification('Failed to permissions update successfully.', 'error');
@@ -293,7 +318,7 @@ export class UserSettingsComponent implements OnInit{
     );
   }
 
-  // User Management 
+  ////////////// User Management 
   loadUserInfo(): void {
     this.authService.getUserInfo().subscribe(
       (response: any) => {
@@ -347,21 +372,21 @@ export class UserSettingsComponent implements OnInit{
   }
 
   loadUsers(): void {
-    this.isLoadingFetch = true;
+    // this.isLoadingFetch = true;
     this.authService.getUsers().subscribe(
       (response: any) => {
         if (response.status === 'success') {
-          this.isLoadingFetch = false;
+          // this.isLoadingFetch = false;
           this.users = response.data;
         } else {
-          this.isLoadingFetch = false;
+          // this.isLoadingFetch = false;
           this.notificationService.showNotification('Failed to fetch users', 'error');
           console.error('Failed to fetch users');
         }
       },
       (error) => console.error('Error fetching users', error),
       () => {
-        this.isLoadingFetch = false; // Stop loading
+        // this.isLoadingFetch = false; // Stop loading
       }
     );
   }
@@ -469,6 +494,10 @@ export class UserSettingsComponent implements OnInit{
           this.selectedAddPermissions = [];
           this.addUserForm.reset();
           this.closeAddUserModal();
+          setTimeout(() => {
+            // Trigger a page refresh after success
+            window.location.reload();
+          }, 1500);
         } else {
           this.isRegistering = false;
           this.notificationService.showNotification('User registration failed. ' ,'error', + response.message);
@@ -509,6 +538,10 @@ export class UserSettingsComponent implements OnInit{
             this.notificationService.showNotification('Personnel has been added!', 'success');
             this.addPersonnelForm.reset();
             this.closeAddPersonnelModal();
+            setTimeout(() => {
+              // Trigger a page refresh after success
+              window.location.reload();
+            }, 1500);
           } else {
             this.isAddingPersonnel = false;
             this.notificationService.showNotification('Failed to save personnel.', 'error');
@@ -525,4 +558,132 @@ export class UserSettingsComponent implements OnInit{
       this.notificationService.showNotification('Please fill out all required fields.', 'error');
     }
   }
+
+  // Office Management 
+  fetchDepartments(): void {
+    this.isLoadingFetch = true; // Start loading
+    this.authService.getAllOffices().subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          this.departments = response.data;
+        } else {
+          console.error('Failed to fetch office');
+        }
+      },
+      (error) => {
+        console.error('Error fetching offices:', error);
+      },
+      () => {
+        this.isLoadingFetch = false; // Stop loading
+      }
+    );
+  }
+
+  // Function to open the modal
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  // Function to close the modal
+  closeModal() {
+    this.isModalOpen = false;
+  }
+
+  addOffice(): void {
+    if (this.officeName.trim()) {
+      this.isChangingPassword = true; // Start loading
+      const officeData = {
+        office_name: this.officeName.toUpperCase()
+      };
+
+      this.authService.addOffice(officeData).subscribe(
+        (response: any) => {
+          if (response.status === 'success') {
+            this.notificationService.showNotification('Office has been added!','success');
+            this.officeName = ''; // Reset the input field
+            this.fetchDepartments(); // Refresh the list of offices
+            this.closeModal();
+          } else if (response.message === 'Office already exists.') {
+            this.notificationService.showNotification('Office already exists.', 'error');
+          } else {
+            this.notificationService.showNotification(`Failed to add office: ${response.message}`, 'error');
+          }
+        },
+        (error) => {
+          console.error('Error adding office:', error);
+          this.notificationService.showNotification('An error occurred while adding office','error');
+        },
+        () => {
+          this.isChangingPassword = false; // Stop loading
+        }
+      );
+    } else {
+      this.notificationService.showNotification('Please enter the office name','error');
+    }
+  }
+
+  openEditModal(office: any) {
+    this.selectedOffice = { ...office }; // Create a copy to edit
+    this.isEditModalOpen = true;
+  }
+
+  closeEditModal() {
+    this.selectedOffice = null;
+    this.isEditModalOpen = false;
+  }
+
+  updateOffice(): void {
+    if (this.selectedOffice && this.selectedOffice.office_name.trim()) {
+      this.selectedOffice.office_name = this.selectedOffice.office_name.toUpperCase();
+      this.isChangingPassword = true;
+
+      this.authService.updateOffice(this.selectedOffice).subscribe(
+        (response: any) => {
+          if (response.status === 'success') {
+            this.notificationService.showNotification(
+              'Office updated successfully!',
+              'success'
+            );
+            this.fetchDepartments(); // Refresh the list
+            this.closeEditModal();
+          } else {
+            this.notificationService.showNotification(
+              `Failed to update office: ${response.message}`,
+              'error'
+            );
+          }
+        },
+        (error) => {
+          console.error('Error updating office:', error);
+          this.notificationService.showNotification(
+            'An error occurred while updating office',
+            'error'
+          );
+        },
+        () => {
+          this.isChangingPassword = false;
+        }
+      );
+    } else {
+      this.notificationService.showNotification(
+        'Please enter a valid office name',
+        'error'
+      );
+    }
+  }
+
+  // Method to handle pagination
+  getPaginatedOffices(): any[] {
+    const startIndex = (this.currentDeptPage - 1) * this.rowsPerDeptPage;
+    return this.departments.slice(startIndex, startIndex + this.rowsPerDeptPage);
+  }
+
+  changeDeptPage(direction: string): void {
+    if (direction === 'next' && (this.currentDeptPage * this.rowsPerDeptPage) < this.departments.length) {
+      this.currentDeptPage++;
+    } else if (direction === 'prev' && this.currentDeptPage > 1) {
+      this.currentDeptPage--;
+    }
+  }
+
 }

@@ -18,30 +18,34 @@ export class HomeComponent implements OnInit {
     permissions: [] // Initialize permissions as an array
   };
 
+  isLoading: boolean = false;
+
   // Permission flags
   showItPersonnelSection: boolean = false;
   showAdminSection: boolean = false;
-  showUserManagement: boolean = false;
+  // showUserManagement: boolean = false;
   showMonitoringSection: boolean = false;
   showSupervisorSection: boolean = false;
   showItSupervisorSection: boolean = false;
-  showOfficeManagement: boolean = false;
+  // showOfficeManagement: boolean = false;
 
   isLoggingOut: boolean = false; // Loading state for logout  
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.authService.getUserPerms().subscribe(
       (response: any) => {
         if (response.status === 'success') {
+          this.isLoading = false;
           this.userInfo = response.data;
           this.userInfo.permissions = response.data.permissions || [];
 
           // Evaluate permissions
           this.showItPersonnelSection = this.hasPermission(0); //dashboard, task, maintenance log, change pass
-          this.showOfficeManagement = this.hasPermission(1.4); 
+          // this.showOfficeManagement = this.hasPermission(1.4); 
           this.showAdminSection = this.hasPermission(1.6);
-          this.showUserManagement = this.hasPermission(1.7);
+          // this.showUserManagement = this.hasPermission(1.7);
           this.showMonitoringSection = this.hasPermission(2.1);
           this.showItSupervisorSection = this.hasPermission(3.1);
           this.showSupervisorSection = this.hasPermission(4.1);
