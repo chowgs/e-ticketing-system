@@ -1,10 +1,6 @@
-<!-- Loading Animation -->
-<div *ngIf="isLoading" class="loading-overlay">
-  <div class="spinner"></div>
-</div>
+
 
 <div *ngIf="!isLoading && reports.length > 0; else noReportsTemplate">
-  <h3 style="text-align: center;">Job Request Task</h3>
 
   <!-- Filter Dropdown -->
   <div class="filter-container">
@@ -66,20 +62,29 @@
           <td class="main-table-row-data" *ngIf="selectedStatus !== 'For Release' && selectedStatus !== 'Released'">
             <!-- Display the duration if it's running -->
             <span *ngIf="durations[report.id]">{{ durations[report.id] }}</span>
-            <span *ngIf="!durations[report.id]">Not Started</span>
+            <span *ngIf="!durations[report.id]">Not Yet Started</span>
           </td>
               <!-- Hide buttons if the status is 'Released' -->
           <td class="main-table-row-data" *ngIf="report.request_status !== 'Released' && report.request_status !== 'For Release'">
-            <button class="btn btn-success btn-sm action-btn" (click)="acceptReport(report)">Accept</button>
+            <button class="btn btn-success btn-sm action-btn" (click)="acceptReport(report)">
+              <span class="material-icons">assignment</span>
+
+            </button>
           </td>        
           <td class="main-table-row-data" *ngIf="report.request_status !== 'Pending' && report.request_status !== 'For Release'">
-            <button class="btn btn-primary btn-sm action-btn" (click)="openViewDialog(report)">Preview</button>
+            <button class="btn btn-primary btn-sm action-btn" (click)="openViewDialog(report)">
+              <span class="material-icons">preview</span>
+            </button>
           </td>
           <td class="main-table-row-data" *ngIf="report.request_status !== 'Released' && report.request_status !== 'For Release'">
-            <button class="btn btn-warning btn-sm action-btn" (click)="openEditDialog(report)">Accomplish</button>
+            <button class="btn btn-warning btn-sm action-btn" (click)="openEditDialog(report)">
+              <span class="material-icons">task</span>
+            </button>
           </td>
           <td class="main-table-row-data" *ngIf="report.request_status !== 'Released' && report.request_status !== 'Pending'">
-            <button class="btn btn-success btn-sm action-btn" (click)="openForReleaseDialog(report)">Release</button>
+            <button class="btn btn-success btn-sm action-btn" (click)="openForReleaseDialog(report)">
+              <span class="material-icons">done</span>
+            </button>
           </td>
         </tr>
       </ng-container>
@@ -99,15 +104,20 @@
   
 </div>
 
-<ng-template #noReportsTemplate>
-  <div class="no-reports-message">
-    <p>No tasks available.</p>
-  </div>
-</ng-template>
-
-<div *ngIf="errorMessage">
-  <p>{{ errorMessage }}</p>
+<div *ngIf="isLoading" class="spinner-container">
+  <div class="loader"></div>
+  <p>Loading data...</p>
 </div>
+
+  <ng-template #noReportsTemplate>
+    <div class="no-reports-message">
+      <p>No tasks available.</p>
+    </div>
+  </ng-template>
+
+  <div *ngIf="errorMessage">
+    <p>{{ errorMessage }}</p>
+  </div>
 
 <!-- Confirmation Dialog -->
 <div *ngIf="isConfirmationDialogOpen" class="confirmation-dialog-overlay" (click)="closeOnOverlay($event)">
@@ -116,12 +126,11 @@
     <p>Do you want to begin this job and start the time?</p>
     <p>Current Date: {{ currentDate }}</p>
     <div class="dialog-footer">
-      <button (click)="confirmAccept()" class="btn-primary">Yes</button>
-      <button (click)="closeConfirmationDialog()" class="btn-secondary">No</button>
+      <button (click)="closeConfirmationDialog()" class="btn-no">No</button>
+      <button (click)="confirmAccept()" class="btn-yes">Yes</button>
     </div>
   </div>
 </div>
-
 
 <!-- Edit Dialog  -->
 <div *ngIf="isEditDialogOpen" class="edit-dialog-overlay" (click)="closeOnOverlay($event)">

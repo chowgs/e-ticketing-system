@@ -1,5 +1,5 @@
 <div class="container my-4">
-    <h2 class="mb-4 text-center">Approved IT Repair and Maintenance Reports</h2>
+    <h2 class="mb-4 text-center">Technical Supervisor</h2>
 
   <div class="filter-container">
     <label for="search">Search:</label>
@@ -7,8 +7,8 @@
   </div>
   <!-- Loading Spinner -->
 <div *ngIf="isLoading" class="spinner-container">
-  <div class="spinner"></div>
-  <p>Loading...</p>
+  <div class="loader"></div>
+  <p>Loading data...</p>
 </div>
   <table class="job-request-task" *ngIf="!isLoading">
     <thead>
@@ -25,12 +25,30 @@
           <td class="main-table-row-data">{{ report.name }}</td>
           <td class="main-table-row-data">{{ report.issue_request }}</td>
           <td class="main-table-row-data">{{ report.date_of_request | date: 'short' }}</td>
-          <td class="main-table-row-data actions-cell">
+          <!-- <td class="main-table-row-data actions-cell">
             <div class="actions-container">
               <button class="btn btn-info action-btn" (click)="openReviewDialog(report)">View</button>
               <button class="btn btn-success action-btn" (click)="openConfirmDialog(report)">Accept</button>
             </div>
-          </td>          
+          </td>           -->
+          <td class="main-table-row-data actions-cell">
+            <div class="actions-container">
+              <button class="btn btn-info action-btn" (click)="openReviewDialog(report)">View</button>
+              <button
+                class="btn btn-success action-btn"
+                (click)="openConfirmDialog(report)"
+                [disabled]="loadingReports[report.id]"
+              >
+                <ng-container *ngIf="!loadingReports[report.id]; else loading">
+                  Accept
+                </ng-container>
+                <ng-template #loading>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Processing...
+                </ng-template>
+              </button>
+            </div>
+          </td> 
         </tr>
       </ng-container>
     </tbody>

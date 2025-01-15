@@ -46,7 +46,6 @@ export class MonitorComponent implements OnInit {
       );
   }
 
-
   loadPersonnelNames(): void {
     this.authService.getPersonnelByDivision().subscribe(
       (response) => {
@@ -61,6 +60,35 @@ export class MonitorComponent implements OnInit {
       }
     );
   }
+
+assignPersonnel(report: any): void {
+  if (!report.selectedPersonnelId) {
+    this.notificationService.showNotification('Please select a personnel', 'warning');
+    return;
+  }
+
+  // Set assigning state for the specific report
+  report.isAssigning = true;
+
+  this.authService.assignPersonnelToReport(report.control_no, report.selectedPersonnelId).subscribe(
+    (response) => {
+      if (response.status === 'success') {
+        this.notificationService.showNotification('Personnel has been assigned', 'success');
+        report.personnel_id = report.selectedPersonnelId; // Update displayed personnel_id
+      } else {
+        this.notificationService.showNotification('Failed to assign personnel', 'error');
+      }
+      report.isAssigning = false; // Reset assigning state
+    },
+    (error) => {
+      console.error("Error assigning personnel:", error);
+      this.notificationService.showNotification('An error has occured while trying to assign personnel', 'error');
+      report.isAssigning = false; // Reset assigning state
+    }
+  );
+}
+}
+
 
 //   assignPersonnel(report: any): void {
 //     if (!report.selectedPersonnelId) {
@@ -85,45 +113,6 @@ export class MonitorComponent implements OnInit {
 //         }
 //     );
 // }
-assignPersonnel(report: any): void {
-  if (!report.selectedPersonnelId) {
-    this.notificationService.showNotification('Please select a personnel', 'warning');
-    return;
-  }
-
-  // Set assigning state for the specific report
-  report.isAssigning = true;
-
-  this.authService.assignPersonnelToReport(report.control_no, report.selectedPersonnelId).subscribe(
-    (response) => {
-      if (response.status === 'success') {
-        this.notificationService.showNotification('Personnel has been assigned', 'success');
-        report.personnel_id = report.selectedPersonnelId; // Update displayed personnel_id
-        this.refreshPage(); // Trigger a page refresh with loading animation
-      } else {
-        this.notificationService.showNotification('Failed to assign personnel', 'error');
-      }
-      report.isAssigning = false; // Reset assigning state
-    },
-    (error) => {
-      console.error("Error assigning personnel:", error);
-      this.notificationService.showNotification('An error has occured while trying to assign personnel', 'error');
-      report.isAssigning = false; // Reset assigning state
-    }
-  );
-}
-
-refreshPage(): void {
-  this.isLoading = true; // Show global loading animation
-  setTimeout(() => {
-    location.reload(); // Reload the page after a short delay
-  }, 1000); // Optional delay for smoother UX
-}
-
-}
-
-
-
   // serviceReports: any[] = [];
 
   // constructor(private authService: AuthService) {}

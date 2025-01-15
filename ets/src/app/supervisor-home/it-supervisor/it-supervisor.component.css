@@ -52,40 +52,66 @@
   background-color: #218838;
 }
 
-/* .loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-} */
-
 .spinner-container {
+  position: fixed; /* To position the loader in the center of the viewport */
+  top: 50%; /* 50% from the top */
+  left: 50%; /* 50% from the left */
+  transform: translate(-50%, -50%); /* To adjust the position and center the element */
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  height: 100%;
-  text-align: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it's on top of other content */
+}
+.loader {
+  width: 50px; /* Smaller size */
+  aspect-ratio: 1;
+  position: relative;
 }
 
-.spinner {
-  border: 8px solid #f3f3f3;
-  border-top: 8px solid #3498db;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
+.loader:before,
+.loader:after {
+  content: "";
+  position: absolute;
+  border-radius: 50px;
+  box-shadow: 0 0 0 3px inset #de4a25;
+  animation: l4 2.5s infinite;
 }
 
-@keyframes spin {
+.loader:after {
+  animation-delay: -1.25s;
+}
+
+@keyframes l4 {
   0% {
-    transform: rotate(0deg);
+    inset: 0 35px 35px 0;
+  }
+  12.5% {
+    inset: 0 35px 0 0;
+  }
+  25% {
+    inset: 35px 35px 0 0;
+  }
+  37.5% {
+    inset: 35px 0 0 0;
+  }
+  50% {
+    inset: 35px 0 0 35px;
+  }
+  62.5% {
+    inset: 0 0 0 35px;
+  }
+  75% {
+    inset: 0 0 35px 35px;
+  }
+  87.5% {
+    inset: 0 0 35px 0;
   }
   100% {
-    transform: rotate(360deg);
+    inset: 0 35px 35px 0;
   }
 }
+
 
 .mat-spinner {
   margin: 0 auto;
@@ -142,7 +168,7 @@ table.job-request-task td {
 }
 
 table.job-request-task th.main-table-head {
-  background-color: #007bff;
+  background-color: #333;
   color: white;
   font-weight: bold;
 }

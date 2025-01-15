@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
+import { NotificationService } from '../../shared/notification.service';
 
 @Component({
   selector: 'app-it-supervisor',
@@ -17,7 +18,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class ItSupervisorComponent implements OnInit {
   isLoading: boolean = false;  // Loading state flag
-
+  loadingReports: { [key: number]: boolean } = {};
   approvedReports: any[] = [];
   selectedReport: any = null;
   filteredReports: any[] = [];
@@ -27,7 +28,8 @@ export class ItSupervisorComponent implements OnInit {
   @ViewChild('reviewDialog', { static: false }) reviewDialog!: TemplateRef<any>;
   @ViewChild('confirmDialog', { static: false }) confirmDialog!: TemplateRef<any>;
 
-  constructor(private supervisorService: SupervisorService, private dialog: MatDialog) {}
+  constructor(private supervisorService: SupervisorService, private dialog: MatDialog, private notificationService: NotificationService,
+  ) {}
 
   ngOnInit(): void {
     this.fetchApprovedReports();
@@ -65,23 +67,29 @@ export class ItSupervisorComponent implements OnInit {
   }
 
   acceptJobRequest(): void {
-    this.isLoading = true; // Set loading to true when request starts
+    this.dialog.closeAll();
     if (this.selectedReport) {
+      const reportId = this.selectedReport.id;
+      this.loadingReports[reportId] = true; // Set loading for specific report
       this.supervisorService.acceptJobRequest(this.selectedReport).subscribe(
         (response) => {
           if (response.status === 'success') {
+            this.notificationService.showNotification('Job request has been accepted', 'success');
             console.log('Job request accepted:', response.data);
             // Re-fetch or update reports to reflect changes
             this.fetchApprovedReports();
           } else {
+            this.notificationService.showNotification(response.message, 'error');
             console.error('Failed to accept job request:', response.message);
           }
-          this.isLoading = false; // Reset loading after response
+          this.loadingReports[reportId] = false; // Reset loading after response
           this.dialog.closeAll(); // Close the dialog
         },
         (error) => {
+          this.notificationService.showNotification('An error occurred. Please try again later.', 'error');
           console.error('API error:', error);
-          this.isLoading = false; // Reset loading after error
+          this.loadingReports[reportId] = false; // Reset loading after error
+          this.dialog.closeAll();
         }
       );
     }

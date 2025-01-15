@@ -18,8 +18,8 @@
 
   <!-- Loading Spinner -->
   <div *ngIf="isLoading" class="spinner-container">
-    <div class="spinner"></div>
-    <p>Loading...</p>
+    <div class="loader"></div>
+    <p>Loading data...</p>
   </div>
 
   <table class="job-request-task" *ngIf="!isLoading">
@@ -36,6 +36,7 @@
           <td class="main-table-row-data">{{ request.name }}</td>
           <td class="main-table-row-data">{{ request.issue_request }}</td>
           <td class="main-table-row-data">
+            <div class="button-container">
             <button
               class="btn btn-success btn-sm action-btn"
               [disabled]="loadingRequests[request.id]"
@@ -49,6 +50,7 @@
                 Processing...
               </ng-template>
             </button>
+            </div>
           </td>
         </tr>
       </ng-container>

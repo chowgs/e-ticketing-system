@@ -29,9 +29,11 @@ export class UserSettingsComponent implements OnInit{
       { id: 1.5, label: 'Add/Edit Permissions' },
       { id: 1.7, label: 'User Management' },
       { id: 1.8, label: 'Add Personnel (User Management Required!)' },
+      { id: 1.9, label: 'Incoming Task' },
     ]},
-    { id: 0, label: 'Technical Support' },
     { id: 2.1, label: 'Monitoring' },
+    { id: 2.2, label: 'Dashboard' },
+    { id: 2.3, label: 'PMS Log' },
     { id: 3.1, label: 'IT Supervisor' },
     { id: 4.1, label: 'Office Supervisor' },
   ];

@@ -1,4 +1,3 @@
-<div *ngIf="isLoading" class="loader"></div>
 
 <header>
   <div class="flex-container">
@@ -24,8 +23,8 @@
   </div>
 
   <!-- Loading animation -->
-  <div *ngIf="isLoggingOut" class="loading-overlay">
-    <div class="spinner"></div>
+  <div *ngIf="isLoggingOut" class="logout-loading-overlay">
+    <div class="logout-spinner"></div>
     <p>Logging out...</p>
   </div>
 </header>
@@ -34,7 +33,7 @@
   <ul>
     <br>
     <!-- Dashboard Section  -->
-    <li *ngIf="showItPersonnelSection">
+    <li *ngIf="showDashboardSection">
       <a routerLink="dashboard" routerLinkActive="active-link">
         <span class="material-icons">dashboard</span>
         Dashboard
@@ -56,10 +55,10 @@
         Job Request
       </a>
     </li>
-    <li *ngIf="showItPersonnelSection">
+    <li *ngIf="showPMSLogSection">
       <a routerLink="maintenance-log" routerLinkActive="active-link">
         <span class="material-icons">build</span>
-        IPMS Log
+        PMS Log
       </a>
     </li>
 
@@ -76,7 +75,7 @@
       <p style="font-size: 12px;">Technical Supervisor</p>
       <a routerLink="supervisor/technical-supervisor" routerLinkActive="active-link">
         <span class="material-icons">settings_input_svideo</span>
-        Incoming Request
+        Received Inquiry
       </a>
     </li>
 

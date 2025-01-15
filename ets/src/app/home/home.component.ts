@@ -22,12 +22,14 @@ export class HomeComponent implements OnInit {
 
   // Permission flags
   showItPersonnelSection: boolean = false;
+  showDashboardSection: boolean = false;
+  showPMSLogSection: boolean = false;
   showAdminSection: boolean = false;
-  // showUserManagement: boolean = false;
   showMonitoringSection: boolean = false;
   showSupervisorSection: boolean = false;
   showItSupervisorSection: boolean = false;
   // showOfficeManagement: boolean = false;
+  // showUserManagement: boolean = false;
 
   isLoggingOut: boolean = false; // Loading state for logout  
   constructor(private authService: AuthService) {}
@@ -41,12 +43,14 @@ export class HomeComponent implements OnInit {
           this.userInfo = response.data;
           this.userInfo.permissions = response.data.permissions || [];
 
-          // Evaluate permissions
-          this.showItPersonnelSection = this.hasPermission(0); //dashboard, task, maintenance log, change pass
-          // this.showOfficeManagement = this.hasPermission(1.4); 
-          this.showAdminSection = this.hasPermission(1.6);
           // this.showUserManagement = this.hasPermission(1.7);
+          // this.showOfficeManagement = this.hasPermission(1.4); 
+          // Evaluate permissions
+          this.showItPersonnelSection = this.hasPermission(1.9);
+          this.showAdminSection = this.hasPermission(1.6);
           this.showMonitoringSection = this.hasPermission(2.1);
+          this.showDashboardSection = this.hasPermission(2.2);
+          this.showPMSLogSection = this.hasPermission(2.3);
           this.showItSupervisorSection = this.hasPermission(3.1);
           this.showSupervisorSection = this.hasPermission(4.1);
 

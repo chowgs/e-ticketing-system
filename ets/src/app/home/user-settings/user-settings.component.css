@@ -1,3 +1,4 @@
+
 /* Settings Container */
 .settings-container {
     max-width: 1200px;
@@ -172,34 +173,65 @@ button:hover {
   animation: spin 1s linear infinite;
 } 
 
-/* loading spinner for all users  */
-.loader {
-  width: 40px;
-  aspect-ratio: 2;
-  --_g: no-repeat radial-gradient(circle closest-side, #000 90%, #0000);
-  background:
-    var(--_g) 0% 50%,
-    var(--_g) 50% 50%,
-    var(--_g) 100% 50%;
-  background-size: calc(100% / 3) 50%;
-  animation: l3 1s infinite linear;
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  height: 100%; /* Ensure it takes the full height of the container */
+  text-align: center;
 }
 
-/* animation for the spinner  */
-@keyframes l3 {
-  20% {
-    background-position: 0% 0%, 50% 50%, 100% 50%;
+.loader {
+  width: 50px; /* Smaller size */
+  aspect-ratio: 1;
+  position: relative;
+}
+
+.loader:before,
+.loader:after {
+  content: "";
+  position: absolute;
+  border-radius: 50px;
+  box-shadow: 0 0 0 3px inset #de4a25;
+  animation: l4 2.5s infinite;
+}
+
+.loader:after {
+  animation-delay: -1.25s;
+}
+
+@keyframes l4 {
+  0% {
+    inset: 0 35px 35px 0;
   }
-  40% {
-    background-position: 0% 100%, 50% 0%, 100% 50%;
+  12.5% {
+    inset: 0 35px 0 0;
   }
-  60% {
-    background-position: 0% 50%, 50% 100%, 100% 0%;
+  25% {
+    inset: 35px 35px 0 0;
   }
-  80% {
-    background-position: 0% 50%, 50% 50%, 100% 100%;
+  37.5% {
+    inset: 35px 0 0 0;
+  }
+  50% {
+    inset: 35px 0 0 35px;
+  }
+  62.5% {
+    inset: 0 0 0 35px;
+  }
+  75% {
+    inset: 0 0 35px 35px;
+  }
+  87.5% {
+    inset: 0 0 35px 0;
+  }
+  100% {
+    inset: 0 35px 35px 0;
   }
 }
+
   
 
   .nested-permissions {

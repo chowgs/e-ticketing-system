@@ -1,32 +1,60 @@
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
+.spinner-container {
+  position: fixed; /* To position the loader in the center of the viewport */
+  top: 50%; /* 50% from the top */
+  left: 50%; /* 50% from the left */
+  transform: translate(-50%, -50%); /* To adjust the position and center the element */
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  z-index: 1000;
+  align-items: center;
+  z-index: 9999; /* Ensure it's on top of other content */
+}
+.loader {
+  width: 50px; /* Smaller size */
+  aspect-ratio: 1;
+  position: relative;
 }
 
-.spinner {
-  border: 2px solid #f3f3f3;
-  border-top: 2px solid #3498db;
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  animation: spin 0.6s linear infinite;
-  display: inline-block;
+.loader:before,
+.loader:after {
+  content: "";
+  position: absolute;
+  border-radius: 50px;
+  box-shadow: 0 0 0 3px inset #de4a25;
+  animation: l4 2.5s infinite;
 }
 
-@keyframes spin {
+.loader:after {
+  animation-delay: -1.25s;
+}
+
+@keyframes l4 {
   0% {
-    transform: rotate(0deg);
+    inset: 0 35px 35px 0;
+  }
+  12.5% {
+    inset: 0 35px 0 0;
+  }
+  25% {
+    inset: 35px 35px 0 0;
+  }
+  37.5% {
+    inset: 35px 0 0 0;
+  }
+  50% {
+    inset: 35px 0 0 35px;
+  }
+  62.5% {
+    inset: 0 0 0 35px;
+  }
+  75% {
+    inset: 0 0 35px 35px;
+  }
+  87.5% {
+    inset: 0 0 35px 0;
   }
   100% {
-    transform: rotate(360deg);
+    inset: 0 35px 35px 0;
   }
 }
   
@@ -61,17 +89,22 @@
   }
   
   .main-table-head {
-    background-color: #007bff;
+    background-color: #333;
     color: #fff;
     font-weight: 600;
   }
   
   /* Action buttons Styling */
   .action-btn {
-    margin-right: 5px; /* Adds spacing between buttons */
-    padding: 5px 5px;  /* Adjusts button size */
-    font-size: 0.85rem; /* Slightly smaller font for compact appearance */
-    border-radius: 5px; /* Rounded corners for a modern look */
+    margin-right: 5px;  /* Adds spacing between buttons */
+    padding: 8px 12px;  /* Adjusts button size to make it more compact */
+    font-size: 1rem;  /* Makes font slightly larger for readability */
+    border-radius: 5px;  /* Rounded corners for a modern look */
+    display: flex;  /* Ensures icons are centered */
+    justify-content: center;  /* Centers icon horizontally */
+    align-items: center;  /* Centers icon vertically */
+    width: auto;  /* Let the button size adjust based on content */
+    height: 40px;  /* Fixes button height */
   }
   
   .action-btn:last-child {

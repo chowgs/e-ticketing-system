@@ -1,4 +1,10 @@
-<div class="settings-container" *ngIf="showAccountSettingsSection">
+
+
+<div class="settings-container" *ngIf="showAccountSettingsSection"> 
+  <div *ngIf="isLoadingFetch" class="spinner-container">
+    <div class="loader"></div>
+    <p>Loading data...</p>
+  </div>
   <div class="top-section">
     <section>
       <p style="text-align: center; font-weight: bold; font-size: 20px; background-color: #3f3f3f; padding: 10px; color: #fff; border-radius: 4px;">Account Settings</p>
@@ -105,6 +111,7 @@
         <button (click)="openAddUserModal()" class="open-addusermodal-btn" *ngIf="showAddUser">Add User +</button>
         <button (click)="openAddPersonnelModal()" class="open-addpersonnelmodal-btn" *ngIf="showAddPersonnel">Add Personnel +</button>
       </div>
+      
       <div *ngIf="isLoadingFetch" class="spinner-container">
         <div class="loader"></div>
         <p>Loading data...</p>
@@ -281,10 +288,10 @@
         <div class="add-user-btn-container">
           <button (click)="openModal()" class="open-modal-btn">Add Department +</button>
         </div>
-          <div *ngIf="isLoadingFetch" class="spinner-container">
-            <div class="loader"></div>
-            <p>Loading data...</p>
-          </div>
+        <div *ngIf="isLoadingFetch" class="spinner-container">
+          <div class="loader"></div>
+          <p>Loading data...</p>
+        </div>
             <table *ngIf="!isLoadingFetch" class="custom-table-I">
               <thead>
                 <tr>
