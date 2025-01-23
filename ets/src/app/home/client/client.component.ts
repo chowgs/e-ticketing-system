@@ -19,6 +19,7 @@ import JsBarcode from 'jsbarcode';
 export class ClientComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
+  currentUser: any; // To store the logged-in user
 
   search_box!: string;
   searchResults: any[] = []; // Store fetched data
@@ -44,7 +45,6 @@ export class ClientComponent {
       password: ['', Validators.required],
     });
   }
-
   onLogin(): void {
     if (this.loginForm.invalid) {
       this.notificationService.showNotification('Please fill out all required fields.', 'error');
@@ -52,14 +52,18 @@ export class ClientComponent {
     }
   
     this.isLoginLoading = true;
-
+  
     this.authService.login(this.loginForm.value).subscribe(
       (response: any) => {
         this.isLoginLoading = false;
         if (response.status === 'success') {
           this.notificationService.showNotification('Login Successful!', 'success');
-          setTimeout(() => this.router.navigate(['/dashboard']), 2500);
-
+          
+          // After login, check permissions and redirect
+          this.authService.getPermissionsAndRedirect().subscribe(() => {
+            // Redirection is handled inside the `getPermissionsAndRedirect` method
+          });
+  
         } else {
           this.notificationService.showNotification(response.message, 'error');
         }
@@ -67,11 +71,10 @@ export class ClientComponent {
       (error) => {
         this.isLoginLoading = false;
         this.notificationService.showNotification('An error occurred. Please try again later.', 'error');
-
       }
     );
   }
-
+ 
   // Function to open the make new request dialog
   openRequestDialog(): void {
     this.dialog.open(RequestDialogComponent, {
@@ -123,5 +126,33 @@ export class ClientComponent {
     this.isViewDialogOpen = false;
     this.selectedReport = null;
   }
+
+ // onLogin(): void {
+  //   if (this.loginForm.invalid) {
+  //     this.notificationService.showNotification('Please fill out all required fields.', 'error');
+  //     return;
+  //   }
+  
+  //   this.isLoginLoading = true;
+
+  //   this.authService.login(this.loginForm.value).subscribe(
+  //     (response: any) => {
+  //       this.isLoginLoading = false;
+  //       if (response.status === 'success') {
+  //         this.notificationService.showNotification('Login Successful!', 'success');
+  //         setTimeout(() => this.router.navigate(['/dashboard']), 2500);
+
+  //       } else {
+  //         this.notificationService.showNotification(response.message, 'error');
+  //       }
+  //     },
+  //     (error) => {
+  //       this.isLoginLoading = false;
+  //       this.notificationService.showNotification('An error occurred. Please try again later.', 'error');
+
+  //     }
+  //   );
+  // }
+
   
 }

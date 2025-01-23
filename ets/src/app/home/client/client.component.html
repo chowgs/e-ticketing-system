@@ -15,6 +15,11 @@
     </form>
   </div>
 
+    <!-- Request Section -->
+    <div class="request-section">
+      <button class="new-request-button" (click)="openRequestDialog()">Make New Request</button>
+    </div>
+
     <!-- Search Section -->
     <div class="search-section">
         <label for="search-type">Search Control No. / Name</label>
@@ -74,12 +79,7 @@
           </tr>
         </tbody>
       </table>
-      
-    <!-- Request Section -->
-    <div class="request-section">
-        <button class="new-request-button" (click)="openRequestDialog()">Make New Request</button>
-    </div>
-    
+
     <router-outlet></router-outlet>
 
     <!-- View Dialog -->
@@ -113,6 +113,39 @@
             <table class="details-table full-width">
               <tr>
                 <td class="label-column">
+                  <label>Date of Request:&nbsp;<span class="client-info-value">{{ selectedReport.date_of_request | date: 'short' }}</span></label>
+                </td>
+                <td class="value-column">
+                  <span></span>
+                </td>
+                <td class="label-column">
+                  <label>Date Released:&nbsp;
+                    <span class="client-info-value">{{ selectedReport.date_released | date: 'MM/dd/yy' }}</span>
+                  </label>
+                </td>
+              </tr>
+              <tr>
+                <td class="label-column">
+                  <label>CLIENT INFO</label>
+                </td>
+                <td class="value-column">
+                  <span></span>
+                </td>
+
+                <td class="label-column">
+                  <label>Released To:&nbsp;
+                    <span *ngIf="selectedReport.signature">
+                      <img [src]="selectedReport.signature" alt="Signature" style="max-width: 150px; max-height: 50px;" />
+                    </span>
+                    <span *ngIf="!selectedReport.signature">Waiting for client's approval</span>
+                  <span class="client-info-value">{{ selectedReport.released_to }}</span>
+                  </label>
+                </td>
+              </tr>
+            </table>
+            <!-- <table class="details-table full-width">
+              <tr>
+                <td class="label-column">
                   <label>Date of Request:&nbsp;</label>
                 </td>
                 <td>
@@ -136,16 +169,69 @@
                 </td>
 
                 <td class="label-column">
+                  <label>Released To:&nbsp;
+                    <span *ngIf="selectedReport.signature">
+                      <img [src]="selectedReport.signature" alt="Signature" style="max-width: 150px; max-height: 50px;" />
+                    </span>
+                    <span *ngIf="!selectedReport.signature">Waiting for client's approval</span>
+                  <span class="client-info-value">{{ selectedReport.released_to }}</span>
+                  </label>
+                </td>
+              </tr>
+            </table> -->
+                <!-- <td class="label-column">
                   <label>Released To:</label>
                 </td>
                 <td class="value-column">
                   <span>{{ selectedReport?.released_to }}</span>
-                </td>
-              </tr>
-            </table>
+                </td> -->
         </div>
-      <!-- CLIENT INFO        -->
-        <div class="padding-container">
+      <!-- CLIENT INFO -->
+      <div class="padding-container">
+        <table class="client-table full-width">
+          <tr>
+            <td class="client-table-data label-column">
+              <label class="client-info-label">Name:&nbsp;<span class="client-info-value">{{ selectedReport?.name }}</span></label>
+            </td>
+            <td class="client-table-data label-column">
+              <label class="client-info-label">Property No (ICS/PAR):&nbsp;<span class="client-info-value">{{ selectedReport?.property_no }}</span></label>
+            </td>
+            <!-- <td class="client-table-data label-column">
+              <label class="client-info-label">Contact No:&nbsp;<span class="client-info-value">{{ selectedReport?.contact_no }}</span></label>
+            </td> -->
+          </tr>
+          <tr>
+            <!-- <td class="client-table-data label-column">
+              <label class="client-info-label">Department:&nbsp;<span class="client-info-value">{{ selectedReport?.office_name }}</span></label>
+            </td> -->
+
+          </tr>
+          <tr>
+            <td class="client-table-data label-column">
+              <span class="client-info-label">Noted By:</span>
+              <br>
+            </td>
+            <td class="client-table-data value-column" colspan="3"><br>
+              <label class="client-info-label"><span class="client-info-value">LENY C. LAYGO</span></label>
+            </td>  
+          </tr>
+          <tr>
+            <td class="client-table-data label-column">
+              <span class="client-info-label">Department Head/</span>
+              <br>
+              <span class="client-info-label">Immediate Supervisor:</span>
+            </td>
+            <td class="client-table-data value-column" colspan="3">
+              <i class="client-info-value"><span>Digitally approved by&nbsp;{{ selectedReport?.dept_head }}</span>
+              <br>
+              <span *ngIf="selectedReport.approval_datetime" >
+                Approval Date: {{ selectedReport?.approval_datetime | date:'MMMM, dd, yyyy h:mm a' }}
+              </span></i>
+            </td>
+          </tr><br>
+        </table>
+      </div>       
+        <!-- <div class="padding-container">
           <table class="client-table full-width">
             <tr>
               <td class="client-table-data label-column">
@@ -156,9 +242,6 @@
               </td>
               <td class="client-table-data label-column">
                 <label>Contact No:</label>
-              </td>
-              <td class="client-table-data value-column">
-                <span>{{ selectedReport?.contact_no }}</span>
               </td>
             </tr>
             <tr>
@@ -177,9 +260,9 @@
                 </span>
                 <span *ngIf="!selectedReport?.signature">Waiting for client's approval</span>
               </td>
-            </tr>
+            </tr>           
           </table>
-        </div><br>
+        </div><br> -->
       <!-- DESCRIPTION  -->
       <div class="padding-container">
         <label>Description of Issue/Problem:</label>
@@ -203,16 +286,26 @@
       </div>      
       <!-- DATES INFO  -->
       <div class="padding-container">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Date Started:</label>
-            <span>{{ selectedReport?.date_started | date: 'MM/dd/yy' }}</span>
-          </div>
-          <div class="form-group">
-            <label>Date & time Accomplished:</label>
-            <span>{{ selectedReport?.datetime_accomplished | date: 'short' }}</span>
-          </div>
-        </div>
+        <table class="details-table full-width">
+          <tr>
+            <td class="label-column">
+              <label>Date & Time Started:&nbsp;<span class="client-info-value">{{ selectedReport.date_started | date: 'short' }}</span></label>
+            </td>
+            <td class="value-column">
+              <span></span>
+            </td>
+            <td class="label-column">
+              <label>Date & Time Accomplished:&nbsp;
+                <span class="client-info-value">{{ selectedReport.datetime_accomplished | date: 'short' }}</span>
+              </label>
+            </td>
+            <td class="label-column"> 
+              <label>Approved By:&nbsp;
+                <span class="client-info-value"></span>
+              </label>
+            </td>
+          </tr>
+        </table>
       </div>
         </div>
       </div>

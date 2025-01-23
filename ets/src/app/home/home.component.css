@@ -259,5 +259,20 @@ a.disabled {
   color: #ccc;  /* Change the text color to indicate it's disabled */
 }
 
+/* change-password-dialog.component.css */
+.change-password-dialog {
+  padding: 20px;
+  max-width: 400px;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
 
 

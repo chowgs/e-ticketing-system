@@ -256,6 +256,29 @@ class UsersController extends \Phalcon\Mvc\Controller
         ])->send();
     }
 
+    public function getUserPermissionsByIdAction($userId)
+    {
+        $this->view->disable();
+    
+        // Find the user by the provided userId
+        $user = Users::findFirstByIdNumber($userId);
+    
+        if (!$user) {
+            return $this->response->setJsonContent([
+                'status' => 'fail',
+                'message' => 'User not found.'
+            ])->send();
+        }
+    
+        $permissions = json_decode($user->permissions); // permissions are stored as JSON
+    
+        return $this->response->setJsonContent([
+            'status' => 'success',
+            'permissions' => $permissions
+        ])->send();
+    } 
+    
+
     // update logged in user's permissions 
     public function updateUserPermissionsAction()
     {
@@ -569,8 +592,61 @@ class UsersController extends \Phalcon\Mvc\Controller
             'errors' => $office->getMessages(),
         ]);
     }
-    
 
+    // update selected user 
+    public function updateUserAction()
+    {
+        // Fetch the raw body and decode it
+        $requestData = json_decode($this->request->getRawBody());
+    
+        // Extract id_number, name, designation, and permissions from the decoded data
+        $idNumber = $requestData->id_number ?? null;
+        $name = $requestData->name ?? null;
+        $designation = $requestData->designation ?? null;
+        $permissions = $requestData->permissions ?? null; // Permissions will be included in the request
+    
+        // Validate the inputs
+        if (!$idNumber || !$name || !$designation || !$permissions) {
+            return $this->response->setJsonContent([
+                'status' => 'error',
+                'message' => 'Invalid input data',
+            ]);
+        }
+    
+        // Find the user by id_number
+        $user = Users::findFirst($idNumber);
+        if (!$user) {
+            return $this->response->setJsonContent([
+                'status' => 'error',
+                'message' => 'User not found',
+            ]);
+        }
+    
+        // Update the user's name, designation, and permissions if they have been modified
+        if ($user->name !== $name) {
+            $user->name = $name;
+        }
+        if ($user->designation !== $designation) {
+            $user->designation = $designation;
+        }
+        if ($user->permissions !== json_encode($permissions)) {
+            $user->permissions = json_encode($permissions); // Save the permissions as JSON
+        }
+    
+        // Save the updated user data
+        if ($user->save()) {
+            return $this->response->setJsonContent([
+                'status' => 'success'
+            ]);
+        }
+    
+        return $this->response->setJsonContent([
+            'status' => 'error',
+            'message' => 'Failed to update user',
+            'errors' => $user->getMessages(),
+        ]);
+    }
+    
     public function getJobRequestsAction()
     {
         $this->view->disable();
@@ -614,6 +690,7 @@ class UsersController extends \Phalcon\Mvc\Controller
             if ($approvalStatus === 1) { // Only set approval_datetime if the status is 1 (approved)
                 $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Manila'));
                 $report->approval_datetime = $currentDateTime->format('Y-m-d H:i:s');
+                $report->control_no = "Pending";
 
             }    
             if ($report->save()) {

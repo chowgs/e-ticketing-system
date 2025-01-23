@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 const API_URL = '/api/ets/etsbackend';
 
@@ -15,7 +16,7 @@ export class AuthService {
   private readonly AUTH_TOKEN_KEY = 'authToken'; // Store token locally (or session)
   private userPermissions: number[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   // Store auth token after login
   setAuthToken(token: string): void {
@@ -63,6 +64,10 @@ export class AuthService {
     return this.http.post(API_URL + '/users/changePassword', passwordData, httpOptions);
   }
 
+  changeUserPassword(currentPassword: string, newPassword: string): Observable<any> {
+    const payload = { current_password: currentPassword, new_password: newPassword };
+    return this.http.post<any>(API_URL + '/users/changePassword', payload, httpOptions);
+  }
   // update logged in user's info service
   updateUserInfo(data: any): Observable<any> {
     return this.http.post(API_URL + '/users/updateUserInfo', data, httpOptions);
@@ -71,6 +76,15 @@ export class AuthService {
   // fetch all the permissions for logged in users service
   getUserPermissions(): Observable<any> {
     return this.http.get(API_URL + '/users/getUserPermissions', httpOptions);
+  }
+  // fetch selected user permissions for editing
+  getUserPermissionsById(userId: number): Observable<any> {
+    return this.http.get<any>(`${API_URL}/users/getUserPermissionsById/${userId}`, { withCredentials: true }).pipe(
+      catchError(error => {
+        console.error('Error fetching permissions for user', error);
+        return of({ status: 'fail', message: 'Failed to fetch user permissions' }); // Return fallback response
+      })
+    );
   }
   
   // update logged in user's perms service
@@ -103,6 +117,33 @@ export class AuthService {
     return this.http.get(API_URL + '/users/getUserPerms', httpOptions);
   }
 
+  // check user permission if supervisor then direct them accordingly 
+  getPermissionsAndRedirect(): Observable<void> {
+    return this.getUserPerms().pipe(
+      map(response => {
+        if (response.status === 'success') {
+          const permissions = response.data.permissions;
+  
+          if (permissions.includes('3.1')) {
+            // User has permission 3.1, redirect to 'technical-supervisor'
+            this.router.navigate(['/technical-supervisor']);
+          } else if (permissions.includes('4.1')) {
+            // User has permission 4.1, redirect to 'head-supervisor'
+            this.router.navigate(['/head-supervisor']);
+          } else {
+            // Default route, can be a generic dashboard or some default page
+            this.router.navigate(['/dashboard']);
+          }
+        }
+      }),
+      catchError((error) => {
+        console.error('Error fetching user permissions', error);
+        // Return an empty observable to fulfill the `Observable<void>` return type
+        return of(undefined);  // This resolves to `void`, which matches the return type
+      })
+    );
+  }
+
   // get division service
   getDivisions(): Observable<any> {
     return this.http.get(API_URL + '/users/getDivisions', httpOptions);
@@ -115,6 +156,11 @@ export class AuthService {
 
   updateOffice(office: any): Observable<any> {
     return this.http.post(API_URL + '/users/updateOffice', office);
+  }  
+
+  // update selected user on administrator 
+  updateUser(users: any): Observable<any> {
+    return this.http.post(API_URL + '/users/updateUser', users);
   }  
 
   getAllOffices(): Observable<any> {

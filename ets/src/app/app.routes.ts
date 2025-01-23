@@ -18,18 +18,18 @@ export const routes: Routes = [
                 path: 'dashboard',
                 loadComponent: () => import('./home/dashboard/dashboard.component'). then(m => m.DashboardComponent),
             },
-            {
-                path: 'user-management',
-                loadComponent: () => import('./home/user-management/user-management.component'). then(m => m.UserManagementComponent),
-            },
+            // {
+            //     path: 'user-management',
+            //     loadComponent: () => import('./home/user-management/user-management.component'). then(m => m.UserManagementComponent),
+            // },
             {
                 path: 'user-settings',
                 loadComponent: () => import('./home/user-settings/user-settings.component'). then(m => m.UserSettingsComponent),
             },
-            {
-                path: 'office-management',
-                loadComponent: () => import('./home/office-management/office-management.component'). then(m => m.OfficeManagementComponent),
-            },
+            // {
+            //     path: 'office-management',
+            //     loadComponent: () => import('./home/office-management/office-management.component'). then(m => m.OfficeManagementComponent),
+            // },
             {
                 path: 'task',
                 loadComponent: () => import('./home/task/task.component'). then(m => m.TaskComponent),
@@ -43,11 +43,11 @@ export const routes: Routes = [
                 loadComponent: () => import('./home/monitor/monitor.component'). then(m => m.MonitorComponent),
             },
             {
-                path: 'supervisor/technical-supervisor',
+                path: 'technical-supervisor',
                 loadComponent: () => import('./supervisor-home/it-supervisor/it-supervisor.component'). then(m => m.ItSupervisorComponent),
             },
             {
-                path: 'supervisor/head-supervisor',
+                path: 'head-supervisor',
                 loadComponent: () => import('./supervisor-home/job-request/job-request.component'). then(m => m.JobRequestComponent),
             },
         ]

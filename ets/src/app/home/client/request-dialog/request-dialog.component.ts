@@ -21,6 +21,8 @@ export class RequestDialogComponent implements OnInit {
 
   divisions: any[] = [];
   offices: any[] = [];
+  divisionsForSelectedOffice: any[] = [];
+
   selectedDivision: string = '';
   selectedOffice: string = '';    
   name: string = '';
@@ -105,7 +107,7 @@ export class RequestDialogComponent implements OnInit {
       (response: any) => {
         this.isSubmitting = false;
         if (response.status === 'success') {
-          this.notificationService.showNotification('Request has been submitted.', 'success');
+          this.notificationService.showNotification('Your request has been forwarded to your Immediate Supervisor/Head Office for approval.', 'success');
           this.dialogRef.close();
         } else {
           this.notificationService.showNotification('Failed to submit request, Please try again', 'error', + response.message);

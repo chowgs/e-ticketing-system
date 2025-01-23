@@ -68,12 +68,12 @@ class ClientController extends \Phalcon\Mvc\Controller
             case 1:
                 $targetTable = new ItrmServiceReport();
                 break;
-            case 2:
-                $targetTable = new SysdevServiceReport();
-                break;
-            case 3:
-                $targetTable = new CwServiceReport();
-                break;
+            // case 2:
+            //     $targetTable = new SysdevServiceReport();
+            //     break;
+            // case 3:
+            //     $targetTable = new CwServiceReport();
+            //     break;
             default:
                 $this->response->setJsonContent(['status' => 'fail', 'message' => 'Invalid division ID.']);
                 return $this->response->send();

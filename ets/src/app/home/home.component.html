@@ -12,7 +12,9 @@
             <span class="caret"></span>
           </button>
           <div class="dropdown-content">
-            <button *ngIf="userInfo.permissions.length === 1 && userInfo.permissions[0] === 0" class="dropdown-item" (click)="changePassword()">Change Password</button>
+            <button *ngIf="hasChangePasswordPermission() && showChangePasswordSection" class="dropdown-item" (click)="changePassword()">Change Password</button>
+
+            <!-- <button *ngIf="userInfo.permissions.length === 1 && userInfo.permissions[0] === 0" class="dropdown-item" (click)="changePassword()">Change Password</button> -->
             <button class="dropdown-item logout-btn" (click)="logout()" [disabled]="isLoggingOut">
               Logout
             </button>
@@ -64,16 +66,16 @@
 
     <!-- Supervisor Section -->
     <li *ngIf="showSupervisorSection">
-      <p style="font-size: 12px;">Office Supervisor</p>
-      <a routerLink="supervisor/head-supervisor" routerLinkActive="active-link">
+      <p style="font-size: 12px;">Office Department Supervisor</p>
+      <a routerLink="head-supervisor" routerLinkActive="active-link">
         <span class="material-icons">supervisor_account</span>
         Client Request
       </a>
     </li>
 
     <li *ngIf="showItSupervisorSection">
-      <p style="font-size: 12px;">Technical Supervisor</p>
-      <a routerLink="supervisor/technical-supervisor" routerLinkActive="active-link">
+      <p style="font-size: 12px;">ICT Department Supervisor</p>
+      <a routerLink="technical-supervisor" routerLinkActive="active-link">
         <span class="material-icons">settings_input_svideo</span>
         Received Inquiry
       </a>
@@ -84,7 +86,7 @@
       <p style="font-size: 12px;">Admin Control</p>
       <a routerLink="user-settings" routerLinkActive="active-link">
         <span class="material-icons">settings</span>
-        User Settings
+        System Management
       </a>
       <!-- <a *ngIf="showUserManagement" routerLink="user-management" routerLinkActive="active-link">
         User Management

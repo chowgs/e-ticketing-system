@@ -122,6 +122,7 @@
             <th>ID No.</th>
             <th>Name of the User</th>
             <th>Designation</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -129,6 +130,11 @@
             <td>{{ user.id_number }}</td>
             <td>{{ user.name }}</td>
             <td>{{ user.designation }}</td>
+            <td class="actions-column">
+              <a (click)="openUserEditModal(user)" class="edit-btn">
+                Edit
+              </a>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -280,6 +286,59 @@
   </div>
 </div>
 
+<div class="modal-overlay" *ngIf="isUserEditModalOpen" (click)="closeUserEditModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Edit User</h3>
+    <form (ngSubmit)="updateUser()">
+      <label for="">Name</label>
+      <input
+       id="editUserName"
+       [(ngModel)]="selectedUser.name"
+       name="editUserName"
+       required
+       />
+       <label for="">Designation</label>
+       <input
+         id="editUserDesignation"
+         [(ngModel)]="selectedUser.designation"
+         name="editUserDesignation"
+         readonly
+       />
+
+      <h3>Manage Permissions</h3>
+      <div class="permission">
+        <div *ngFor="let permission of allPermissions">
+          <label>
+            <input 
+              type="checkbox"
+              [checked]="selectedPermissions.includes(permission.id)"
+              (change)="toggleSelectedUesrPermission(permission.id, permission.children)" 
+            />
+            {{ permission.label }}
+          </label>
+          
+          <!-- Nested Permissions -->
+          <div class="nested-permission" *ngIf="permission.children?.length">
+            <label *ngFor="let child of permission.children">
+              <input 
+                type="checkbox" 
+                [checked]="selectedPermissions.includes(child.id)"
+                (change)="toggleSelectedUesrPermission(child.id)"
+              />
+              {{ child.label }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="isChangingPassword">
+        <span *ngIf="isChangingPassword" class="spinner"></span>
+        {{ isChangingPassword ? 'Updating...' : 'Save Changes' }}
+      </button>
+    </form>
+  </div>
+</div>
+
 <div class="office-management-container" *ngIf="showOfficeManagement">
   <div class="flex-sections">
       <section>
@@ -333,6 +392,7 @@
 
 <!-- Add New Office Modal -->
 <div *ngIf="isModalOpen" class="modal-overlay" (click)="closeModal()">
+  <span class="close" (click)="closePermissionsDialog()">×</span>
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h3>New Department</h3>
     <form (ngSubmit)="addOffice()">

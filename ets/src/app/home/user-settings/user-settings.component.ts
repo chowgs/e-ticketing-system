@@ -29,12 +29,12 @@ export class UserSettingsComponent implements OnInit{
       { id: 1.5, label: 'Add/Edit Permissions' },
       { id: 1.7, label: 'User Management' },
       { id: 1.8, label: 'Add Personnel (User Management Required!)' },
-      { id: 1.9, label: 'Incoming Task' },
     ]},
+    { id: 1.9, label: 'Incoming Task' },
     { id: 2.1, label: 'Monitoring' },
     { id: 2.2, label: 'Dashboard' },
     { id: 2.3, label: 'PMS Log' },
-    { id: 3.1, label: 'IT Supervisor' },
+    { id: 3.1, label: 'ICT Supervisor' },
     { id: 4.1, label: 'Office Supervisor' },
   ];
   
@@ -60,8 +60,12 @@ export class UserSettingsComponent implements OnInit{
   offices: any[] = [];
   selectedAddPermissions: number[] = [];
   users: any[] = []; // Store fetched users
+
   currentPage: number = 1; // Track the current page
   rowsPerPage: number = 8; // Maximum rows per page
+
+  isUserEditModalOpen = false;
+  selectedUser: any = null;
 
   // Sub-Permissions
   adminSubPermissions = [
@@ -124,6 +128,11 @@ export class UserSettingsComponent implements OnInit{
       // Get current user details from the backend and populate the form
       this.fetchPermissions();
       this.fetchDepartments();
+      // fetch current user info 
+      this.loadUserInfo();
+      this.loadDivisions();
+      this.loadOffices();
+      this.loadUsers();
       
       this.authService.getUserInfo().subscribe((response: any) => {
         if (response.status === 'success') {
@@ -157,13 +166,9 @@ export class UserSettingsComponent implements OnInit{
        division: ['', Validators.required],
       });
 
-    // Fetch current user info
-    this.loadUserInfo();
-    this.loadDivisions();
-    this.loadOffices();
-    this.loadUsers();
   }
 
+  // update logged in user 
   saveChanges(): void {
     if (this.myAccountForm.invalid) {
       this.notificationService.showNotification('Please fill out all required fields.', 'error');
@@ -199,6 +204,7 @@ export class UserSettingsComponent implements OnInit{
     this.isPasswordModalVisible = false;
   }
 
+  // change password for both user and user with permission 
   changePassword(): void {
     const { currentPassword, newPassword, confirmPassword } = this.passwordForm.value;
 
@@ -227,6 +233,7 @@ export class UserSettingsComponent implements OnInit{
     );
   }
 
+  // dialog for editing logged in user's permission 
   openPermissionsDialog(): void {
     this.isPermissionsModalVisible = true;
   }
@@ -235,6 +242,7 @@ export class UserSettingsComponent implements OnInit{
     this.isPermissionsModalVisible = false;
   }
 
+  // fetch logged in user's permissions and display their corresponding settings based on their permissions. 
   fetchPermissions(): void {
     this.authService.getUserPermissions().subscribe(
       (response: any) => {
@@ -259,6 +267,22 @@ export class UserSettingsComponent implements OnInit{
     );
   }
 
+  // fetch selected user permissions for update 
+  fetchPermissionsForSelectedUser(userId: number): void {
+    this.authService.getUserPermissionsById(userId).subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          this.selectedPermissions = response.permissions || [];
+        } else {
+          alert('Failed to fetch permissions.');
+        }
+      },
+      (error) => {
+        console.error('Error fetching permissions', error);
+      }
+    );
+  }
+  
   togglePermission(permission: number, children?: { id: number }[]): void {
     const index = this.selectedPermissions.indexOf(permission);
   
@@ -295,7 +319,84 @@ export class UserSettingsComponent implements OnInit{
       }
     }
   }
+
+  // toggle selected user's permissions 
+  toggleSelectedUesrPermission(permission: number, children?: { id: number }[]): void {
+    const index = this.selectedPermissions.indexOf(permission);
   
+    if (index > -1) {
+      // If permission is already selected, remove it
+      this.selectedPermissions.splice(index, 1);
+  
+      // If it has children, remove them as well
+      if (children) {
+        children.forEach(child => {
+          const childIndex = this.selectedPermissions.indexOf(child.id);
+          if (childIndex > -1) {
+            this.selectedPermissions.splice(childIndex, 1);
+          }
+        });
+      }
+    } else {
+      // Add the selected permission
+      this.selectedPermissions.push(permission);
+  
+      // If it has children, add them as well
+      if (children) {
+        children.forEach(child => {
+          if (!this.selectedPermissions.includes(child.id)) {
+            this.selectedPermissions.push(child.id);
+          }
+        });
+      }
+  
+      // If a child is selected, ensure the parent (Administrator) is also selected
+      const parent = this.allPermissions.find(p => p.children?.some(child => child.id === permission));
+      if (parent && !this.selectedPermissions.includes(parent.id)) {
+        this.selectedPermissions.push(parent.id);
+      }
+    }
+  }
+  
+
+  // toggleSelectedUserPerms(permission: number, children?: { id: number }[]): void {
+  //   const index = this.selectedPermissions.indexOf(permission);
+  
+  //   if (index > -1) {
+  //     // If permission is already selected, remove it
+  //     this.selectedPermissions.splice(index, 1);
+  
+  //     // If it has children, remove them as well
+  //     if (children) {
+  //       children.forEach(child => {
+  //         const childIndex = this.selectedPermissions.indexOf(child.id);
+  //         if (childIndex > -1) {
+  //           this.selectedPermissions.splice(childIndex, 1);
+  //         }
+  //       });
+  //     }
+  //   } else {
+  //     // Add the selected permission
+  //     this.selectedPermissions.push(permission);
+  
+  //     // If it has children, add them as well
+  //     if (children) {
+  //       children.forEach(child => {
+  //         if (!this.selectedPermissions.includes(child.id)) {
+  //           this.selectedPermissions.push(child.id);
+  //         }
+  //       });
+  //     }
+  
+  //     // If a child is selected, ensure the parent (Administrator) is also selected
+  //     const parent = this.allPermissions.find(p => p.children?.some(child => child.id === permission));
+  //     if (parent && !this.selectedPermissions.includes(parent.id)) {
+  //       this.selectedPermissions.push(parent.id);
+  //     }
+  //   }
+  // }
+  
+  // save current user's permissions 
   savePermissions(): void {
     this.isAddingPerms = true;
     this.authService.updateUserPermissions(this.selectedPermissions).subscribe(
@@ -320,7 +421,7 @@ export class UserSettingsComponent implements OnInit{
     );
   }
 
-  ////////////// User Management 
+  //////////////////////////////// User Management 
   loadUserInfo(): void {
     this.authService.getUserInfo().subscribe(
       (response: any) => {
@@ -561,7 +662,49 @@ export class UserSettingsComponent implements OnInit{
     }
   }
 
-  // Office Management 
+  // update selected user 
+  updateUser(): void {
+    if (this.selectedUser && this.selectedUser.name.trim()) {
+      // Include selectedPermissions in the request data
+      this.selectedUser.permissions = this.selectedPermissions; 
+  
+      this.isChangingPassword = true;
+  
+      this.authService.updateUser(this.selectedUser).subscribe(
+        (response: any) => {
+          if (response.status === 'success') {
+            this.notificationService.showNotification('User information saved successfully', 'success');
+            this.closeUserEditModal();
+          } else {
+            this.notificationService.showNotification(`Failed to update user: ${response.message}`, 'error');
+          }
+        },
+        (error) => {
+          console.error('Error updating user:', error);
+          this.notificationService.showNotification('An error occurred while updating user', 'error');
+        },
+        () => {
+          this.isChangingPassword = false;
+        }
+      );
+    } else {
+      this.notificationService.showNotification('Please enter a valid user', 'error');
+    }
+  }
+
+  openUserEditModal(user: any) {
+    this.selectedUser = { ...user };
+    this.isUserEditModalOpen = true;
+    this.fetchPermissionsForSelectedUser(user.id_number);  // Fetch permissions for the selected user
+  }
+
+  closeUserEditModal() {
+
+    this.isUserEditModalOpen = false;
+  }
+
+
+  ////////////////////////////// Office Management 
   fetchDepartments(): void {
     this.isLoadingFetch = true; // Start loading
     this.authService.getAllOffices().subscribe(

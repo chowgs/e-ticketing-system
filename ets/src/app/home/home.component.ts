@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { NotificationComponent } from '../shared/notification/notification.component';
 import { MatBadgeModule } from '@angular/material/badge';
+import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-home',
@@ -28,11 +30,13 @@ export class HomeComponent implements OnInit {
   showMonitoringSection: boolean = false;
   showSupervisorSection: boolean = false;
   showItSupervisorSection: boolean = false;
+  showChangePasswordSection: boolean = true;
   // showOfficeManagement: boolean = false;
   // showUserManagement: boolean = false;
 
   isLoggingOut: boolean = false; // Loading state for logout  
-  constructor(private authService: AuthService) {}
+
+  constructor(private authService: AuthService, private dialog: MatDialog, private router: Router) {}
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -46,6 +50,7 @@ export class HomeComponent implements OnInit {
           // this.showUserManagement = this.hasPermission(1.7);
           // this.showOfficeManagement = this.hasPermission(1.4); 
           // Evaluate permissions
+          this.showChangePasswordSection = this.hasPermission(1.2);
           this.showItPersonnelSection = this.hasPermission(1.9);
           this.showAdminSection = this.hasPermission(1.6);
           this.showMonitoringSection = this.hasPermission(2.1);
@@ -66,6 +71,11 @@ export class HomeComponent implements OnInit {
 
   hasPermission(permission: number): boolean {
     return this.userInfo.permissions.includes(permission);
+  }
+
+  hasChangePasswordPermission(): boolean {
+    // Check for permissions 1.9, 3.1, or 4.1
+    return this.userInfo.permissions.includes(1.9) || this.userInfo.permissions.includes(3.1) || this.userInfo.permissions.includes(4.1);
   }
 
   logout(): void {
@@ -91,7 +101,15 @@ export class HomeComponent implements OnInit {
   }
   
   changePassword(): void {
-    // Implement change password functionality here
-    console.log('Change Password clicked');
+    const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Handle any post-dialog actions (e.g., notify user of success)
+        console.log('Password changed successfully');
+      }
+    });
   }
 }

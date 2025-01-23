@@ -102,7 +102,7 @@
 
 /* Request Section */
 .request-section {
-    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .new-request-button {
@@ -337,10 +337,12 @@ h3 {
   background-color: #f9f9f9;
 }
 
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
+.client-info-label {
+  font-weight: 500;
+}
+
+.client-info-value {
+  font-weight: 300;
 }
 
 .client-table-data {

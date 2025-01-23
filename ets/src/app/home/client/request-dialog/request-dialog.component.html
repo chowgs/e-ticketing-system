@@ -54,8 +54,9 @@
               <option value="" disabled selected>Select an Office</option>
               <option *ngFor="let office of offices" [value]="office.office_id">{{ office.office_name }}</option>
             </select>
+
           </mat-form-field>
-    
+          
           <!-- Issue/Request Field -->
           <mat-form-field class="full-width">
             <mat-label>Issue/Request</mat-label>
