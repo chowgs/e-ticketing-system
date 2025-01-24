@@ -86,12 +86,19 @@ export class UserSettingsComponent implements OnInit{
 
   // Office Management 
   officeName: string = '';
+  officeValue: string = '';
+  divisionName: string = '';
   departments: any[] = [];
   isModalOpen = false;
   isEditModalOpen = false; // For edit modal
+  isDivisionModalOpen = false;
+  isEditDivisionModalOpen = false;
+  selectedDivision: any = null;
   selectedOffice: any = null; 
   currentDeptPage: number = 1; // Track the current page
   rowsPerDeptPage: number = 8; // Maximum rows per page
+  currentDivPage: number = 1; // Track the current page
+  rowsPerDivPage: number = 8; // Maximum rows per page
   
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private notificationService: NotificationService) {
     this.myAccountForm = this.fb.group({
@@ -128,6 +135,7 @@ export class UserSettingsComponent implements OnInit{
       // Get current user details from the backend and populate the form
       this.fetchPermissions();
       this.fetchDepartments();
+      this.fetchDivisions();
       // fetch current user info 
       this.loadUserInfo();
       this.loadDivisions();
@@ -479,17 +487,14 @@ export class UserSettingsComponent implements OnInit{
     this.authService.getUsers().subscribe(
       (response: any) => {
         if (response.status === 'success') {
-          // this.isLoadingFetch = false;
           this.users = response.data;
         } else {
-          // this.isLoadingFetch = false;
           this.notificationService.showNotification('Failed to fetch users', 'error');
           console.error('Failed to fetch users');
         }
       },
       (error) => console.error('Error fetching users', error),
       () => {
-        // this.isLoadingFetch = false; // Stop loading
       }
     );
   }
@@ -724,6 +729,25 @@ export class UserSettingsComponent implements OnInit{
     );
   }
 
+  fetchDivisions(): void {
+    this.isLoadingFetch = true; // Start loading
+    this.authService.getDivisions().subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          this.divisions = response.data;
+        } else {
+          console.error('Failed to fetch division');
+        }
+      },
+      (error) => {
+        console.error('Error fetching divisions:', error);
+      },
+      () => {
+        this.isLoadingFetch = false; // Stop loading
+      }
+    );
+  }
+
   // Function to open the modal
   openModal() {
     this.isModalOpen = true;
@@ -734,18 +758,30 @@ export class UserSettingsComponent implements OnInit{
     this.isModalOpen = false;
   }
 
+  openDivisionModal() {
+    this.isDivisionModalOpen = true;
+  }
+
+  // Function to close the modal
+  closeDivisionModal() {
+    this.isDivisionModalOpen = false;
+    this.isEditDivisionModalOpen = false;
+  }
+
   addOffice(): void {
-    if (this.officeName.trim()) {
+    if (this.officeName.trim() && this.officeValue.trim()) {
       this.isChangingPassword = true; // Start loading
       const officeData = {
-        office_name: this.officeName.toUpperCase()
+        office_name: this.officeName.toUpperCase(),
+        office_value: this.officeValue  // Add office_value to the data object
       };
-
+  
       this.authService.addOffice(officeData).subscribe(
         (response: any) => {
           if (response.status === 'success') {
-            this.notificationService.showNotification('Office has been added!','success');
+            this.notificationService.showNotification('Office has been added!', 'success');
             this.officeName = ''; // Reset the input field
+            this.officeValue = ''; // Reset the office value input
             this.fetchDepartments(); // Refresh the list of offices
             this.closeModal();
           } else if (response.message === 'Office already exists.') {
@@ -756,14 +792,99 @@ export class UserSettingsComponent implements OnInit{
         },
         (error) => {
           console.error('Error adding office:', error);
-          this.notificationService.showNotification('An error occurred while adding office','error');
+          this.notificationService.showNotification('An error occurred while adding office', 'error');
         },
         () => {
           this.isChangingPassword = false; // Stop loading
         }
       );
     } else {
-      this.notificationService.showNotification('Please enter the office name','error');
+      this.notificationService.showNotification('Please fill in both office name and value', 'error');
+    }
+  }
+
+  addDivision(): void {
+    if (this.divisionName.trim()) {
+      this.isChangingPassword = true; // Start loading
+      const divisionData = {
+        division_name: this.divisionName.toUpperCase(), // Make sure the key is 'division_name'
+      };
+  
+      this.authService.addDivision(divisionData).subscribe(
+        (response: any) => {
+          if (response.status === 'success') {
+            this.notificationService.showNotification('Division has been added!', 'success');
+            this.divisionName = ''; // Reset the input field
+            this.fetchDivisions(); // Refresh the list of divisions
+            this.closeDivisionModal(); // Close the modal
+          } else if (response.message === 'Division already exists.') {
+            this.notificationService.showNotification('Division already exists.', 'error');
+          } else {
+            this.notificationService.showNotification(`Failed to add division: ${response.message}`, 'error');
+          }
+        },
+        (error) => {
+          console.error('Error adding division:', error);
+          this.notificationService.showNotification('An error occurred while adding division', 'error');
+        },
+        () => {
+          this.isChangingPassword = false; // Stop loading
+        }
+      );
+    } else {
+      this.notificationService.showNotification('Please fill in the division name', 'error');
+    }
+  }
+
+  openEditDivisionModal(division: any) {
+    this.selectedDivision = { ...division };
+    this.isEditDivisionModalOpen = true;
+  }
+
+  closeEditDivisionModal(){
+    this.selectedDivision = null;
+    this.isEditDivisionModalOpen = false;    
+  }
+
+  updateDivision(): void {
+    if (this.selectedDivision.division_name.trim()) {
+      // Ensure office values are formatted and passed
+      this.selectedDivision.division_name = this.selectedDivision.division_name.toUpperCase();
+  
+      this.isChangingPassword = true;
+  
+      this.authService.updateDivision(this.selectedDivision).subscribe(
+        (response: any) => {
+          if (response.status === 'success') {
+            this.notificationService.showNotification(
+              'Department updated successfully!',
+              'success'
+            );
+            this.fetchDivisions(); // Refresh the list
+            this.closeEditDivisionModal();
+          } else {
+            this.notificationService.showNotification(
+              `Failed to update office: ${response.message}`,
+              'error'
+            );
+          }
+        },
+        (error) => {
+          console.error('Error updating office:', error);
+          this.notificationService.showNotification(
+            'An error occurred while updating office',
+            'error'
+          );
+        },
+        () => {
+          this.isChangingPassword = false;
+        }
+      );
+    } else {
+      this.notificationService.showNotification(
+        'Please enter a valid office name, division name, and office value',
+        'error'
+      );
     }
   }
 
@@ -778,15 +899,18 @@ export class UserSettingsComponent implements OnInit{
   }
 
   updateOffice(): void {
-    if (this.selectedOffice && this.selectedOffice.office_name.trim()) {
+    if (this.selectedOffice && this.selectedOffice.office_name.trim() && this.selectedOffice.office_value.trim()) {
+      // Ensure office values are formatted and passed
       this.selectedOffice.office_name = this.selectedOffice.office_name.toUpperCase();
+      this.selectedOffice.office_value = this.selectedOffice.office_value.toUpperCase();
+  
       this.isChangingPassword = true;
-
+  
       this.authService.updateOffice(this.selectedOffice).subscribe(
         (response: any) => {
           if (response.status === 'success') {
             this.notificationService.showNotification(
-              'Office updated successfully!',
+              'Department updated successfully!',
               'success'
             );
             this.fetchDepartments(); // Refresh the list
@@ -811,12 +935,12 @@ export class UserSettingsComponent implements OnInit{
       );
     } else {
       this.notificationService.showNotification(
-        'Please enter a valid office name',
+        'Please enter a valid office name, division name, and office value',
         'error'
       );
     }
   }
-
+  
   // Method to handle pagination
   getPaginatedOffices(): any[] {
     const startIndex = (this.currentDeptPage - 1) * this.rowsPerDeptPage;
@@ -828,6 +952,19 @@ export class UserSettingsComponent implements OnInit{
       this.currentDeptPage++;
     } else if (direction === 'prev' && this.currentDeptPage > 1) {
       this.currentDeptPage--;
+    }
+  }
+
+  getPaginatedDivisions(): any[] {
+    const startIndex = (this.currentDivPage - 1) * this.rowsPerDivPage;
+    return this.divisions.slice(startIndex, startIndex + this.rowsPerDivPage);
+  }
+
+  changeDivPage(direction: string): void {
+    if (direction === 'next' && (this.currentDivPage * this.rowsPerDivPage) < this.divisions.length) {
+      this.currentDivPage++;
+    } else if (direction === 'prev' && this.currentDivPage > 1) {
+      this.currentDivPage--;
     }
   }
 

@@ -412,16 +412,26 @@
       </div>      
       <!-- DATES INFO  -->
       <div class="padding-container">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Date Started:</label>
-            <span class="client-info-value">{{ selectedReport.date_started | date: 'MM/dd/yy' }}</span>
-          </div>
-          <div class="form-group">
-            <label>Date & time Accomplished:</label>
-            <span class="client-info-value">{{ selectedReport.datetime_accomplished | date: 'short' }}</span>
-          </div>
-        </div>
+        <table class="details-table full-width">
+          <tr>
+            <td class="label-column">
+              <label>Date & Time Started:&nbsp;<span class="client-info-value">{{ selectedReport.date_started | date: 'short' }}</span></label>
+            </td>
+            <td class="value-column">
+              <span></span>
+            </td>
+            <td class="label-column">
+              <label>Date & Time Accomplished:&nbsp;
+                <span class="client-info-value">{{ selectedReport.datetime_accomplished | date: 'short' }}</span>
+              </label>
+            </td>
+            <td class="label-column"> 
+              <label>Approved By:&nbsp;
+                <span class="client-info-value">{{ currentUser?.name || 'Not Available' }}</span>
+              </label>
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
 

@@ -155,12 +155,16 @@ export class AuthService {
   }
 
   updateOffice(office: any): Observable<any> {
-    return this.http.post(API_URL + '/users/updateOffice', office);
+    return this.http.post(API_URL + '/users/updateOffice', office, httpOptions);
+  }  
+
+  updateDivision(division: any): Observable<any> {
+    return this.http.post(API_URL + '/users/updateDivision', division, httpOptions);
   }  
 
   // update selected user on administrator 
   updateUser(users: any): Observable<any> {
-    return this.http.post(API_URL + '/users/updateUser', users);
+    return this.http.post(API_URL + '/users/updateUser', users, httpOptions);
   }  
 
   getAllOffices(): Observable<any> {
@@ -170,6 +174,10 @@ export class AuthService {
   // add office service
   addOffice(officeData: any): Observable<any> {
     return this.http.post(API_URL + '/users/addOffice', officeData, httpOptions);
+  } 
+
+  addDivision(divisionData: any): Observable<any> {
+    return this.http.post(API_URL + '/users/addDivision', divisionData, httpOptions);
   } 
 
   fetchAcceptedReports(): Observable<any> {

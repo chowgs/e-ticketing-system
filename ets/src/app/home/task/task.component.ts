@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import JsBarcode from 'jsbarcode';
 import { forkJoin } from 'rxjs';
 import { NotificationService } from '../../shared/notification.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-task',
@@ -15,6 +16,8 @@ import { NotificationService } from '../../shared/notification.service';
 })
 export class TaskComponent implements OnInit {
   @ViewChild('signaturePad', { static: false }) signaturePad!: ElementRef<HTMLCanvasElement>;
+  currentUser: any; // To store the logged-in user
+
   isSignaturePadVisible: boolean = false;
   signatureDataUrl: string | null = null;
 
@@ -71,10 +74,26 @@ export class TaskComponent implements OnInit {
     { id: 12, service_type: 'Registration to Biometrics' }, // No service levels
   ];
 
-  constructor(private taskService: TaskService, private notificationService: NotificationService) {}
+  constructor(private taskService: TaskService, private notificationService: NotificationService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.fetchReportsForCurrentUser();
+    this.fetchUserName();
+  }
+
+  fetchUserName(): void {
+    this.authService.getUserPerms().subscribe(
+      (response: any) => {
+        if (response.status === 'success') {
+          this.currentUser = response.data;  // Store user data
+        } else {
+          console.error('Failed to fetch user info:', response.message);
+        }
+      },
+      (error) => {
+        console.error('Error fetching user info:', error);
+      }
+    );
   }
 
   fetchReportsForCurrentUser(): void {

@@ -120,10 +120,28 @@ class ClientController extends \Phalcon\Mvc\Controller
             'bind' => ['query' => '%' . $query . '%']
         ]);
     
-        if (count($reports) > 0) {
+        // Create a result set that includes the personnel_name instead of personnel_id
+        $result = [];
+        foreach ($reports as $report) {
+            $personnelId = $report->personnel_id;
+        
+            // Get the user details from the 'users' table based on personnel_id
+            $user = Users::findFirst([
+                'conditions' => 'id_number = :personnel_id:',
+                'bind' => ['personnel_id' => $personnelId]
+            ]);
+        
+            // Append the report data with the name from the users table
+            $reportData = $report->toArray();
+            $reportData['personnel_name'] = $user ? $user->name : 'N/A';
+        
+            $result[] = $reportData;
+        }
+
+        if (count($result) > 0) {
             return $this->response->setJsonContent([
                 'status' => 'success',
-                'data' => $reports->toArray()
+                'data' => $result
             ]);
         } else {
             return $this->response->setJsonContent([
@@ -131,43 +149,43 @@ class ClientController extends \Phalcon\Mvc\Controller
                 'message' => 'No reports found.'
             ]);
         }
-    }   
+    }  
 
     // save signature to itrm_service_report
-    public function saveSignatureAction()
-    {
-        $this->view->disable();
-        $rawData = $this->request->getJsonRawBody(true);
+    // public function saveSignatureAction()
+    // {
+    //     $this->view->disable();
+    //     $rawData = $this->request->getJsonRawBody(true);
     
-        $reportId = $this->filter->sanitize($rawData['reportId'], 'int');
-        $signature = $rawData['signature']; // Base64 encoded signature
+    //     $reportId = $this->filter->sanitize($rawData['reportId'], 'int');
+    //     $signature = $rawData['signature']; // Base64 encoded signature
     
-        // Fetch the report
-        $report = ItrmServiceReport::findFirstById($reportId);
+    //     // Fetch the report
+    //     $report = ItrmServiceReport::findFirstById($reportId);
     
-        if (!$report) {
-            return $this->response->setJsonContent([
-                'status' => 'fail',
-                'message' => 'Report not found.'
-            ]);
-        }
+    //     if (!$report) {
+    //         return $this->response->setJsonContent([
+    //             'status' => 'fail',
+    //             'message' => 'Report not found.'
+    //         ]);
+    //     }
     
-        // Save the signature
-        $report->signature = $signature;
+    //     // Save the signature
+    //     $report->signature = $signature;
     
-        if ($report->save()) {
-            return $this->response->setJsonContent([
-                'status' => 'success',
-                'message' => 'Signature saved successfully.'
-            ]);
-        } else {
-            return $this->response->setJsonContent([
-                'status' => 'fail',
-                'message' => 'Failed to save signature.',
-                'errors' => $report->getMessages()
-            ]);
-        }
-    }
+    //     if ($report->save()) {
+    //         return $this->response->setJsonContent([
+    //             'status' => 'success',
+    //             'message' => 'Signature saved successfully.'
+    //         ]);
+    //     } else {
+    //         return $this->response->setJsonContent([
+    //             'status' => 'fail',
+    //             'message' => 'Failed to save signature.',
+    //             'errors' => $report->getMessages()
+    //         ]);
+    //     }
+    // }
     
     
 }

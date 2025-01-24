@@ -19,9 +19,8 @@ import JsBarcode from 'jsbarcode';
 export class ClientComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
-  currentUser: any; // To store the logged-in user
 
-  search_box!: string;
+  search_box!: string
   searchResults: any[] = []; // Store fetched data
 
   isViewDialogOpen: boolean = false;
@@ -61,7 +60,6 @@ export class ClientComponent {
           
           // After login, check permissions and redirect
           this.authService.getPermissionsAndRedirect().subscribe(() => {
-            // Redirection is handled inside the `getPermissionsAndRedirect` method
           });
   
         } else {

@@ -91,6 +91,22 @@ section {
   cursor: pointer;
 }
 
+.close:hover{
+  color: #ff0000; /* Change color on hover */
+}
+
+.close-btn {
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+}
+
+.close-btn:hover {
+  color: #ff0000; /* Change color on hover */
+}
+
+
 /* H2 Change pass, Edit pass  */
 .h2 {
   margin-bottom: 20px;
@@ -581,6 +597,27 @@ a:hover {
   animation: slide-down 0.3s ease-out;
 }
 
+.addpersonnelmodal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Transparent dark background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it's on top */
+}
+
+.addpersonnelmodal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px; /* Adjust size as needed */
+  position: relative; /* To position the close button */
+}
+
 @keyframes slideIn {
   from {
     transform: translateY(-20px);
@@ -671,16 +708,9 @@ a:hover {
 }
 
 .modal-header-personnel {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  font-weight: bold;
-}
-
-.modal-header-personnel h3 {
-  margin: 0;
+  position: absolute;
+  top: 10px; /* Distance from top */
+  right: 10px; /* Distance from right */
 }
 
 .modal-body {

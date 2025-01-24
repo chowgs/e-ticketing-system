@@ -16,12 +16,21 @@ class Office extends \Phalcon\Mvc\Model
     public $office_name;
 
     /**
+     *
+     * @var string
+     */
+    public $office_value;
+
+    /**
      * Initialize method for model.
      */
     public function initialize()
     {
         $this->setSchema("etsdb");
         $this->setSource("office");
+        $this->hasMany('office_id', 'ItrmServiceReport', 'office_id', ['alias' => 'ItrmServiceReport']);
+        $this->hasMany('office_id', 'ServiceReports', 'office_id', ['alias' => 'ServiceReports']);
+        $this->hasMany('office_id', 'Users', 'office_id', ['alias' => 'Users']);
     }
 
     /**

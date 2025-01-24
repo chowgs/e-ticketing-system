@@ -277,7 +277,6 @@ class UsersController extends \Phalcon\Mvc\Controller
             'permissions' => $permissions
         ])->send();
     } 
-    
 
     // update logged in user's permissions 
     public function updateUserPermissionsAction()
@@ -398,14 +397,36 @@ class UsersController extends \Phalcon\Mvc\Controller
     public function getUsersAction()
     {
         $this->view->disable();
+        
+        // Fetch users along with office and division details
         $users = Users::find([
-            'columns' => 'id_number, name, designation',
+            'columns' => 'id_number, name, designation, office_id, division_id',
         ]);
     
+        // Initialize an array to hold the transformed user data
+        $userData = [];
+    
         if ($users) {
+            // Loop through each user to replace office_id and division_id with their names/values
+            foreach ($users as $user) {
+                // Get office value by office_id
+                $office = Office::findFirst($user->office_id);
+                $division = Divisions::findFirst($user->division_id);
+    
+                // Add the user data along with office_value and division_name
+                $userData[] = [
+                    'id_number' => $user->id_number,
+                    'name' => $user->name,
+                    'designation' => $user->designation,
+                    'office' => $office ? $office->office_value : '', // Fetch the office_value
+                    'division' => $division ? $division->division_name : '', // Fetch the division_name
+                ];
+            }
+    
+            // Send the response with the transformed data
             $this->response->setJsonContent([
                 'status' => 'success',
-                'data' => $users->toArray(),
+                'data' => $userData,
             ]);
         } else {
             $this->response->setJsonContent([
@@ -421,6 +442,53 @@ class UsersController extends \Phalcon\Mvc\Controller
     {
         $this->view->disable();
         $rawData = $this->request->getJsonRawBody(true);
+    
+        $factory = new FilterFactory();
+        $locator = $factory->newInstance();
+    
+        $response_array = [
+            'status' => 'fail',
+            'message' => 'An unexpected error occurred.'
+        ];
+    
+        if (isset($rawData['office_name']) && isset($rawData['office_value'])) {
+            // Sanitize and convert to uppercase
+            $office_name = strtoupper($locator->sanitize($rawData['office_name'], ['striptags', 'string']));
+            $office_value = $locator->sanitize($rawData['office_value'], ['striptags', 'string']);
+    
+            // Check if office already exists
+            $existingOffice = Office::findFirst([
+                'conditions' => 'office_name = :office_name:',
+                'bind'       => ['office_name' => $office_name]
+            ]);
+    
+            if ($existingOffice) {
+                $response_array['message'] = 'Office already exists.';
+            } else {
+                // Create and save new office
+                $office = new Office();
+                $office->office_name = $office_name;
+                $office->office_value = $office_value;  // Add office_value
+    
+                if ($office->save() == false) {
+                    $response_array['message'] = 'Office registration unsuccessful.';
+                } else {
+                    $response_array['status'] = 'success';
+                    $response_array['message'] = 'Office added successfully.';
+                }
+            }
+        } else {
+            $response_array['message'] = 'Office name and value are required.';
+        }
+    
+        $this->response->setJsonContent($response_array);
+        return $this->response->send();
+    }
+
+    public function addDivisionAction()
+    {
+        $this->view->disable();
+        $rawData = $this->request->getJsonRawBody(true);
 
         $factory = new FilterFactory();
         $locator = $factory->newInstance();
@@ -430,37 +498,38 @@ class UsersController extends \Phalcon\Mvc\Controller
             'message' => 'An unexpected error occurred.'
         ];
 
-        if (isset($rawData['office_name'])) {
+        if (isset($rawData['division_name'])) {
             // Sanitize and convert to uppercase
-            $office_name = strtoupper($locator->sanitize($rawData['office_name'], ['striptags', 'string']));
+            $division_name = strtoupper($locator->sanitize($rawData['division_name'], ['striptags', 'string']));
 
-            // Check if office already exists
-            $existingOffice = Office::findFirst([
-                'conditions' => 'office_name = :office_name:',
-                'bind'       => ['office_name' => $office_name]
+            // Check if division already exists
+            $existingDivision = Divisions::findFirst([
+                'conditions' => 'division_name = :division_name:',
+                'bind'       => ['division_name' => $division_name]
             ]);
 
-            if ($existingOffice) {
-                $response_array['message'] = 'Office already exists.';
+            if ($existingDivision) {
+                $response_array['message'] = 'Division already exists.';
             } else {
-                // Create and save new office
-                $office = new Office();
-                $office->office_name = $office_name;
+                // Create and save new division
+                $division = new Divisions();
+                $division->division_name = $division_name;
 
-                if ($office->save() == false) {
-                    $response_array['message'] = 'Office registration unsuccessful.';
+                if ($division->save() == false) {
+                    $response_array['message'] = 'Division registration unsuccessful.';
                 } else {
                     $response_array['status'] = 'success';
-                    $response_array['message'] = 'Office added successfully.';
+                    $response_array['message'] = 'Division added successfully.';
                 }
             }
         } else {
-            $response_array['message'] = 'Office name is required.';
+            $response_array['message'] = 'Division name is required.';
         }
 
         $this->response->setJsonContent($response_array);
         return $this->response->send();
     }
+    
 
     // fetch and display all existing office 
     public function getAllOfficesAction()
@@ -565,8 +634,9 @@ class UsersController extends \Phalcon\Mvc\Controller
         $request = $this->request->getJsonRawBody();
         $officeId = $request->office_id ?? null;
         $officeName = $request->office_name ?? null;
+        $officeVal = $request->office_value ?? null;
     
-        if (!$officeId || !$officeName) {
+        if (!$officeId || !$officeName || !$officeVal) {
             return $this->response->setJsonContent([
                 'status' => 'error',
                 'message' => 'Invalid input data',
@@ -582,6 +652,7 @@ class UsersController extends \Phalcon\Mvc\Controller
         }
     
         $office->office_name = $officeName;
+        $office->office_value = $officeVal;
         if ($office->save()) {
             return $this->response->setJsonContent(['status' => 'success']);
         }
@@ -590,6 +661,40 @@ class UsersController extends \Phalcon\Mvc\Controller
             'status' => 'error',
             'message' => 'Failed to update office',
             'errors' => $office->getMessages(),
+        ]);
+    }
+
+    public function updateDivisionAction()
+    {
+        $request = $this->request->getJsonRawBody();
+        $divisionId = $request->division_id ?? null;
+        $divisionName = $request->division_name ?? null;
+    
+        // if (!$divisionId || !$divisionName) {
+        if (!$divisionName) {
+            return $this->response->setJsonContent([
+                'status' => 'error',
+                'message' => 'Invalid input data',
+            ]);
+        }
+    
+        $division = Divisions::findFirst($divisionId);
+        if (!$division) {
+            return $this->response->setJsonContent([
+                'status' => 'error',
+                'message' => 'Division not found',
+            ]);
+        }
+    
+        $division->division_name = $divisionName;
+        if ($division->save()) {
+            return $this->response->setJsonContent(['status' => 'success']);
+        }
+    
+        return $this->response->setJsonContent([
+            'status' => 'error',
+            'message' => 'Failed to division office',
+            'errors' => $division->getMessages(),
         ]);
     }
 
