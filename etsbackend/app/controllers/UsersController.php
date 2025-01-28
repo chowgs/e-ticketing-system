@@ -93,6 +93,7 @@ class UsersController extends \Phalcon\Mvc\Controller
                     'id_number' => $user->id_number,
                     'name' => $user->name,
                     'designation' => $user->designation,
+                    'office_id' => $office ? $office->office_id : null,
                     'office_name' => $office ? $office->office_name : null,
                     'division_id' => $division ? $division->division_id : null,
                     'division_name' => $division ? $division->division_name : null,
@@ -197,12 +198,13 @@ class UsersController extends \Phalcon\Mvc\Controller
     
         if (isset($data->name)) $user->name = $data->name;
         if (isset($data->designation)) $user->designation = $data->designation;
-        if (isset($data->office_name)) {
-            $office = Office::findFirstByOfficeName($data->office_name);
+
+        if (isset($data->office)) {
+            $office = Office::findFirst($data->office);  // Fetch the office by ID
             $user->office_id = $office ? $office->office_id : null;
         }
-        if (isset($data->division_name)) {
-            $division = Divisions::findFirstByDivisionName($data->division_name);
+        if (isset($data->division)) {
+            $division = Divisions::findFirst($data->division);  // Fetch the division by ID
             $user->division_id = $division ? $division->division_id : null;
         }
     
@@ -1171,7 +1173,7 @@ class UsersController extends \Phalcon\Mvc\Controller
     
         // Dynamically update fields if they exist in the request payload
         $updatableFields = [
-            'services', 'service_level_id', 'action_taken', 
+            'services', 'service_level_id', 'service_quantity_id', 'action_taken', 
             'remarks', 'date_started', 'datetime_accomplished', 
             'request_status', 'task_duration'
         ];
@@ -1181,7 +1183,7 @@ class UsersController extends \Phalcon\Mvc\Controller
                 $value = $data->$field;
                 if ($field === 'datetime_accomplished' || $field === 'date_started') {
                     $value = $value ? date('Y-m-d H:i:s', strtotime($value)) : null;
-                } elseif ($field === 'services' || $field === 'service_level_id') {
+                } elseif ($field === 'services' || $field === 'service_level_id' || $field === 'service_quantity_id') {
                     $value = json_encode($value);
                 }
                 $report->$field = $value;

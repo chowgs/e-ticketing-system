@@ -19,7 +19,12 @@
         </div>
         <div class="form-column">
           <label>Department</label>
-          <input formControlName="office" type="text" />
+          <select formControlName="office">
+            <option *ngFor="let office of offices" [value]="office.office_id">
+              {{ office.office_name }}
+            </option>
+          </select>
+
           <label>Division</label>
           <select formControlName="division">
             <option *ngFor="let division of divisions" [value]="division.division_id">

@@ -19,17 +19,17 @@ export class RequestDialogComponent implements OnInit {
   isLoading: boolean = true;
   isSubmitting: boolean = false;
 
+  requestDivisions: any[] = []; 
   divisions: any[] = [];
   offices: any[] = [];
-  divisionsForSelectedOffice: any[] = [];
 
-  selectedDivision: string = '';
-  selectedOffice: string = '';    
+  selectedRequestDivision: string = '';
   name: string = '';
   property_no: string = '';
   contact_no: string = '';
   dept_head: string = '';
   office_name: string = '';
+  division_name: string = '';
   issue_request: string = '';
 
   constructor(public dialogRef: MatDialogRef<RequestDialogComponent>, private clientService: ClientService, private notificationService: NotificationService) {}
@@ -40,17 +40,18 @@ export class RequestDialogComponent implements OnInit {
 
   loadData(): void {
     this.isLoading = true;
-    Promise.all([this.fetchDivisions(), this.fetchOffices()])
+    Promise.all([this.fetchRequestDivisions(), this.fetchDivisions(), this.fetchOffices()])
       .then(() => this.isLoading = false)
       .catch(() => this.isLoading = false);
   }
 
-  fetchDivisions(): Promise<void> {
+  fetchRequestDivisions(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.clientService.getDivisions().subscribe(
+      this.clientService.getRequestDivisions().subscribe(
         (response: any) => {
           if (response.status === 'success') {
-            this.divisions = response.data;
+            // this.divisions = response.data;
+            this.requestDivisions = response.data;
             resolve();
           } else {
             console.error('Failed to fetch divisions');
@@ -85,9 +86,30 @@ export class RequestDialogComponent implements OnInit {
     });
   }
 
+  fetchDivisions(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.clientService.getDivisions().subscribe(
+        (response: any) => {
+          if (response.status === 'success') {
+            // this.divisions = response.data;
+            this.divisions = response.data;
+            resolve();
+          } else {
+            console.error('Failed to fetch divisions');
+            reject();
+          }
+        },
+        (error) => {
+          console.error('Error fetching divisions', error);
+          reject();
+        }
+      );
+    });
+  }
 
   submitRequest(): void {
-    if (!this.selectedDivision) {
+    // if (!this.selectedDivision) {
+    if (!this.selectedRequestDivision) {
       this.notificationService.showNotification('Please select a division before submitting the request.', 'error');
       return;
     }
@@ -98,9 +120,10 @@ export class RequestDialogComponent implements OnInit {
       property_no: this.property_no,
       contact: this.contact_no,
       dept_head: this.dept_head,
+      requestDiv_Id: parseInt(this.selectedRequestDivision),
       office_id: parseInt(this.office_name), 
+      division_id: parseInt(this.division_name),
       issue_request: this.issue_request,
-      division_id: parseInt(this.selectedDivision)
     };
   
     this.clientService.submitRequest(requestData).subscribe(

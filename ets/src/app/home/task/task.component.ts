@@ -23,6 +23,7 @@ export class TaskComponent implements OnInit {
 
   isLoading: boolean = true;
   isButtonLoading: boolean = false;
+  isSaveButtonLoading: boolean = false;
 
   reports: any[] = [];
   errorMessage: string = '';
@@ -49,7 +50,8 @@ export class TaskComponent implements OnInit {
 
   selectedReport: any = {
     selectedServices: [],
-    service_level_id: {}, // Store selected service levels and units
+    service_level_id: {}, // Store selected service levels
+    service_quantity_id: {},
     action_taken: '',  
     remarks: '',       
     date_started: '', 
@@ -60,19 +62,20 @@ export class TaskComponent implements OnInit {
 
   // Service Types and their corresponding service levels
   serviceTypes = [
-    { id: 1, service_type: 'Basic Troubleshooting' },
-    { id: 2, service_type: 'Installation of OS' },
-    { id: 3, service_type: 'Installation of Applications' },
-    { id: 4, service_type: 'Data Backup', levels: ['LC', 'HC'] },
-    { id: 5, service_type: 'Data Retrieval', levels: ['LC', 'HC'] },
-    { id: 6, service_type: 'Printer', levels: ['Moderate', 'Complex'] },
-    { id: 7, service_type: 'Hardware Repair', levels: ['Simple', 'Moderate', 'Complex'] },
-    { id: 8, service_type: 'Network Repair', levels: ['Moderate', 'Complex'] },
-    { id: 9, service_type: 'Network', levels: ['Wired', 'Wireless', 'Cabling'] },
-    { id: 10, service_type: 'Virus', levels: ['Simple', 'Moderate'] },
-    { id: 11, service_type: 'Inspection', levels: ['Delivery', 'Disposal'] },
-    { id: 12, service_type: 'Registration to Biometrics' }, // No service levels
+    { id: 1, service_type: 'Basic Troubleshooting', quantity: 0 },
+    { id: 2, service_type: 'Installation of OS', quantity: 0 },
+    { id: 3, service_type: 'Installation of Applications', quantity: 0 },
+    { id: 4, service_type: 'Data Backup', quantity: 0, levels: ['LC', 'HC'] },
+    { id: 5, service_type: 'Data Retrieval', quantity: 0, levels: ['LC', 'HC'] },
+    { id: 6, service_type: 'Printer', quantity: 0, levels: ['Moderate', 'Complex'] },
+    { id: 7, service_type: 'Hardware Repair', quantity: 0, levels: ['Simple', 'Moderate', 'Complex'] },
+    { id: 8, service_type: 'Network Repair', quantity: 0, levels: ['Moderate', 'Complex'] },
+    { id: 9, service_type: 'Network', quantity: 0, levels: ['Wired', 'Wireless', 'Cabling'] },
+    { id: 10, service_type: 'Virus', quantity: 0, levels: ['Simple', 'Moderate'] },
+    { id: 11, service_type: 'Inspection', quantity: 0, levels: ['Delivery', 'Disposal'] },
+    { id: 12, service_type: 'Registration to Biometrics', quantity: 0 } // No service levels
   ];
+  
 
   constructor(private taskService: TaskService, private notificationService: NotificationService, private authService: AuthService) {}
 
@@ -126,20 +129,36 @@ export class TaskComponent implements OnInit {
       }
     );
   }
-  
+  // used for displaying the no of units/quantity 
+  getServiceName(serviceId: number): string {
+    const service = this.serviceTypes.find(service => service.id === serviceId);
+    return service ? service.service_type : 'Unknown Service';
+  }
+
   // handle the checkbox change 
   onServiceChange(serviceId: number, event: any): void {
     if (event.target.checked) {
       this.selectedReport.selectedServices.push(serviceId);
-    } else {
-      if (this.selectedReport.service_level_id && this.selectedReport.service_level_id[serviceId]) {
-        delete this.selectedReport.service_level_id[serviceId];
-      }
-          // Remove the service ID from selected services
+
+    // Initialize service quantity if not already initialized
+    if (!this.selectedReport.service_quantity_id[serviceId]) {
+      this.selectedReport.service_quantity_id[serviceId] = 1; // Default quantity is 1
+    }
+
+    // Initialize service level if necessary
+    if (!this.selectedReport.service_level_id[serviceId]) {
+      this.selectedReport.service_level_id[serviceId] = ''; // Default level is empty or choose an appropriate default
+    }
+  } else {
+    // Remove service and its quantity/level
+    delete this.selectedReport.service_level_id[serviceId];
+    delete this.selectedReport.service_quantity_id[serviceId];
+
+    // Remove the service ID from selected services
     this.selectedReport.selectedServices = this.selectedReport.selectedServices.filter(
       (id: number) => id !== serviceId
     );
-  }
+    }
   }
   
   openEditDialog(report: any): void {
@@ -153,12 +172,12 @@ export class TaskComponent implements OnInit {
     this.selectedReport = { 
       ...report, 
       selectedServices: report.services ? JSON.parse(report.services) : [],
-      service_level_id: report.service_level_id
-        ? JSON.parse(report.service_level_id)
-        : {},
+      service_level_id: report.service_level_id ? JSON.parse(report.service_level_id) : {},
+      service_quantity_id: report.service_quantity_id ? JSON.parse(report.service_quantity_id) : {} // Ensure it's initialized
     };
     this.isEditDialogOpen = true;
   }
+  
 
   openForReleaseDialog(report: any): void {
     this.selectedReport = { 
@@ -188,6 +207,7 @@ export class TaskComponent implements OnInit {
       datetime_accomplished: this.formatDateTime(this.selectedReport.datetime_accomplished),
       services: this.selectedReport.selectedServices,
       service_level_id: this.selectedReport.service_level_id,
+      service_quantity_id: this.selectedReport.service_quantity_id, // Include service quantities
       request_status: 'For Release',
       task_duration: this.durations[this.selectedReport.id],  
     };
@@ -290,6 +310,13 @@ export class TaskComponent implements OnInit {
   }
   
   saveSignature(): void {
+    this.isSaveButtonLoading = true;
+
+    setTimeout(() => {
+      this.isSaveButtonLoading = false;
+      // Handle signature saving logic here
+    }, 2000);  // Adjust the time as per your logic (e.g., 2 seconds)
+
     const canvas = this.signaturePad.nativeElement;
     this.signatureDataUrl = canvas.toDataURL('image/png'); // Get base64 image
   
@@ -324,14 +351,24 @@ export class TaskComponent implements OnInit {
       this.closeEditDialog();
     }
   }
-  // Store the selected service level for the service
-  onServiceLevelChange(serviceId: number, level: string): void {
-    this.selectedReport.service_level_id[serviceId] = level;  
-  }
+  // Store the selected service level for the service OLD SERVICE
+  // onServiceLevelChange(serviceId: number, level: string): void {
+  //   this.selectedReport.service_level_id[serviceId] = level;  
+  // }
 
   closeEditDialog(): void {
-    this.isEditDialogOpen = false;
-    this.isForReleaseDialogOpen = false;
+  // Check if the signature pad was visible and clear it if not saved
+  if (this.isSignaturePadVisible) {
+    const canvas = this.signaturePad.nativeElement;
+    const context = canvas.getContext('2d');
+    if (canvas && context) {
+      context.clearRect(0, 0, canvas.width, canvas.height); // Clear the signature
+    }
+  }
+
+  this.isSignaturePadVisible = false; // Hide the signature pad 
+  this.isEditDialogOpen = false;
+  this.isForReleaseDialogOpen = false;
   }
   
   openViewDialog(report: any): void {
@@ -339,6 +376,7 @@ export class TaskComponent implements OnInit {
       ...report, 
       selectedServices: report.services ? JSON.parse(report.services) : [],
       service_level_id: report.service_level_id ? JSON.parse(report.service_level_id) : {}, 
+      service_quantity_id: report.service_quantity_id ? JSON.parse(report.service_quantity_id) : {}, // Ensure this is parsed correctly
       signature: report.signature,
     };
 

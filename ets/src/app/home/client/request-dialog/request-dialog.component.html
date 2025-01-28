@@ -8,13 +8,13 @@
     </ng-container>
 
     <ng-template #formTemplate>
-      <h2 class="form-title">New Service Request</h2>
+      <h2 class="form-title">Generate Service Request</h2>
     
       <div class="select-search-type">
-        <label for="request">Request to:</label><br>
-        <select id="select_request" [(ngModel)]="selectedDivision" required>
-          <option value="" disabled selected>Select a Division</option>
-          <option *ngFor="let division of divisions" [value]="division.division_id">{{ division.division_name }}</option>
+        <label for="request">REQUEST IT</label><br>
+        <select id="select_request" [(ngModel)]="selectedRequestDivision" required>
+          <option value="" disabled selected>Select Division</option>
+          <option *ngFor="let requestDivision of requestDivisions" [value]="requestDivision.requestDiv_Id">{{ requestDivision.requestDiv_Name }}</option>
         </select>
       </div>
       <br>
@@ -51,11 +51,20 @@
           <mat-form-field class="half-width">
             <mat-label>Department</mat-label>
             <select matNativeControl [(ngModel)]="office_name" name="office_id" required>
-              <option value="" disabled selected>Select an Office</option>
+              <option value="" disabled selected>Select Office</option>
               <option *ngFor="let office of offices" [value]="office.office_id">{{ office.office_name }}</option>
             </select>
-
           </mat-form-field>
+
+          <!-- Division Selection Field -->
+          <mat-form-field class="half-width">
+            <mat-label>Division</mat-label>
+            <select matNativeControl [(ngModel)]="division_name" name="division_id" required>
+              <option value="" disabled selected>Select Division</option>
+              <option *ngFor="let division of divisions" [value]="division.division_id">{{ division.division_name }}</option>
+            </select>
+          </mat-form-field>
+
           
           <!-- Issue/Request Field -->
           <mat-form-field class="full-width">

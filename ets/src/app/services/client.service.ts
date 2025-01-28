@@ -19,6 +19,11 @@ export class ClientService {
     return this.http.get(API_URL + '/client/getDivisions', httpOptions);
   }
 
+  // get division service
+  getRequestDivisions(): Observable<any> {
+    return this.http.get(API_URL + '/client/getRequestDivision', httpOptions);
+  } 
+
   getOffices(): Observable<any> {
     return this.http.get(API_URL + '/client/getOffices', httpOptions);
   }

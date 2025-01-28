@@ -148,7 +148,7 @@ export class UserSettingsComponent implements OnInit{
             idNumber: response.data.id_number, 
             name: response.data.name,
             designation: response.data.designation,
-            office: response.data.office_name,  
+            office: response.data.office_id,  
             division: response.data.division_id,  
           });
           
@@ -182,7 +182,7 @@ export class UserSettingsComponent implements OnInit{
       this.notificationService.showNotification('Please fill out all required fields.', 'error');
       return;
     }
-
+    
     this.isSaving = true;
     const updatedData = this.myAccountForm.getRawValue(); 
     this.authService.updateUserInfo(updatedData).subscribe(

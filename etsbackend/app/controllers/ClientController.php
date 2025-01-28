@@ -3,17 +3,18 @@ declare(strict_types=1);
 
 class ClientController extends \Phalcon\Mvc\Controller
 {
-    public function getDivisionsAction()
+
+    public function getRequestDivisionAction()
     {
         $this->view->disable(); 
 
         // Fetch divisions from the database
-        $divisions = Divisions::find(); 
+        $requestDivisions = RequestDivision::find(); 
 
-        if ($divisions) {
+        if ($requestDivisions) {
             $response = [
                 'status' => 'success',
-                'data' => $divisions->toArray() 
+                'data' => $requestDivisions->toArray() 
             ];
         } else {
             $response = [
@@ -47,6 +48,44 @@ class ClientController extends \Phalcon\Mvc\Controller
         ]);
     }
 
+    public function getDivisionsAction()
+    {
+        $this->view->disable(); 
+
+        // Fetch divisions from the database
+        $divisions = Divisions::find(); 
+
+        $divisionData = [];
+    
+        foreach ($divisions as $division) {
+            $divisionData[] = [
+                'division_id' => $division->division_id,
+                'division_name' => $division->division_name
+            ];
+        }
+    
+        return $this->response->setJsonContent([
+            'status' => 'success',
+            'data' => $divisionData
+        ]);
+
+        if ($divisions) {
+            $response = [
+                'status' => 'success',
+                'data' => $divisions->toArray() 
+            ];
+        } else {
+            $response = [
+                'status' => 'fail',
+                'message' => 'No divisions found.'
+            ];
+        }
+
+        // Send JSON response
+        $this->response->setJsonContent($response);
+        return $this->response->send();
+    }
+
     // submit job request to office supervisor 
     public function createServiceReportAction()
     {
@@ -58,13 +97,17 @@ class ClientController extends \Phalcon\Mvc\Controller
         $property_no = $this->filter->sanitize($rawData['property_no'], 'string');
         $contact = $this->filter->sanitize($rawData['contact'], 'string');
         $dept_head = $this->filter->sanitize($rawData['dept_head'], 'string');
+        $requestDiv_Id = (int)$rawData['requestDiv_Id'];
         $office_id = (int)$rawData['office_id'];
-        $issue_request = $this->filter->sanitize($rawData['issue_request'], 'string');
         $division_id = (int)$rawData['division_id'];
+        $issue_request = $this->filter->sanitize($rawData['issue_request'], 'string');
+
+
     
         // Determine the target table based on division_id
         $targetTable = null;
-        switch ($division_id) {
+        // switch ($division_id) {
+        switch ($requestDiv_Id) {
             case 1:
                 $targetTable = new ItrmServiceReport();
                 break;
@@ -84,9 +127,10 @@ class ClientController extends \Phalcon\Mvc\Controller
         $targetTable->contact_no = $contact;
         $targetTable->dept_head = $dept_head;
         $targetTable->office_id = $office_id;
+        $targetTable->division_id = $division_id;
         $targetTable->issue_request = $issue_request;
         $targetTable->personnel_id = null;
-        $targetTable->division_id = $division_id;
+        $targetTable->requestDiv_Id = $requestDiv_Id;
         $targetTable->approval_status = 0; // Default to unapproved
         $targetTable->property_no = $property_no;
         $targetTable->date_of_request = null; // Default to empty

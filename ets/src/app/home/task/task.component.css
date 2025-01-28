@@ -123,12 +123,28 @@ h3 {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background-color: #5f5f5f;
   color: #fff;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #252525;
+}
+
+.btn-view {
+  background-color: #2572de;
+  color: #fff;
+}
+
+.btn-view:hover {
+  background-color: #4085e5 ;
+  color: #fff;
+
+}
+
+.btn-primary:disabled {
+  background-color: #dcdcdc;
+  cursor: not-allowed;
 }
 
 .btn-warning {
@@ -228,16 +244,6 @@ button:hover {
   opacity: 0.9;
 }
 
-.save-btn {
-  background-color: #28a745;
-  color: #ffffff;
-}
-
-.cancel-btn {
-  background-color: #dc3545;
-  color: #ffffff;
-}
-
 /* Close Icon */
 .close-icon {
   position: absolute;
@@ -257,9 +263,14 @@ button:hover {
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-top-color: #fff;
   border-radius: 50%;
-  animation: spin 0.6s linear infinite;  
+  animation: spin 1s linear infinite;  
+  transform: translate(-50%, -50%);
 }
- 
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 /* View dialog styling */
 .view-dialog-overlay {
@@ -456,7 +467,24 @@ p {
 
 /* SERVICES RENDERED  */
 
-/* Styled Container for Services */
+/* Styling for two-column layout */
+.row {
+  display: flex;
+  justify-content: space-between; /* Ensures the columns are spaced evenly */
+  margin-bottom: 10px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Adds space between label and textarea */
+}
+
+.half-width {
+  width: 48%; /* Adjusts the width of each column to half */
+}
+
+/* Mimics the textarea-like appearance */
 .textarea-like {
   display: block;
   width: 100%;
@@ -481,6 +509,11 @@ p {
 
 .padding-container {
   padding: 3px;
+}
+
+.textarea-info-value {
+  display: block;
+  word-wrap: break-word; /* Ensures long text doesn't overflow the container */
 }
 
 .details-table {
@@ -555,22 +588,97 @@ p {
 
 
 .signature-container {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-top: 20px;
+  text-align: center;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
 
 .signature-actions {
   margin-top: 10px;
+  text-align: center;
+}
+
+.signature-actions button {
+  margin: 0 10px;
+  padding: 8px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .signature-display img {
+  width: 100%;
   max-width: 100%;
   max-height: 200px;
   border: 1px solid #ccc;
+}
+
+/* Error and Required Messages */
+.error-message {
+  color: red;
+  font-size: 12px;
+}
+
+.signature-required .error {
+  color: red;
+  font-size: 14px;
+}
+
+.release-btn {
+  background-color: #5f5f5f;
+  color: #fff;
+}
+
+.release-btn:hover {
+  background-color: #252525;
+}
+
+.addSign-btn {
+color: #fff;
+background-color: #5f5f5f ;
+}
+
+.addSign-btn:hover {
+  background-color: #252525;
+}
+
+
+.clearSign-btn {
+  background-color: #f44336;
+}
+
+.clearSign-btn:hover {
+  background-color: #e53935;
+}
+
+.saveSign-btn {
+  background-color: #2196F3;
+}
+
+.saveSign-btn:hover {
+  background-color: #1976D2;
+}
+
+.btn {
+  width: 100%; /* Makes the button take up full width (if desired) */
+  font-size: 16px; /* Adjust font size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn i {
+  margin-right: 8px; /* Space between icon and text */
+}
+
+.btn-light {
+  background-color: #f8f9fa;
+  border: none;
+  color: #333;
 }
 
 .filter-container {

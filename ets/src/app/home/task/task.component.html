@@ -72,7 +72,7 @@
             </button>
           </td>        
           <td class="main-table-row-data" *ngIf="report.request_status !== 'Pending' && report.request_status !== 'For Release'">
-            <button class="btn btn-primary btn-sm action-btn" (click)="openViewDialog(report)">
+            <button class="btn btn-view btn-sm action-btn" (click)="openViewDialog(report)">
               <span class="material-icons">preview</span>
             </button>
           </td>
@@ -136,7 +136,7 @@
 <div *ngIf="isEditDialogOpen" class="edit-dialog-overlay" (click)="closeOnOverlay($event)">
   <div class="edit-dialog">
     <h3>Pending Request</h3>
-    <form (ngSubmit)="submitEditForm()">
+    <form (ngSubmit)="submitEditForm()" #editForm="ngForm">
       <!-- Released to and Date Released -->
       <div class="form-row">
         <div class="form-group">
@@ -160,23 +160,40 @@
               <input 
                 type="checkbox" 
                 [checked]="selectedReport.selectedServices.includes(service.id)" 
-                (change)="onServiceChange(service.id, $event)">
+                (change)="onServiceChange(service.id, $event)"
+                required>
               {{ service.service_type }}
             </label>
+          
+            <!-- Show service level options if available -->
             <div *ngIf="service.levels && selectedReport.selectedServices.includes(service.id)" class="service-level">
               <div *ngFor="let level of service.levels">
-                <label>
+                <label> 
                   <input 
                     type="radio" 
                     name="serviceLevel_{{service.id}}" 
                     [(ngModel)]="selectedReport.service_level_id[service.id]" 
-                    [value]="level">
+                    [value]="level"
+                    required>
                   {{ level }}
                 </label>
-              </div>              
+              </div>
             </div>
-
-          </div>
+          
+            <!-- Quantity input -->
+            <div *ngIf="selectedReport.selectedServices.includes(service.id)" class="quantity-input">
+              <label for="quantity_{{ service.id }}">Quantity:</label>
+              <input 
+                type="number" 
+                id="quantity_{{ service.id }}" 
+                [(ngModel)]="selectedReport.service_quantity_id[service.id]"
+                [min]="1" 
+                [step]="1" 
+                placeholder="Enter quantity"
+                name="quantity_{{ service.id }}"
+                required />
+            </div>
+          </div>        
         </div>
       </div>
 
@@ -184,11 +201,11 @@
       <div class="form-row">
         <div class="form-group">
           <label for="action_taken">Action Taken:</label>
-          <textarea id="action_taken" [(ngModel)]="selectedReport.action_taken" name="action_taken"></textarea>
+          <textarea id="action_taken" [(ngModel)]="selectedReport.action_taken" name="action_taken" required></textarea>
         </div>
         <div class="form-group">
           <label for="remarks">Remarks:</label>
-          <textarea id="remarks" [(ngModel)]="selectedReport.remarks" name="remarks"></textarea>
+          <textarea id="remarks" [(ngModel)]="selectedReport.remarks" name="remarks" required></textarea>
         </div>
       </div>
 
@@ -207,15 +224,15 @@
         
         <div class="form-group">
           <label for="datetime_accomplished">Datetime Accomplished:</label>
-          <input type="datetime-local" id="datetime_accomplished" [(ngModel)]="selectedReport.datetime_accomplished" name="datetime_accomplished">
+          <input type="datetime-local" id="datetime_accomplished" [(ngModel)]="selectedReport.datetime_accomplished" name="datetime_accomplished" required>
         </div>
       </div>
 
-      <!-- Footer -->
+      <!-- Footer --> 
       <div class="dialog-footer">
-        <button type="submit" class="btn-primary save-btn" [disabled]="isButtonLoading">
+        <button type="submit" [disabled]="editForm.invalid || isButtonLoading" class="btn-primary">
           For Release
-        <span *ngIf="isButtonLoading">&nbsp;</span>
+        <span *ngIf="!isButtonLoading">&nbsp;</span>
         <span *ngIf="isButtonLoading" class="ediTask-spinner"></span>
         </button> 
       </div>
@@ -261,6 +278,7 @@
           <input type="datetime-local" id="datetime_accomplished" [(ngModel)]="selectedReport.datetime_accomplished" name="datetime_accomplished" readonly>
         </div>
       </div>
+      
       <!-- Display Signature -->
       <div *ngIf="!selectedReport?.signature" class="signature-required">
         <p class="error">Please add your signature</p>
@@ -270,28 +288,37 @@
       </div>
       <div class="form-group">
         <label for="released_to">Received By:</label>
-        <!-- <input type="text" id="released_to" [(ngModel)]="selectedReport.released_to" name="released_to" required #receivedBy="ngModel"> -->
         <input type="text" id="released_to" [(ngModel)]="selectedReport.name" name="released_to">
-      </div>
+      </div><br>
 
-      <!-- Footer -->
+      <!-- Footer with buttons -->
       <div class="dialog-footer">
-        <button type="submit" class="btn-success save-btn" [disabled]="isButtonLoading || !releaseForm.valid || !selectedReport.signature">
-          Release
-        <span *ngIf="isButtonLoading">&nbsp;</span>
-        <span *ngIf="isButtonLoading" class="ediTask-spinner"></span>
+        <button type="submit" [disabled]="releaseForm.invalid || isButtonLoading || !selectedReport.signature" class="btn btn-primary">
+          <i class="fas fa-check-circle"></i> Release
+          <span *ngIf="!isButtonLoading">&nbsp;</span>
+          <span *ngIf="isButtonLoading" class="ediTask-spinner"></span>
         </button>
-      </div>
+      </div><br>
     </form>
-    <!-- Signature Pad Trigger -->
-    <button *ngIf="!selectedReport?.signature" (click)="showSignaturePad()">Add Signature</button>
 
-    <!-- Signature Pad -->
+    <div class="dialog-footer">
+      <button *ngIf="!selectedReport?.signature" (click)="showSignaturePad()" class="btn btn-secondary">
+        <i class="fas fa-pencil-alt"></i> Signature
+      </button>
+    </div>
+
+    <!-- Signature Pad Trigger -->
     <div *ngIf="isSignaturePadVisible" class="signature-container">
       <canvas #signaturePad></canvas>
       <div class="signature-actions">
-        <button (click)="clearSignature()">Clear</button>
-        <button (click)="saveSignature()">Save</button>
+        <button (click)="clearSignature()" class="btn btn-light">
+          Clear
+        </button>
+        <button (click)="saveSignature()" class="btn btn-success">
+          <i class="fas fa-save"></i> 
+          <span *ngIf="!isSaveButtonLoading">Save</span>
+          <span *ngIf="isSaveButtonLoading" class="ediTask-spinner"></span>
+        </button>     
       </div>
     </div>
   </div>
@@ -394,22 +421,44 @@
                 </span></i>
               </td>
             </tr>
+            <tr>
+              <td class="client-table-data label-column">
+                <span class="client-info-label">Noted By:</span>
+                <br>
+              </td>
+              <td class="client-table-data value-column" colspan="3"><br>
+                <label class="client-info-label"><span class="client-info-value">LENY C. LAYGO</span></label>
+              </td>  
+            </tr>
           </table>
         </div><br>
-      <!-- DESCRIPTION  -->
-      <div class="padding-container">
-        <label>Description of Issue/Problem:</label>
-        <div class="textarea-like">
-          <span class="client-info-value">{{ selectedReport.issue_request }}</span>
+        <!-- DESCRIPTION and SERVICE/S RENDERED in two columns -->
+        <div class="padding-container row">
+          <!-- DESCRIPTION -->
+          <div class="column half-width">
+            <label>Description of Issue/Problem:</label>
+            <div class="textarea-like">
+              <span class="textarea-info-value">{{ selectedReport.issue_request }}</span>
+            </div>
+          </div>              
+
+          <!-- SERVICE/S RENDERED -->
+          <div class="column half-width">
+            <label>Service/s Rendered:</label>
+            <div class="textarea-like">
+              <span class="client-info-value">
+                <!-- Loop through selected services and display each with its quantity -->
+                <span *ngFor="let serviceId of selectedReport.selectedServices; let i = index">
+                  {{ getServiceName(serviceId) }} 
+                  ({{ selectedReport.service_quantity_id[serviceId] || 0 }})
+                  
+                  <span *ngIf="i < selectedReport.selectedServices.length - 1">, </span>
+                </span>
+              </span>
+            </div>
+            
+          </div>  
         </div>
-      </div>              
-      <!-- SERVICE/S RENDERED  -->
-      <div class="padding-container">
-        <label>Service/s Rendered:</label>
-        <div class="textarea-like">
-          <span class="client-info-value">{{ selectedReport.selectedServiceNames.join(', ') || 'No services selected' }}</span>
-        </div>
-      </div>      
       <!-- DATES INFO  -->
       <div class="padding-container">
         <table class="details-table full-width">
