@@ -316,7 +316,7 @@
             <input 
               type="checkbox"
               [checked]="selectedPermissions.includes(permission.id)"
-              (change)="toggleSelectedUesrPermission(permission.id, permission.children)" 
+              (change)="toggleSelectedUserPermission(permission.id, permission.children)" 
             />
             {{ permission.label }}
           </label>
@@ -327,7 +327,7 @@
               <input 
                 type="checkbox" 
                 [checked]="selectedPermissions.includes(child.id)"
-                (change)="toggleSelectedUesrPermission(child.id)"
+                (change)="toggleSelectedUserPermission(child.id)"
               />
               {{ child.label }}
             </label>

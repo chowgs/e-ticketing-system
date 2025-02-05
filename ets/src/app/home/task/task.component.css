@@ -139,8 +139,18 @@ h3 {
 .btn-view:hover {
   background-color: #4085e5 ;
   color: #fff;
-
 }
+
+.btn-pdf {
+  background-color: #de2525;
+  color: #fff;
+}
+
+.btn-pdf:hover {
+  background-color: #F44336  ;
+  color: #fff;
+}
+
 
 .btn-primary:disabled {
   background-color: #dcdcdc;
@@ -768,6 +778,9 @@ background-color: #5f5f5f ;
   background-color: #f44336;
   color: white;
 }
+
+
+
 
 
 

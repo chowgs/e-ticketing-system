@@ -49,9 +49,5 @@ $router->add($baseUri . '/getAllOffices', [
 ]);
 
 
-
-
-
-
 $router->handle($_SERVER['REQUEST_URI']);
 

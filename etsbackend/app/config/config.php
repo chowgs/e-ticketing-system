@@ -24,8 +24,8 @@ return new \Phalcon\Config([
         'viewsDir'       => APP_PATH . '/views/',
         'pluginsDir'     => APP_PATH . '/plugins/',
         'libraryDir'     => APP_PATH . '/library/',
+        'tcpdfDir'       => APP_PATH . '/library/tcpdf/',
         'cacheDir'       => BASE_PATH . '/cache/',
-        
         'baseUri'        => '/ets/',
     ]
 ]);

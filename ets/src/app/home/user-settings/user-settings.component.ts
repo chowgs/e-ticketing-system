@@ -329,7 +329,7 @@ export class UserSettingsComponent implements OnInit{
   }
 
   // toggle selected user's permissions 
-  toggleSelectedUesrPermission(permission: number, children?: { id: number }[]): void {
+  toggleSelectedUserPermission(permission: number, children?: { id: number }[]): void {
     const index = this.selectedPermissions.indexOf(permission);
   
     if (index > -1) {

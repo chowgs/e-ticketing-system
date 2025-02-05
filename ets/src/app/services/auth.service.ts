@@ -14,7 +14,6 @@ const httpOptions = {
 })
 export class AuthService {
   private readonly AUTH_TOKEN_KEY = 'authToken'; // Store token locally (or session)
-  private userPermissions: number[] = [];
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -201,7 +200,6 @@ export class AuthService {
     }, httpOptions);
   }
 
-  
 
 
   // // Login service 

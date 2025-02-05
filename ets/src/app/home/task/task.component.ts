@@ -1,11 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../../services/task.service';
 import { FormsModule } from '@angular/forms';
-import JsBarcode from 'jsbarcode';
 import { forkJoin } from 'rxjs';
 import { NotificationService } from '../../shared/notification.service';
 import { AuthService } from '../../services/auth.service';
+import JsBarcode from 'jsbarcode';
+import { PdfService } from '../../services/pdf.service';
 
 @Component({
   selector: 'app-task',
@@ -14,6 +15,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './task.component.html',
   styleUrl: './task.component.css'
 })
+
 export class TaskComponent implements OnInit {
   @ViewChild('signaturePad', { static: false }) signaturePad!: ElementRef<HTMLCanvasElement>;
   currentUser: any; // To store the logged-in user
@@ -77,7 +79,8 @@ export class TaskComponent implements OnInit {
   ];
   
 
-  constructor(private taskService: TaskService, private notificationService: NotificationService, private authService: AuthService) {}
+  constructor(private taskService: TaskService, private notificationService: NotificationService,
+     private authService: AuthService, private pdfService: PdfService) {}
 
   ngOnInit(): void {
     this.fetchReportsForCurrentUser();
@@ -178,7 +181,6 @@ export class TaskComponent implements OnInit {
     this.isEditDialogOpen = true;
   }
   
-
   openForReleaseDialog(report: any): void {
     this.selectedReport = { 
       ...report, 
@@ -351,10 +353,6 @@ export class TaskComponent implements OnInit {
       this.closeEditDialog();
     }
   }
-  // Store the selected service level for the service OLD SERVICE
-  // onServiceLevelChange(serviceId: number, level: string): void {
-  //   this.selectedReport.service_level_id[serviceId] = level;  
-  // }
 
   closeEditDialog(): void {
   // Check if the signature pad was visible and clear it if not saved
@@ -478,8 +476,38 @@ export class TaskComponent implements OnInit {
     this.closeConfirmationDialog(); // Close the dialog
     this.notificationService.showNotification('Request has been accepted, time started', 'success');
   }
-  
 
+  generatePdf() {
+    console.log('Selected Report Data:', this.selectedReport); // Log the data to ensure it's populated
+    this.pdfService.generatePdf(this.selectedReport, this.currentUser).subscribe({
+      next: (pdfBlob: Blob) => {
+        // Create a URL for the Blob
+        const fileURL = URL.createObjectURL(pdfBlob);
+        
+        // Open a new tab with the PDF content
+        const newTab = window.open(fileURL, '_blank');
+        
+        // Create a download link in the new tab
+        if (newTab) {
+          const downloadLink = newTab.document.createElement('a');
+          downloadLink.href = fileURL;
+          downloadLink.download = 'report.pdf'; // Name the file
+          downloadLink.textContent = 'Click here to download the PDF';
+          
+          // Append the download link to the new tab's document body
+          newTab.document.body.appendChild(downloadLink);
+        }
+      },
+      error: (err) => {
+        console.error('Error generating PDF:', err);
+      }
+    });
+  }
+  
+  
+  
+  
+  
 }
 
 
