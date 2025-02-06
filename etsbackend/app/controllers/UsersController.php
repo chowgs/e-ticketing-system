@@ -1298,38 +1298,39 @@ class UsersController extends \Phalcon\Mvc\Controller
         $currentUser = json_decode(file_get_contents('php://input'))->currentUser;
 
         // Custom Header Layout
-        $pdf->Image('C:/U2/UniServerZ/ssl/ets/ets/src/assets/quezon logo.png', 13, 17, 20, 20);  // Adjust position and size as necessary
-        
-        // Add header text
-        $pdf->SetFont('helvetica', 'B', 14);  // Set bold font for header
-        $pdf->SetXY(35, 15);  // Position the header text, adjust as needed
+        $pdf->Image('C:/U2/UniServerZ/ssl/ets/ets/src/assets/quezon logo.png', 12, 13, 15, 15);  // Adjust position and size as necessary
+        // horizontal,vertical,width,height
+        $pdf->SetFont('helvetica', 'B', 12);  // Set bold font for header
+        $pdf->SetXY(30, 12);  // Position the header text, adjust as needed
         $pdf->MultiCell(0, 15, 'Provincial Information and Communications Technology Office', 0, 'L');
         
-        $pdf->SetFont('helvetica', '', 12);  // Set regular font for the address and other details
-        $pdf->SetXY(35, 22);  // Position the header text, adjust as needed
+        $pdf->SetFont('helvetica', '', 10);  // Set regular font for the address and other details
+        $pdf->SetXY(30, 17);  // Position the header text, adjust as needed
         $pdf->MultiCell(0, 10, 'Address: 2nd Floor Finance Building, Provincial Capitol Compound, Lucena City', 0, 'L');
-        $pdf->SetXY(35, 27);  // Position the header text, adjust as needed
+        $pdf->SetXY(30, 21);  // Position the header text, adjust as needed
         $pdf->MultiCell(0, 10, 'Tel. Number: (042) 719 - 1324', 0, 'L');
-        $pdf->SetXY(35, 32);  // Position the header text, adjust as needed
+        $pdf->SetXY(30, 25);  // Position the header text, adjust as needed
         $pdf->MultiCell(0, 10, 'Email Address: picto@quezon.gov.ph', 0, 'L');
     
         // Add horizontal line
-        $pdf->Line(10, 40, 200, 40);  // Adjust the coordinates as needed
+        //$pdf->Line(10, 31, 200, 31);  
     
         // Add title "IT Repair & Maintenance" and "Job Request Details"
         $pdf->Ln(20);
-        $pdf->SetFont('helvetica', 'B', 18);
-        $pdf->SetXY(10, 42);  // Position the header text, adjust as needed
+        $pdf->SetFont('helvetica', 'B', 14);
+        $pdf->SetXY(10, 33);  // Position the header text, adjust as needed
         $pdf->MultiCell(0, 10, 'IT Repair & Maintenance', 0, 'L');
-        $pdf->SetFont('helvetica', '', 16);
-        $pdf->SetXY(10, 50);  // Position the header text, adjust as needed
-        $pdf->MultiCell(0, 10, 'Job Request Details', 0, 'L');
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetXY(10, 40);  // Position the header text, adjust as needed
+        $pdf->MultiCell(0, 10, 'Job Request Form', 0, 'L');
 
         // Generate the barcode for control_no in CODE 128 C format
-        $pdf->write1DBarcode($selectedReport->control_no, 'C128', 144, 43, 55, 10, 0.4, array(), 'N');
-        $pdf->SetFont('helvetica', '', 12);
-        $pdf->SetXY(154, 53);  // Position the header text, adjust as needed
-        $pdf->MultiCell(0, 10, $selectedReport->control_no, 0, 'L');
+        //hori,verti,wid,hei,bar wid
+        $pdf->write1DBarcode($selectedReport->control_no, 'C128', 147, 33, 53, 8, 0.3, array(), 'N');
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetXY(149, 41);  // Position the header text, adjust as needed
+        $pdf->MultiCell(0, 10, 'Control No. '. $selectedReport->control_no, 0, 'L');
+
         // Parameters:
         // - $selectedReport->control_no: Barcode content   
         // - 'C128C': Barcode type (CODE 128 C)
@@ -1337,19 +1338,20 @@ class UsersController extends \Phalcon\Mvc\Controller
         // - Width (80), Height (20)
         // - Bar width factor (0.4)
         // - Orientation ('N' for normal, 'S' for skewed)
-    
+        $pdf->Line(10, 48, 200, 48);  // Adjust the coordinates as needed
+
         $pdf->Ln(10); 
     
         // Set the font for table content
-        $pdf->SetFont('helvetica', '', 12);
+        $pdf->SetFont('helvetica', '', 10);
 
-        $pdf->SetXY(10, 67);  
+        $pdf->SetXY(10, 50);  
         $pdf->MultiCell(90, 10, 'Date of Request: ' . date('m/d/Y h:i A', strtotime($selectedReport->date_of_request)), 0, 'L');
 
-        $pdf->SetXY(140, 67);  
+        $pdf->SetXY(140, 50);  
         $pdf->MultiCell(90, 10, 'Date Released: ' . date('m/d/Y', strtotime($selectedReport->date_released)), 0, 'L');
        
-        $pdf->SetXY(10, 75);  
+        $pdf->SetXY(10, 55);  
         $pdf->MultiCell(90, 10, 'Released To: ' . $selectedReport->released_to, 0, 'L');
            
         // Signature field with base64 image
@@ -1361,14 +1363,14 @@ class UsersController extends \Phalcon\Mvc\Controller
             $base64_signature = preg_replace('/^data:image\/(png|jpeg|jpg);base64,/', '', $base64_signature);
 
             // Output the signature image from the base64 string
-            $pdf->Image('@' . base64_decode($base64_signature), 140, 69, 50, 20);  // Adjust the size (50, 20) and position
+            $pdf->Image('@' . base64_decode($base64_signature), 140, 51, 50, 20);  // Adjust the size (50, 20) and position
         }
 
         // Client Info
-        $pdf->SetFont('helvetica', 'B', 12); // Bold for labels
+        $pdf->SetFont('helvetica', '', 10); // Bold for labels
 
         //Start table and positioning
-        $pdf->SetXY(10, 93);
+        $pdf->SetXY(10, 65);
 
         //First Row two columns
         $pdf->Cell(90, 10, 'Name: ' . $selectedReport->name, 1, 0, 'L');  
@@ -1379,47 +1381,48 @@ class UsersController extends \Phalcon\Mvc\Controller
         $pdf->Cell(90, 10, 'Property No: ' . $selectedReport->property_no, 1, 1, 'L');
 
         // Third Row first column
-        $pdf->SetFont('helvetica', 'B', 12);
-        $pdf->Cell(90, 10.8, 'Department: ', 1, 0, 'L');  
-        $pdf->SetFont('helvetica', '', 12);
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell(90, 10, 'Department: ', 1, 0, 'L');  
+        $pdf->SetFont('helvetica', '', 9);
         $pdf->MultiCell(90, 10, $selectedReport->office_name, 1, 'L');  
 
         // Fourth Row first column
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont('helvetica', '', 10);
         $pdf->Cell(90, 10, 'Department Head/Immediate Supervisor: ', 1, 0, 'L'); 
-        $pdf->SetFont('helvetica', '', 12);
+        $pdf->SetFont('helvetica', '', 10);
         $pdf->Cell(90, 10, $selectedReport->dept_head, 1, 1, 'L');  
 
         $pdf->Ln(5);
-        $pdf->SetFont('helvetica', 'B', 12);
-        $pdf->SetXY(10, 140);
+        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetXY(10, 108);
         $pdf->MultiCell(90, 10, 'Description of Issue: ', 0, 'L');
-        $pdf->SetFont('helvetica', '', 12);
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetXY(10, 117);
         $pdf->SetCellPadding(4);
         $pdf->SetFillColor(249, 249, 249); 
         $pdf->SetDrawColor(0, 0, 0); //Black border color
         $pdf->MultiCell(90, 10, $selectedReport->issue_request, 1, 'L', true);  
 
         if (!empty($selectedReport->selectedServiceNames)) {
-            $pdf->SetFont('helvetica', 'B', 12);
-            $pdf->SetXY(105, 136);
+            $pdf->SetFont('helvetica', 'B', 10);
+            $pdf->SetXY(105, 104);
             $pdf->MultiCell(90, 10, 'Service(s) Rendered: ', 0, 'L');
-            $pdf->SetFont('helvetica', '', 12);
-            $pdf->SetXY(108, 150);
+            $pdf->SetFont('helvetica', '', 10);
+            $pdf->SetXY(108, 117);
             $pdf->SetCellPadding(4);
             $pdf->SetFillColor(249, 249, 249); 
             $pdf->SetDrawColor(0, 0, 0); //Black border color
             $pdf->MultiCell(90, 10, implode(', ', $selectedReport->selectedServiceNames), 1, 'L', true);  
         }
 
-        $pdf->SetXY(7, 173);  
+        $pdf->SetXY(7, 140);  
         $pdf->MultiCell(90, 10, 'Date & Time Started: ' . date('m/d/Y h:i A', strtotime($selectedReport->date_started)), 0, 'L');
 
-        $pdf->SetXY(7, 181);  
+        $pdf->SetXY(7, 145);  
         $pdf->MultiCell(90, 10, 'Date & Time Accomplished: ' . date('m/d/Y h:i A', strtotime($selectedReport->datetime_accomplished)), 0, 'L');
        
-        $pdf->SetXY(114, 173);  
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetXY(114, 140);  
+        $pdf->SetFont('helvetica', '', 10);
         $pdf->MultiCell(90, 10, 'Approved by: '. $currentUser->name, 0, 'L');
       
 
