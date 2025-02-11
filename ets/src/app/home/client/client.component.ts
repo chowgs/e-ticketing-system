@@ -17,6 +17,9 @@ import JsBarcode from 'jsbarcode';
   styleUrl: './client.component.css'
 })
 export class ClientComponent {
+  isMenuOpen = false;
+  isLoginVisible = false; // Controls visibility of the login form
+
   loginForm: FormGroup;
   errorMessage: string = '';
 
@@ -43,7 +46,15 @@ export class ClientComponent {
       id_number: ['', Validators.required],
       password: ['', Validators.required],
     });
+    
   }
+
+  showLogin(): void {
+    this.isMenuOpen = false; // Close the menu after clicking Login
+    this.isLoginVisible = true; // Show the login form when Login is clicked
+    this.loginForm.reset();  // Optionally reset the form if required
+  }
+
   onLogin(): void {
     if (this.loginForm.invalid) {
       this.notificationService.showNotification('Please fill out all required fields.', 'error');
@@ -124,6 +135,21 @@ export class ClientComponent {
     this.isViewDialogOpen = false;
     this.selectedReport = null;
   }
+
+  toggleMenu(){
+    this.isMenuOpen = !this.isMenuOpen;
+    const menuToggle = document.getElementById('menu-toggle');
+    if (menuToggle) {
+      menuToggle.classList.toggle('open', this.isMenuOpen);
+    }
+  }
+
+  // Close the login form
+  closeLoginForm(): void {
+    this.isLoginVisible = false; // Close the login form
+  }
+  
+
 
  // onLogin(): void {
   //   if (this.loginForm.invalid) {

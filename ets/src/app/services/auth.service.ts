@@ -27,7 +27,7 @@ export class AuthService {
     return localStorage.getItem(this.AUTH_TOKEN_KEY);
   }
 
-  // Check if the user is logged in by verifying session or token
+  // Check if the user is logged in by verifying session or token for auth
   isLoggedIn(): boolean {
     return !!localStorage.getItem('authToken'); 
   }
@@ -36,7 +36,7 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.getAuthToken(); // Returns true if token exists
   }
-
+ 
   // Clear auth token during logout
   clearAuthToken(): void {
     localStorage.removeItem(this.AUTH_TOKEN_KEY);

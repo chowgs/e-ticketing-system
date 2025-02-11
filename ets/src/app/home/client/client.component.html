@@ -1,58 +1,66 @@
 <div class="clients-container">
-    <img src="/assets/ets logo.png" alt="ETS Logo" id="Logo"><br>
+  <img src="/assets/ets logo.png" alt="ETS Logo" id="Logo" class="etslogo"><br>
 
-  <!-- Login Section -->
-  <div class="login-section">
+  <!-- Hamburger Menu (Will be transformed to X on open) -->
+  <div id="menu-toggle" class="menu-toggle" (click)="toggleMenu()">
+    <div class="hamburger"></div>
+    <div class="hamburger"></div>
+    <div class="hamburger"></div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [ngClass]="{'menu-open': isMenuOpen}">
+    <ul>
+      <li><a href="javascript:void(0)" (click)="showLogin()">Login</a></li>
+      <li><a href="javascript:void(0)" (click)="openRequestDialog()">Request</a></li>
+    </ul>
+  </div>
+
+  <!-- Login Section (Only visible when isLoginVisible is true) -->
+  <div class="login-section" [ngClass]="{'menu-open': isMenuOpen, 'show': isLoginVisible}">
+    <button class="close-button" (click)="closeLoginForm()">x</button>
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
       <input type="text" placeholder="ID Number" class="login-input" formControlName="id_number" required>
       <input type="password" placeholder="Password" class="login-input" formControlName="password" required>
 
-      <!-- Add the loading spinner within the login button -->
       <button type="submit" class="login-button" [disabled]="isLoginLoading">
         <span *ngIf="!isLoginLoading">Login</span>
-        <div *ngIf="isLoginLoading" class="spinner"></div> <!-- Spinner when loading -->
+        <div *ngIf="isLoginLoading" class="spinner"></div>
       </button>
     </form>
   </div>
 
-    <!-- Request Section -->
-    <div class="request-section">
-      <button class="new-request-button" (click)="openRequestDialog()">Make New Request</button>
-    </div>
-
+  <!-- Request Section -->
+  <div class="request-section">
+    <button class="new-request-button" (click)="openRequestDialog()">Make New Request</button>
     <!-- Search Section -->
     <div class="search-section">
-        <label for="search-type">Search Control No. / Name</label>
-        <div class="search-bar-container">
-          <input
-            type="text"
-            [(ngModel)]="search_box"
-            placeholder="Search..."
-            class="search-bar"
-            (keydown.enter)="onSearch()"
-          />
-          <button type="button" class="search-button" (click)="onSearch()">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              style="fill: rgba(255, 255, 255, 1)"
-            >
-              <path
-                d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"
-              ></path>
-            </svg>
-          </button>
-        </div>
+      <label for="search-type">Search Control No. / Name</label>
+      <div class="search-bar-container">
+        <input
+          type="text"
+          [(ngModel)]="search_box"
+          placeholder="Search..."
+          class="search-bar"
+          (keydown.enter)="onSearch()"
+        />
+        <button type="button" class="search-button" (click)="onSearch()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1)">
+            <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
+          </svg>
+        </button>
       </div>
-      
-      <div *ngIf="isSearchLoading" class="loading">
-        <div class="spinner"></div>
-      </div>
-      
-      <div *ngIf="error" class="error">{{ error }}</div>
-      
+    </div>
+  </div>
+
+  <div *ngIf="isSearchLoading" class="loading">
+    <div class="spinner"></div>
+  </div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <!-- Table Section -->
+   <div class="container">
+    <div class="table-container">
       <table *ngIf="searchResults.length > 0" class="results-table">
         <thead>
           <tr>
@@ -68,246 +76,278 @@
         <tbody>
           <tr *ngFor="let result of searchResults">
             <td>{{ result.control_no }}</td>
-            <td>{{ result.name }}</td>
-            <td>{{ result.contact_no }}</td>
-            <td>{{ result.issue_request }}</td>
-            <td>{{ result.date_of_request | date }}</td>
-            <td>{{ result.request_status }}</td>
-            <td>
+            <td >{{ result.name }}</td>
+            <td >{{ result.contact_no }}</td>
+            <td >{{ result.issue_request }}</td>
+            <td >{{ result.date_of_request | date }}</td>
+            <td >{{ result.request_status }}</td>
+            <td class="view-btn">
               <button (click)="openViewDialog(result)">View</button>
             </td>
           </tr>
         </tbody>
       </table>
-
-    <router-outlet></router-outlet>
-
-    <!-- View Dialog -->
-    <div *ngIf="isViewDialogOpen" class="view-dialog-overlay" (click)="closeViewDialog()">
-      <div class="view-dialog landscape-dialog" (click)="$event.stopPropagation()">
-        <!-- View Dialog Header -->
-        <div class="logo-form-head-container">
-          <div class="logo-container">
-            <img src="assets/quezon logo.png" alt="Quezon-Official-Seal" class="form-logo">
-          </div>
-            <div class="form-head">
-              <b>Provincial Information and Communications Technology Office</b>
-              <p>Address: 2nd Floor Finance Building, Provincial Capitol Compound, Lucena City</p>
-              <p>Tel. Number: (042) 719 - 1324</p>
-              <p>Email Address: picto&#64;quezon.gov.ph</p>
-            </div>
-            <div class="job-order-section">
-              <!-- Barcode Section -->
-              <div class="barcode-container">
-                <label class="control_no_text">Control No:</label>
-                <svg id="barcode"></svg>
-              </div>
-            </div>
-        </div>
-        <h4 class="title-form">IT REPAIR & MAINTENANCE</h4>
-        <p class="sub-title-form">Service Request Details</p>
-        <hr>  
-        <!-- Dialog Content -->
-        <div class="dialog-content">
-          <div class="padding-container">
-            <table class="details-table full-width">
-              <tr>
-                <td class="label-column">
-                  <label>Date of Request:&nbsp;<span class="client-info-value">{{ selectedReport.date_of_request | date: 'short' }}</span></label>
-                </td>
-                <td class="value-column">
-                  <span></span>
-                </td>
-                <td class="label-column">
-                  <label>Date Released:&nbsp;
-                    <span class="client-info-value">{{ selectedReport.date_released | date: 'MM/dd/yy' }}</span>
-                  </label>
-                </td>
-              </tr>
-              <tr>
-                <td class="label-column">
-                  <label>CLIENT INFO</label>
-                </td>
-                <td class="value-column">
-                  <span></span>
-                </td>
-
-                <td class="label-column">
-                  <label>Released To:&nbsp;
-                    <span *ngIf="selectedReport.signature">
-                      <img [src]="selectedReport.signature" alt="Signature" style="max-width: 150px; max-height: 50px;" />
-                    </span>
-                    <span *ngIf="!selectedReport.signature">Waiting for client's approval</span>
-                  <span class="client-info-value">{{ selectedReport.released_to }}</span>
-                  </label>
-                </td>
-              </tr>
-            </table>
-            <!-- <table class="details-table full-width">
-              <tr>
-                <td class="label-column">
-                  <label>Date of Request:&nbsp;</label>
-                </td>
-                <td>
-                  <span>{{ selectedReport?.date_of_request | date }}</span>
-                </td>
-
-                <td class="label-column">
-                  <label>Date Released:&nbsp;</label>
-                </td>
-                <td class="value-column">
-                  <span>{{ selectedReport?.date_released | date: 'MM/dd/yy' }}</span>
-                </td>
-
-              </tr>
-              <tr>
-                <td class="label-column">
-                  <label>CLIENT INFO</label>
-                </td>
-                <td class="value-column">
-                  <span></span>
-                </td>
-
-                <td class="label-column">
-                  <label>Released To:&nbsp;
-                    <span *ngIf="selectedReport.signature">
-                      <img [src]="selectedReport.signature" alt="Signature" style="max-width: 150px; max-height: 50px;" />
-                    </span>
-                    <span *ngIf="!selectedReport.signature">Waiting for client's approval</span>
-                  <span class="client-info-value">{{ selectedReport.released_to }}</span>
-                  </label>
-                </td>
-              </tr>
-            </table> -->
-                <!-- <td class="label-column">
-                  <label>Released To:</label>
-                </td>
-                <td class="value-column">
-                  <span>{{ selectedReport?.released_to }}</span>
-                </td> -->
-        </div>
-      <!-- CLIENT INFO -->
-      <div class="padding-container">
-        <table class="client-table full-width">
-          <tr>
-            <td class="client-table-data label-column">
-              <label class="client-info-label">Name:&nbsp;<span class="client-info-value">{{ selectedReport?.name }}</span></label>
-            </td>
-            <td class="client-table-data label-column">
-              <label class="client-info-label">Property No (ICS/PAR):&nbsp;<span class="client-info-value">{{ selectedReport?.property_no }}</span></label>
-            </td>
-            <!-- <td class="client-table-data label-column">
-              <label class="client-info-label">Contact No:&nbsp;<span class="client-info-value">{{ selectedReport?.contact_no }}</span></label>
-            </td> -->
-          </tr>
-          <tr>
-            <!-- <td class="client-table-data label-column">
-              <label class="client-info-label">Department:&nbsp;<span class="client-info-value">{{ selectedReport?.office_name }}</span></label>
-            </td> -->
-
-          </tr>
-          <tr>
-            <td class="client-table-data label-column">
-              <span class="client-info-label">Noted By:</span>
-              <br>
-            </td>
-            <td class="client-table-data value-column" colspan="3"><br>
-              <label class="client-info-label"><span class="client-info-value">LENY C. LAYGO</span></label>
-            </td>  
-          </tr>
-          <tr>
-            <td class="client-table-data label-column">
-              <span class="client-info-label">Department Head/</span>
-              <br>
-              <span class="client-info-label">Immediate Supervisor:</span>
-            </td>
-            <td class="client-table-data value-column" colspan="3">
-              <i class="client-info-value"><span>Digitally approved by&nbsp;{{ selectedReport?.dept_head }}</span>
-              <br>
-              <span *ngIf="selectedReport.approval_datetime" >
-                Approval Date: {{ selectedReport?.approval_datetime | date:'MMMM, dd, yyyy h:mm a' }}
-              </span></i>
-            </td>
-          </tr><br>
-        </table>
-      </div>       
-        <!-- <div class="padding-container">
-          <table class="client-table full-width">
-            <tr>
-              <td class="client-table-data label-column">
-                <label>Name:</label>
-              </td>
-              <td class="client-table-data value-column">
-                <span>{{ selectedReport?.name }}</span>
-              </td>
-              <td class="client-table-data label-column">
-                <label>Contact No:</label>
-              </td>
-            </tr>
-            <tr>
-              <td class="client-table-data label-column">
-                <label>Property No (ICS/PAR):</label>
-              </td>
-              <td class="client-table-data value-column">
-                <span>{{ selectedReport?.property_no }}</span>
-              </td>
-              <td class="client-table-data label-column">
-                <label>Signature:</label>
-              </td>
-              <td class="client-table-data value-column">
-                <span *ngIf="selectedReport?.signature">
-                  <img [src]="selectedReport?.signature" alt="Signature" style="max-width: 150px; max-height: 50px;" />
-                </span>
-                <span *ngIf="!selectedReport?.signature">Waiting for client's approval</span>
-              </td>
-            </tr>           
-          </table>
-        </div><br> -->
-      <!-- DESCRIPTION  -->
-      <div class="padding-container">
-        <label>Description of Issue/Problem:</label>
-        <div class="textarea-like">
-          <span>{{ selectedReport?.issue_request }}</span>
-        </div>
-      </div>              
-      <!-- Action Taken  -->
-      <div class="padding-container">
-        <label>Action Taken:</label>
-        <div class="textarea-like">
-          {{ selectedReport?.action_taken }}
-        </div>
-      </div>      
-      <!-- Remarks  -->
-      <div class="padding-container">
-        <label>Remarks:</label>
-        <div class="textarea-like">
-          {{ selectedReport?.remarks }}
-        </div>
-      </div>      
-      <!-- DATES INFO  -->
-      <div class="padding-container">
-        <table class="details-table full-width">
-          <tr>
-            <td class="label-column">
-              <label>Date & Time Started:&nbsp;<span class="client-info-value">{{ selectedReport.date_started | date: 'short' }}</span></label>
-            </td>
-            <td class="value-column">
-              <span></span>
-            </td>
-            <td class="label-column">
-              <label>Date & Time Accomplished:&nbsp;
-                <span class="client-info-value">{{ selectedReport.datetime_accomplished | date: 'short' }}</span>
-              </label>
-            </td>
-            <td class="label-column"> 
-              <label>Approved By:&nbsp;
-                <span class="client-info-value">{{ selectedReport.personnel_name || 'N/A' }}</span>
-              </label>
-            </td>
-          </tr>
-        </table>
-      </div>
-        </div>
-      </div>
     </div>
+   </div>
+
+   <router-outlet></router-outlet>
+
+   <!-- View Dialog -->
+   <div *ngIf="isViewDialogOpen" class="view-dialog-overlay" (click)="closeViewDialog()">
+     <div class="view-dialog landscape-dialog" (click)="$event.stopPropagation()">
+       <!-- View Dialog Header -->
+       <div class="logo-form-head-container">
+         <div class="logo-container">
+           <img src="assets/quezon logo.png" alt="Quezon-Official-Seal" class="form-logo">
+         </div>
+           <div class="form-head">
+             <b>Provincial Information and Communications Technology Office</b>
+             <p>Address: 2nd Floor Finance Building, Provincial Capitol Compound, Lucena City</p>
+             <p>Tel. Number: (042) 719 - 1324</p>
+             <p>Email Address: picto&#64;quezon.gov.ph</p>
+           </div>
+           <div class="job-order-section">
+             <!-- Barcode Section -->
+             <div class="barcode-container">
+               <label class="control_no_text">Control No:</label>
+               <svg id="barcode"></svg>
+             </div>
+           </div>
+       </div>
+       <h4 class="title-form">IT REPAIR & MAINTENANCE</h4>
+       <p class="sub-title-form">Service Request Details</p>
+       <hr>  
+       <!-- Dialog Content -->
+       <div class="dialog-content">
+         <div class="padding-container">
+           <table class="details-table full-width">
+             <tr>
+               <td class="label-column">
+                 <label>Date of Request:&nbsp;<span class="client-info-value">{{ selectedReport.date_of_request | date: 'short' }}</span></label>
+               </td>
+               <td class="value-column">
+                 <span></span>
+               </td>
+               <td class="label-column">
+                 <label>Date Released:&nbsp;
+                   <span class="client-info-value">{{ selectedReport.date_released | date: 'MM/dd/yy' }}</span>
+                 </label>
+               </td>
+             </tr>
+             <tr>
+               <td class="label-column">
+                 <label>CLIENT INFO</label>
+               </td>
+               <td class="value-column">
+                 <span></span>
+               </td>
+
+               <td class="label-column">
+                 <label>Released To:&nbsp;
+                   <span *ngIf="selectedReport.signature">
+                     <img [src]="selectedReport.signature" alt="Signature" style="max-width: 150px; max-height: 50px;" />
+                   </span>
+                   <span *ngIf="!selectedReport.signature">Waiting for client's approval</span>
+                 <span class="client-info-value">{{ selectedReport.released_to }}</span>
+                 </label>
+               </td>
+             </tr>
+           </table>
+           <!-- <table class="details-table full-width">
+             <tr>
+               <td class="label-column">
+                 <label>Date of Request:&nbsp;</label>
+               </td>
+               <td>
+                 <span>{{ selectedReport?.date_of_request | date }}</span>
+               </td>
+
+               <td class="label-column">
+                 <label>Date Released:&nbsp;</label>
+               </td>
+               <td class="value-column">
+                 <span>{{ selectedReport?.date_released | date: 'MM/dd/yy' }}</span>
+               </td>
+
+             </tr>
+             <tr>
+               <td class="label-column">
+                 <label>CLIENT INFO</label>
+               </td>
+               <td class="value-column">
+                 <span></span>
+               </td>
+
+               <td class="label-column">
+                 <label>Released To:&nbsp;
+                   <span *ngIf="selectedReport.signature">
+                     <img [src]="selectedReport.signature" alt="Signature" style="max-width: 150px; max-height: 50px;" />
+                   </span>
+                   <span *ngIf="!selectedReport.signature">Waiting for client's approval</span>
+                 <span class="client-info-value">{{ selectedReport.released_to }}</span>
+                 </label>
+               </td>
+             </tr>
+           </table> -->
+               <!-- <td class="label-column">
+                 <label>Released To:</label>
+               </td>
+               <td class="value-column">
+                 <span>{{ selectedReport?.released_to }}</span>
+               </td> -->
+       </div>
+     <!-- CLIENT INFO -->
+     <div class="padding-container">
+       <table class="client-table full-width">
+         <tr>
+           <td class="client-table-data label-column">
+             <label class="client-info-label">Name:&nbsp;<span class="client-info-value">{{ selectedReport?.name }}</span></label>
+           </td>
+           <td class="client-table-data label-column">
+             <label class="client-info-label">Property No (ICS/PAR):&nbsp;<span class="client-info-value">{{ selectedReport?.property_no }}</span></label>
+           </td>
+           <!-- <td class="client-table-data label-column">
+             <label class="client-info-label">Contact No:&nbsp;<span class="client-info-value">{{ selectedReport?.contact_no }}</span></label>
+           </td> -->
+         </tr>
+         <tr>
+           <!-- <td class="client-table-data label-column">
+             <label class="client-info-label">Department:&nbsp;<span class="client-info-value">{{ selectedReport?.office_name }}</span></label>
+           </td> -->
+
+         </tr>
+         <tr>
+           <td class="client-table-data label-column">
+             <span class="client-info-label">Noted By:</span>
+             <br>
+           </td>
+           <td class="client-table-data value-column" colspan="3"><br>
+             <label class="client-info-label"><span class="client-info-value">LENY C. LAYGO</span></label>
+           </td>  
+         </tr>
+         <tr>
+           <td class="client-table-data label-column">
+             <span class="client-info-label">Department Head/</span>
+             <br>
+             <span class="client-info-label">Immediate Supervisor:</span>
+           </td>
+           <td class="client-table-data value-column" colspan="3">
+             <i class="client-info-value"><span>Digitally approved by&nbsp;{{ selectedReport?.dept_head }}</span>
+             <br>
+             <span *ngIf="selectedReport.approval_datetime" >
+               Approval Date: {{ selectedReport?.approval_datetime | date:'MMMM, dd, yyyy h:mm a' }}
+             </span></i>
+           </td>
+         </tr><br>
+       </table>
+     </div>       
+       <!-- <div class="padding-container">
+         <table class="client-table full-width">
+           <tr>
+             <td class="client-table-data label-column">
+               <label>Name:</label>
+             </td>
+             <td class="client-table-data value-column">
+               <span>{{ selectedReport?.name }}</span>
+             </td>
+             <td class="client-table-data label-column">
+               <label>Contact No:</label>
+             </td>
+           </tr>
+           <tr>
+             <td class="client-table-data label-column">
+               <label>Property No (ICS/PAR):</label>
+             </td>
+             <td class="client-table-data value-column">
+               <span>{{ selectedReport?.property_no }}</span>
+             </td>
+             <td class="client-table-data label-column">
+               <label>Signature:</label>
+             </td>
+             <td class="client-table-data value-column">
+               <span *ngIf="selectedReport?.signature">
+                 <img [src]="selectedReport?.signature" alt="Signature" style="max-width: 150px; max-height: 50px;" />
+               </span>
+               <span *ngIf="!selectedReport?.signature">Waiting for client's approval</span>
+             </td>
+           </tr>           
+         </table>
+       </div><br> -->
+     <!-- DESCRIPTION  -->
+     <div class="padding-container">
+       <label>Description of Issue/Problem:</label>
+       <div class="textarea-like">
+         <span>{{ selectedReport?.issue_request }}</span>
+       </div>
+     </div>              
+     <!-- Action Taken  -->
+     <div class="padding-container">
+       <label>Action Taken:</label>
+       <div class="textarea-like">
+         {{ selectedReport?.action_taken }}
+       </div>
+     </div>      
+     <!-- Remarks  -->
+     <div class="padding-container">
+       <label>Remarks:</label>
+       <div class="textarea-like">
+         {{ selectedReport?.remarks }}
+       </div>
+     </div>      
+     <!-- DATES INFO  -->
+     <div class="padding-container">
+       <table class="details-table full-width">
+         <tr>
+           <td class="label-column">
+             <label>Date & Time Started:&nbsp;<span class="client-info-value">{{ selectedReport.date_started | date: 'short' }}</span></label>
+           </td>
+           <td class="value-column">
+             <span></span>
+           </td>
+           <td class="label-column">
+             <label>Date & Time Accomplished:&nbsp;
+               <span class="client-info-value">{{ selectedReport.datetime_accomplished | date: 'short' }}</span>
+             </label>
+           </td>
+           <td class="label-column"> 
+             <label>Approved By:&nbsp;
+               <span class="client-info-value">{{ selectedReport.personnel_name || 'N/A' }}</span>
+             </label>
+           </td>
+         </tr>
+       </table>
+     </div>
+       </div>
+     </div>
+   </div>
+
+  <!-- <div class="table-container">
+    <table *ngIf="searchResults.length > 0" class="results-table">
+      <thead>
+        <tr>
+          <th>Control No.</th>
+          <th>Name</th>
+          <th>Contact No.</th>
+          <th>Issue/Request</th>
+          <th>Date of Request</th>
+          <th>Request Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let result of searchResults">
+          <td>{{ result.control_no }}</td>
+          <td>{{ result.name }}</td>
+          <td>{{ result.contact_no }}</td>
+          <td>{{ result.issue_request }}</td>
+          <td>{{ result.date_of_request | date }}</td>
+          <td>{{ result.request_status }}</td>
+          <td>
+            <button (click)="openViewDialog(result)">View</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div> -->
+  
 </div>

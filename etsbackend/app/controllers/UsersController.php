@@ -1284,6 +1284,7 @@ class UsersController extends \Phalcon\Mvc\Controller
         }
     }
 
+    // TCPDF for task component 
     public function generatePdfAction()
     {        
         // Initialize TCPDF

@@ -75,11 +75,6 @@
                 <span class="material-icons">preview</span>
               </button>
             </td>
-              <!-- <td class="main-table-row-data" *ngIf="report.request_status !== 'Pending' && report.request_status !== 'For Release'">
-                <button class="btn btn-pdf btn-sm action-btn">
-                  <span class="material-icons">picture_as_pdf</span>
-                </button>
-              </td> -->
             <td class="main-table-row-data" *ngIf="report.request_status !== 'Released' && report.request_status !== 'For Release'">
               <button class="btn btn-warning btn-sm action-btn" (click)="openEditDialog(report)">
                 <span class="material-icons">task</span>
@@ -490,7 +485,10 @@
 
     <!-- Footer -->
     <div class="dialog-footer">
-      <button (click)="generatePdf()">Download PDF</button>
+      <button (click)="generatePdf()" class="btn-pdf">
+        Generate
+        <span class="material-icons">picture_as_pdf</span>
+      </button>
     </div>
   </div>
 </div>

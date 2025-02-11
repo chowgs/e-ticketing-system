@@ -1,4 +1,3 @@
-// This will prevent user from going back to client page if they're currently logged in 
 import { Injectable } from '@angular/core';
 import { CanMatch, Route, Router, UrlSegment, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';

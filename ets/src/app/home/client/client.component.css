@@ -1,419 +1,705 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "poppins", sans-serif;
+}
+
 .clients-container {
-    background-image: url('/assets/BG.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-    padding: 0;
+  background-image: url('/assets/BG.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  position: relative;
 }
-
 #Logo {
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    height: 5rem;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  height: 5rem;
+  max-width: 100%;
 }
 
-/* LOGIN STYLE */
 .login-section {
-    position: absolute;
-    top: 25px;
-    right: 20px;
-    display: flex;
-    align-items: center;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center; /* Center content vertically */
+  background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background for readability */
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-
 .login-form {
-    display: flex;
-    align-items: center;
+  display: flex;
+  flex-direction: row; /* Align input and button in a row */
+  gap: 10px; /* Space between input fields and button */
 }
-
 .login-input {
-    padding: 5px;
-    margin-right: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  width: 150px; /* Set width of input fields */
 }
-
+.login-input:focus {
+  border-color: #007bff;
+}
 .login-button {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  padding: 0.6rem;
+  font-size: 1.1rem;
+  background-color: #de4a25;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 120px; /* Set a fixed width for the button */
 }
-
-.login-button:hover {
-    background-color: #0056b3;
-}
-
-/* Adjust button styles when loading */
 .login-button:disabled {
-    background-color: #007bff;
-    cursor: not-allowed;
-    opacity: 0.6;
+  background-color: #b0c4de;
+}
+.login-button:hover:enabled {
+  background-color: #ff8161;
+}
+.spinner {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-
-/* Search Section */
-.search-section {
-    margin-bottom: 30px;
-    text-align: center;
+/* Hamburger Menu Style */
+.menu-toggle {
+  display: none;
+  font-size: 2.5rem;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  color: #de4a25;
+  z-index: 100;
+  transition: color 0.3s ease;
 }
-
-.search-bar-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Hamburger Bars */
+.hamburger {
+  width: 30px;
+  height: 4px;
+  background-color: #de4a25;
+  margin: 6px 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  border-radius: 4px;
 }
-
-.search-bar {
-    width: 300px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px;
-    outline: none;
+/* When the menu is open, transform the hamburger bars into an "X" */
+.menu-toggle.open .hamburger:nth-child(1) {
+  transform: rotate(45deg) translateY(14px);
 }
-
-.search-button {
-    background-color: #de4a25;
-    color: white;
-    border: none;
-    border-radius: 0 5px 5px 0;
-    padding: 10px 12px;
-    cursor: pointer;
+.menu-toggle.open .hamburger:nth-child(2) {
+  opacity: 0; /* Hide the middle bar */
 }
-
-.search-button i {
-    margin: 0;
-    font-size: 20px;
+.menu-toggle.open .hamburger:nth-child(3) {
+  transform: rotate(-45deg) translateY(-14px);
 }
-
-.search-button:hover {
-    background-color: #ff86687e;
+/* Mobile Menu (Hidden by default) */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -250px; /* Start off-screen */
+  width: 120px;
+  height: 100%;
+  background-color: rgb(255, 255, 255); /* Dark background for the sidebar */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding-top: 60px; /* Space for the logo at the top */
+  z-index: 99;
+  transition: right 0.3s ease; 
 }
-
-/* Request Section */
-.request-section {
-    margin-bottom: 20px;
+.mobile-menu.menu-open {
+  right: 0;
+}
+.mobile-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.mobile-menu ul li {
+  padding: 20px;
+  font-size: 1rem;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+.mobile-menu ul li a {
+  text-decoration: none;
+  color: #de4a25;
+  font-weight: bold;
+}
+.login-section.show {
+  display: block; /* Make sure the login form is visible */
+}
+.close-button {
+  display: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 25px;
+  cursor: pointer;
+  color: #de4a25;
 }
 
 .new-request-button {
-    padding: 12px 24px;
-    background-color: #de4a25;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  width: 100%;
+  max-width: 500px;
+  background-color: #de4a25;
+  border: none;
+  border-radius: 4px;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.3s ease;
 }
-
 .new-request-button:hover {
-    background-color: #ff86687e;
+  background-color: #ff8161;
+
 }
 
-.results-table {
-    width: 80%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    text-align: left;
-  }
-  
-  .results-table th,
-  .results-table td {
-    padding: 10px;
-    border: 1px solid #ccc;
-  }
-  
-  .results-table th {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .results-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-/* White background for table rows */
-.results-table tbody tr {
-    background-color: white;
-  }
-  
-  /* Loading spinner styles */
-  .loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-  }
+/* Search Section */
+.search-section {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 10px; /* Reduced space between the button and search input */
+}
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px;
+  gap: 8px; /* Reduced gap between the input and button */
+}
+.search-bar {
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  width: 100%;
+  max-width: 300px; /* Match the button size */
+}
+.search-bar:focus {
+  border-color: #007bff;
+}
+.search-button {
+  background-color: #de4a25;
+  border: none;
+  border-radius: 4px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.3s ease;
+  width: auto; /* Remove any fixed width */
+}
+.search-button:hover {
+  background-color: #ff8161;
+}
 
-  .loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .spinner {
-    width: 20px;
-    height: 20px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #007bff; /* Blue spinner color */
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  
-  
-  .error {
-    text-align: center;
-    color: red;
-  }
-  .view-dialog-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
+/* Table responsiveness */
+.container {
+  max-width: 1440px;
+  width: 100%;
+  background: #fff;
+  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+  margin-top: 20px;
+}
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.results-table thead {
+  background: #3f3f3f;
+  color: #fff;
+}
+.results-table thead tr th {
+  font-size: 0.6rem;
+  padding: 0.8rem;
+  vertical-align: top;
+  border: 1px solid #aab7b8;
+}
+.results-table tbody tr td {
+  font-size: 0.8rem;
+  font-weight: normal;
+  text-align: center;
+  border: 1px solid #aab7b8;
+  padding: 0.8rem;
+}
+
+.error {
+  text-align: center;
+  color: red;
+}
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+.view-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
 /* Dialog Box */
 .view-dialog {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-width: 60%;
-    width: 400px;
-  
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 90%; /* Set max-width to 90% to allow for better scaling on smaller screens */
+  width: 400px;
+  overflow-y: auto; /* Allow scrolling if content overflows */
+  max-height: 90vh;
+
 }
 
 .landscape-dialog {
-  width: 1200px;
+width: 1200px;
 }
 
 /* Flexbox container for logo and form head */
 .logo-form-head-container {
-    display: flex;
-    align-items: flex-start; /* Align logo and text at the top */
-    justify-content: space-between; /* Push job order section to the right */
-    margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start; /* Align logo and text at the top */
+  justify-content: space-between; /* Push job order section to the right */
+  margin-bottom: 20px;
 }
 
 /* Logo container */
 .logo-container {
-    flex-shrink: 0; /* Prevent shrinking of the logo */
-    margin-right: 15px;
-  }
-  
+  flex-shrink: 0; /* Prevent shrinking of the logo */
+  margin-right: 15px;
+}
+
 .form-logo {
-   width: 50px; /* Adjust logo size */
-   height: auto;
+ width: 50px; /* Adjust logo size */
+ height: auto;
 }
 
 /* Form head content */
 .form-head {
-  flex-grow: 1; /* Allow form head to grow and fill available space */
-  text-align: left;
+flex-grow: 1; /* Allow form head to grow and fill available space */
+text-align: left;
 }
 
 .form-head b {
-  font-size: 12px;
-  color: #333;
+font-size: 12px;
+color: #333;
 }
 
 .form-head p {
-  margin: 0; /* Remove default margin */
-  padding: 0; /* Remove any padding */
-  font-size: 12px;
-  color: #666;
-  line-height: 1.2; /* Adjust line height to make text closer */
+margin: 0; /* Remove default margin */
+padding: 0; /* Remove any padding */
+font-size: 12px;
+color: #666;
+line-height: 1.2; /* Adjust line height to make text closer */
 }
 
 /* Job order section */
 .job-order-section {
-  text-align: right;
-  margin-left: auto;
+text-align: right;
+margin-left: auto;
 }
 
 .job-order-section h3 {
-  font-size: 18px;
-  font-weight: bold;
-  color: #de4a25;
-  margin: 0;
+font-size: 18px;
+font-weight: bold;
+color: #de4a25;
+margin: 0;
 }
 
 .job-order-section p {
-  font-size: 12px;
-  color: #ffffff;
-  background-color: #0847ad;
-  border-radius: 8px;
-  margin: 0;
-  padding: 3px 15px;
+font-size: 12px;
+color: #ffffff;
+background-color: #0847ad;
+border-radius: 8px;
+margin: 0;
+padding: 3px 15px;
 }
 
 #barcode {
-  width: 200px; /* Adjust barcode width */
-  height: auto; /* Maintain aspect ratio */
+width: 200px; /* Adjust barcode width */
+height: auto; /* Maintain aspect ratio */
 }
 
 .barcode-container {
-  margin-top: 2px;
-  text-align: center;
-  font-size: 8;
+margin-top: 2px;
+text-align: center;
+font-size: 8;
 }
 
 .control_no_text{
-    font-size: 12px;
+  font-size: 12px;
 }
 
 h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 1.5rem;
+font-size: 1.5rem;
+font-weight: 600;
+color: #333;
+margin-bottom: 1.5rem;
 }
 
 .view-dialog button {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .title-form {
- text-align: center;
- font-weight: bold;
+text-align: center;
+font-weight: bold;
 }
 
 .sub-title-form {
-  font-size: 14px;
-  text-align: center;
+font-size: 14px;
+text-align: center;
 }
 
 .padding-container {
-  padding: 3px;
+padding: 3px;
 }
 
 .details-table {
-  border: none; /* Removes table border */
-  border-collapse: collapse; /* Ensures no space between cells */
-  background-color: transparent;
+border: none; /* Removes table border */
+border-collapse: collapse; /* Ensures no space between cells */
+background-color: transparent;
 }
 
 .details-table td {
-  border: none; /* Removes cell borders */
-  background-color: transparent;
+border: none; /* Removes cell borders */
+background-color: transparent;
 }
 
 .full-width {
-  width: 100%;
+width: 100%;
 }
 
 .label-column, .value-column {
-  background-color: #f9f9f9;
+background-color: #f9f9f9;
 }
 
 .client-info-label {
-  font-weight: 500;
+font-weight: 500;
 }
 
 .client-info-value {
-  font-weight: 300;
+font-weight: 300;
 }
 
 .client-table-data {
-  padding: 3px 10px;
-  text-align: left;
-  border: 1px solid #ddd;
+padding: 3px 10px;
+text-align: left;
+border: 1px solid #ddd;
 }
 
 /* Styled Container for Services */
 .textarea-like {
-  display: block;
-  width: 100%;
-  min-height: 80px; /* Mimics a textarea height */
-  padding: 10px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #333;
-  white-space: pre-wrap; /* Maintains line breaks if present */
-  overflow-y: auto; /* Allows scrolling for overflow content */
+display: block;
+width: 100%;
+min-height: 80px; /* Mimics a textarea height */
+padding: 10px;
+background-color: #f9f9f9;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 14px;
+line-height: 1.5;
+color: #333;
+white-space: pre-wrap; /* Maintains line breaks if present */
+overflow-y: auto; /* Allows scrolling for overflow content */
 }
 
 /* Optional: Highlight Background */
 .textarea-like:empty {
-  background-color: #fff5f5;
-  color: #999;
-  font-style: italic;
+background-color: #fff5f5;
+color: #999;
+font-style: italic;
 }
 
 .form-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  margin-bottom: 15px;
+display: flex;
+justify-content: space-between;
+gap: 15px;
+margin-bottom: 15px;
 }
 
 .form-group {
-  flex: 1; /* Equal width for both columns */
-  margin-bottom: 5px;
+flex: 1; /* Equal width for both columns */
+margin-bottom: 5px;
 }
 
 p {
-  margin: 0;
-  color: #333;
-  font-size: 14px;
+margin: 0;
+color: #333;
+font-size: 14px;
 }
-
-/* Make sure clicking outside closes the dialog */
-/* .view-dialog-overlay {
-    cursor: pointer;
+/* .table-container {
+  overflow-x: auto;
+  width: 100%;
+  margin-top: 20px;
+  background-color: #fff;
+  border-radius: 4px;
 }
-
-.view-dialog-overlay .view-dialog {
-    cursor: auto;
+.results-table {
+  width: 100%;
+  max-width:100%;
+  table-layout: auto; 
+  border-collapse: collapse;
+}
+.results-table th, .results-table td {
+  padding: 10px; 
+  border: 1px solid #ddd;
+  white-space: nowrap;
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+.results-table th {
+  background-color: #3f3f3f; 
+  color: white;
+  font-weight: bold;
+}
+.results-table td:hover {
+  background-color: #f1f1f1;
 } */
+.results-table button {
+  background-color: #de4a25;
+  color: white;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-/* Optional: Style the button to make it more noticeable */
-button {
-    padding: 5px 5px;
+.results-table button:hover {
+  background-color: #ff8161; 
+}
+
+.results-table button:focus {
+  outline: none;
+}
+
+
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  #Logo {
+    height: 4rem; /* Adjust logo size for larger tablets and smaller desktops */
+  }
+  .view-dialog {
+    width: 85%;
+    max-width: 600px; /* Adjust max-width for larger tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  #Logo {
+    height: 3rem; /* Adjust logo size for tablets and smaller devices */
+    top: 5px; /* Adjust logo positioning for smaller devices */
+    left: 15px;
+  }
+
+  .menu-toggle {
+    display: block; /* Show hamburger icon on smaller screens */
+  }
+
+  .login-section {
+    position: fixed;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 350px;
+    z-index: 101;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column; /* Stack input fields and button */
+    gap: 15px; /* Space between form elements */
+  }
+
+  .login-input {
+    width: 100%; /* Inputs take up full width */
+  }
+
+  .login-button {
+    width: 100%; /* Button takes up full width */
+  }
+
+  .close-button {
+    display: block;
+  }
+
+  .results-table thead {
+    display: none;
+  }
+  .results-table tr, .results-table td {
+    display: block;
+    width: 100%;
+  }
+  .results-table tr{
+    margin-bottom: 1rem;
+  }
+  .results-table tbody tr td{
+    text-align: left;
+    position: relative;
+  }
+  /* .results-table {
+    font-size: 0.9rem; 
+  }
+
+  .results-table th, .results-table td {
+    font-size: 0.8rem; 
+  } */
+  .view-dialog {
+    width: 90%;
+    max-width: 500px; /* Further scale the modal for tablets */
+  }
+
+  .logo-container {
+    margin-right: 10px; /* Reduce margin for smaller screens */
+  }
+
+  .form-head {
+    text-align: center; /* Center-align the form header on smaller screens */
+  }
+
+  .job-order-section {
+    text-align: center; /* Center the job order section */
+    margin-top: 20px;
+  }
+
+  .barcode-container {
+    text-align: center;
+  }
+
+  .details-table, .client-table {
+    font-size: 14px; /* Adjust font size for better readability */
+  }
+
+  .results-table button {
+    padding: 8px 14px; /* Make buttons larger and more tap-friendly */
+  }
+}
+
+@media (max-width: 480px) {
+  #Logo {
+    height: 2.5rem; /* Adjust logo size for mobile devices */
+    top: 5px;
+    left: 10px; /* Adjust the position further for small screens */
+  }
+  .new-request-button {
+    font-size: 0.9rem; /* Adjust font size for smaller screens */
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+  }
+  .search-bar {
+    padding: 0.6rem 1rem; /* Adjust padding for smaller screens */
+    font-size: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    width: 100%;
+    max-width: 200px; /* Match the button size */
+  }
+  .search-button {
+    font-size: 0.9rem; /* Adjust font size for smaller screens */
+    padding: 0.6rem 1rem;
+  }
+  .search-button {
     background-color: #de4a25;
-    color: white;
-    font-size: 14px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
+    padding: 0.5rem ;
     cursor: pointer;
+    color: white;
+    transition: background-color 0.3s ease;
+    width: auto; /* Remove any fixed width */
+  }
+  .results-table th, .results-table td {
+    font-size: 0.8rem; /* Reduce font size more for extra small screens */
+    padding: 0.2rem; /* Reduce padding further */
+  }
+  .view-dialog {
+    width: 100%;
+    max-width: 400px; /* Make modal full width for small mobile screens */
+  }
+
+  .logo-container {
+    display: block; /* Stack the logo if space is tight */
+    margin: 0 auto;
+  }
+
+  .logo-form-head-container {
+    flex-direction: column; /* Stack elements in the logo-form-head-container */
+    align-items: center;
+  }
+
+  .form-head {
+    text-align: center;
+    font-size: 14px; /* Smaller font size */
+    padding: 0 10px;
+  }
+
+  .form-head b {
+    font-size: 14px; /* Adjust title size */
+  }
+
+  .job-order-section h3 {
+    font-size: 16px; /* Adjust job order section title */
+  }
+
+  .dialog-content {
+    padding: 0 10px;
+  }
+
+  .details-table, .client-table {
+    font-size: 12px; /* Make text smaller for better fit */
+  }
+
+  .results-table button {
+    font-size: 0.8rem;
+    padding: 6px 12px; /* Scale down buttons for mobile */
+  }
+
+  .textarea-like {
+    min-height: 60px; /* Adjust textarea-like for small screens */
+  }
 }
-
-button:hover {
-    background-color: #ff86687e;
-}
-
-

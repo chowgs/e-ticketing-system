@@ -141,14 +141,17 @@ h3 {
   color: #fff;
 }
 
-.btn-pdf {
-  background-color: #de2525;
+.btn-pdf .material-icons {
   color: #fff;
+}
+
+.btn-pdf {
+  color: #fff;
+  background-color: #dc3545;
 }
 
 .btn-pdf:hover {
   background-color: #F44336  ;
-  color: #fff;
 }
 
 
