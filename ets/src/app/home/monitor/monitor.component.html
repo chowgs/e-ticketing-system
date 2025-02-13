@@ -1,50 +1,49 @@
-<h3 style="text-align: center;">Pending Request</h3>
-  <!-- Loading Spinner -->
-  <div *ngIf="isLoading" class="spinner-container">
-    <div class="loader"></div>
-    <p>Loading data...</p>
-  </div>
-<table class="job-request-task">
-  <thead>
-    <tr>
-      <th class="main-table-head">Name</th>
-      <th class="main-table-head">Issue</th>
-      <th class="main-table-head">Date of Request</th>
-      <th class="main-table-head">Office</th>
-      <th class="main-table-head">Personnel</th>
-      <th class="main-table-head">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-container *ngFor="let report of reports">    
-      <tr *ngIf="!report.personnel_id">
-        <td class="main-table-row-data">{{ report.name }}</td>
-        <td class="main-table-row-data">{{ report.issue_request }}</td>
-        <td class="main-table-row-data">{{ report.date_of_request | date:'yyyy-MM-dd' }}</td>
-        <td class="main-table-row-data">{{ report.office_name }}</td>
-        <td class="main-table-row-data">
-          <select [(ngModel)]="report.selectedPersonnelId" [ngModelOptions]="{standalone: true}">
-            <option *ngFor="let personnel of personnelNames" [value]="personnel.personnel_id">
-              {{ personnel.personnel_name }}
-            </option>
-          </select>
-        </td>
-        <td class="main-table-row-data">
-          <button
-            class="btn btn-info btn-sm action-btn"
-            (click)="assignPersonnel(report)"
-            [disabled]="report.isAssigning"
-          >
-            <ng-container *ngIf="!report.isAssigning; else loading">
-              Assign
-            </ng-container>
-            <ng-template #loading>
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Processing...
-            </ng-template>
-          </button>
-        </td>        
+<!-- Loading Spinner -->
+<div *ngIf="isLoading" class="spinner-container">
+  <div class="loader"></div>
+  <p>Loading data...</p>
+</div>
+
+<div class="table-container">
+  <h3 class="pending-request-header">Pending Request</h3>
+  <table class="job-request-task">
+    <thead>
+      <tr>
+        <th class="main-table-head">Name</th>
+        <th class="main-table-head">Issue</th>
+        <th class="main-table-head">Date of Request</th>
+        <th class="main-table-head">Office</th>
+        <th class="main-table-head">Personnel</th>
+        <th class="main-table-head">Action</th>
       </tr>
-    </ng-container>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let report of reports">
+        <tr *ngIf="!report.personnel_id">
+          <td class="main-table-row-data">{{ report.name }}</td>
+          <td class="main-table-row-data">{{ report.issue_request }}</td>
+          <td class="main-table-row-data">{{ report.date_of_request | date:'yyyy-MM-dd' }}</td>
+          <td class="main-table-row-data">{{ report.office_name }}</td>
+          <td class="main-table-row-data">
+            <select [(ngModel)]="report.selectedPersonnelId" [ngModelOptions]="{standalone: true}">
+              <option *ngFor="let personnel of personnelNames" [value]="personnel.personnel_id">
+                {{ personnel.personnel_name }}
+              </option>
+            </select>
+          </td>
+          <td class="main-table-row-data">
+            <button class="btn btn-info btn-sm action-btn" (click)="assignPersonnel(report)" [disabled]="report.isAssigning">
+              <ng-container *ngIf="!report.isAssigning; else loading">
+                Assign
+              </ng-container>
+              <ng-template #loading>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Processing...
+              </ng-template>
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>

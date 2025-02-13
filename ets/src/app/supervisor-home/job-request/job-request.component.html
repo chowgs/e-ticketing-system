@@ -1,6 +1,4 @@
 <div class="container my-2">
-  <h2 class="mb-2 text-center">Service Job Request</h2>
-
   <!-- Search and Sort Controls -->
   <div class="d-flex justify-content-between mb-3">
     <input
@@ -22,40 +20,43 @@
     <p>Loading data...</p>
   </div>
 
-  <table class="job-request-task" *ngIf="!isLoading">
-    <thead>
-      <tr>
-        <th class="main-table-head">Name</th>
-        <th class="main-table-head">Issue/Request</th>
-        <th class="main-table-head">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <ng-container *ngFor="let request of paginatedJobRequests">
-        <tr *ngIf="request.approval_status !== '1'">
-          <td class="main-table-row-data">{{ request.name }}</td>
-          <td class="main-table-row-data">{{ request.issue_request }}</td>
-          <td class="main-table-row-data">
-            <div class="button-container">
-            <button
-              class="btn btn-success btn-sm action-btn"
-              [disabled]="loadingRequests[request.id]"
-              (click)="openConfirmationDialog(request)"
-            >
-              <ng-container *ngIf="!loadingRequests[request.id]; else loading">
-                For Approval
-              </ng-container>
-              <ng-template #loading>
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Processing...
-              </ng-template>
-            </button>
-            </div>
-          </td>
+  <div class="table-container">
+    <h3 class="pending-request-header">Service Job Request</h3>
+    <table class="job-request-task" *ngIf="!isLoading">
+      <thead>
+        <tr>
+          <th class="main-table-head">Name</th>
+          <th class="main-table-head">Issue/Request</th>
+          <th class="main-table-head">Action</th>
         </tr>
-      </ng-container>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let request of paginatedJobRequests">
+          <tr *ngIf="request.approval_status !== '1'">
+            <td class="main-table-row-data">{{ request.name }}</td>
+            <td class="main-table-row-data">{{ request.issue_request }}</td>
+            <td class="main-table-row-data">
+              <div class="button-container">
+              <button
+                class="btn btn-success btn-sm action-btn"
+                [disabled]="loadingRequests[request.id]"
+                (click)="openConfirmationDialog(request)"
+              >
+                <ng-container *ngIf="!loadingRequests[request.id]; else loading">
+                  For Approval
+                </ng-container>
+                <ng-template #loading>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Processing...
+                </ng-template>
+              </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
 
   <!-- Angular Material Paginator -->
   <mat-paginator

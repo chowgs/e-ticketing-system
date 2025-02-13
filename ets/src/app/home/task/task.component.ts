@@ -283,25 +283,48 @@ export class TaskComponent implements OnInit {
   enableDrawing(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
     let drawing = false;
   
-    const startDrawing = (event: MouseEvent) => {
+    const startDrawing = (event: MouseEvent | TouchEvent) => {
       drawing = true;
+      const { offsetX, offsetY } = this.getEventCoordinates(event);
       context.beginPath();
-      context.moveTo(event.offsetX, event.offsetY);
+      context.moveTo(offsetX, offsetY);
     };
   
-    const draw = (event: MouseEvent) => {
+    const draw = (event: MouseEvent | TouchEvent) => {
       if (!drawing) return;
-      context.lineTo(event.offsetX, event.offsetY);
+      const { offsetX, offsetY } = this.getEventCoordinates(event);
+      context.lineTo(offsetX, offsetY);
       context.stroke();
     };
   
     const stopDrawing = () => (drawing = false);
-  
+    // Touch events for desktop 
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mouseout', stopDrawing);
+
+    // Touch events for mobile
+    canvas.addEventListener('touchstart', startDrawing);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', stopDrawing);
+    canvas.addEventListener('touchcancel', stopDrawing);
   }
+
+    // Helper function to get the correct coordinates for both mouse and touch events
+    getEventCoordinates(event: MouseEvent | TouchEvent): { offsetX: number, offsetY: number } {
+      if (event instanceof MouseEvent) {
+        return { offsetX: event.offsetX, offsetY: event.offsetY };
+      } else if (event instanceof TouchEvent) {
+        const touch = event.touches[0];
+        const rect = (event.target as HTMLElement).getBoundingClientRect();
+        return {
+          offsetX: touch.clientX - rect.left,
+          offsetY: touch.clientY - rect.top,
+        };
+      }
+      return { offsetX: 0, offsetY: 0 }; // Default return value
+    }
   
   clearSignature(): void {
     const canvas = this.signaturePad.nativeElement;

@@ -1,11 +1,32 @@
-/* Table Styles */
-.job-request-task {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 2rem;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* font-family: "poppins", sans-serif; */
+}
+  body {
+    background-color: #f8f9fa;
   }
+
+/* Table Styles */
+.pending-request-header {
+  text-align: center;  
+  margin-top: 20px;
+  margin-bottom: 20px;  
+  font-size: 24px;  
+  font-weight: bold; 
+}
+.table-container{
+  width: 100%;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
   
   .main-table-head, .main-table-row-data {
     padding: 12px 15px;
@@ -133,3 +154,38 @@
     justify-content: center;
   }
   
+
+  @media (max-width: 1200px) {
+  }
+
+  @media (max-width: 768px) {
+  /* Adjust table styling for smaller screens */
+  table {
+    font-size: 12px;  /* Slightly smaller text on smaller screens */
+  }
+
+
+  .main-table-head, .main-table-row-data {
+    padding: 10px;  /* Adjust padding for better fit */
+  }
+
+  .action-btn {
+    font-size: 0.9rem;  /* Reduce button text size */
+    padding: 6px 10px;  /* Reduce button padding */
+  }
+  
+  }
+  @media (max-width: 480px) {
+    table {
+      font-size: 11px;  /* Further reduce text size */
+    }
+  
+    .main-table-head, .main-table-row-data {
+      padding: 8px;  /* Reduce padding for compact layout */
+    }
+  
+    .action-btn {
+      font-size: 0.85rem;  /* Smaller action button size */
+      padding: 5px 8px;  /* Further reduce padding */
+    }
+  }

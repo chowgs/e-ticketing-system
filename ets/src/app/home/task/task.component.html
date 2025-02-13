@@ -1,7 +1,6 @@
 
 
 <div *ngIf="!isLoading && reports.length > 0; else noReportsTemplate">
-
   <!-- Filter Dropdown -->
   <div class="filter-container">
     <label for="statusFilter">Filter by Status:</label>
@@ -19,6 +18,7 @@
       (input)="filterReports()"
     />
   </div>
+  <div class="table-container">
     <table class="job-request-task">
       <!-- Conditionally render the table head -->
       <thead *ngIf="filteredReports.length > 0">
@@ -95,12 +95,12 @@
         </tr>
       </tfoot>
     </table> 
+  </div>
   <div class="pagination">
     <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">Previous</button>
     <span>Page {{ currentPage }} of {{ totalPages }}</span>
     <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">Next</button>
   </div>
-  
 </div>
 
 <div *ngIf="isLoading" class="spinner-container">
@@ -199,17 +199,9 @@
       <!-- Action Taken and Remarks -->
       <div class="form-row">
         <div class="form-group">
-          <label for="action_taken">Action Taken:</label>
-          <textarea id="action_taken" [(ngModel)]="selectedReport.action_taken" name="action_taken" required></textarea>
+          <label for="datetime_accomplished">Datetime Accomplished:</label>
+          <input type="date" id="datetime_accomplished" [(ngModel)]="selectedReport.datetime_accomplished" name="datetime_accomplished" required>
         </div>
-        <div class="form-group">
-          <label for="remarks">Remarks:</label>
-          <textarea id="remarks" [(ngModel)]="selectedReport.remarks" name="remarks" required></textarea>
-        </div>
-      </div>
-
-      <!-- Date Started and Date Accomplished -->
-      <div class="form-row">
         <div class="form-group">
           <label for="date_started">Date Started:</label>
           <input
@@ -220,10 +212,17 @@
             readonly
           />
         </div>
-        
+      </div>
+
+      <!-- Date Started and Date Accomplished -->
+      <div class="form-row">
         <div class="form-group">
-          <label for="datetime_accomplished">Datetime Accomplished:</label>
-          <input type="datetime-local" id="datetime_accomplished" [(ngModel)]="selectedReport.datetime_accomplished" name="datetime_accomplished" required>
+          <label for="remarks">Remarks:</label>
+          <textarea id="remarks" [(ngModel)]="selectedReport.remarks" name="remarks" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="action_taken">Action Taken:</label>
+          <textarea id="action_taken" [(ngModel)]="selectedReport.action_taken" name="action_taken" required></textarea>
         </div>
       </div>
 

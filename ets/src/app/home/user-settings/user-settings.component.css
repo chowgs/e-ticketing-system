@@ -1,12 +1,22 @@
-
+  /* General Styles */
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    /* font-family: "poppins", sans-serif; */
+  }
+    body {
+      background-color: #f8f9fa;
+    }
+  
 /* Settings Container */
 .settings-container {
-    max-width: 1200px;
+    /* max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
   }
 
 .top-section {
@@ -419,13 +429,17 @@ input[type="password"]:focus {
   font-size: 14px;
 }
 
+.table-container{
+  width: 100%;
+  overflow-x: auto;
+}
 /* Custom Table Styling */
 .custom-table {
   width: 100%;
   border-collapse: collapse;
-  border-radius: 8px;
-  margin-top: 20px;
-  background-color: #ffffff;
+  margin-bottom: 2rem;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .custom-table th,
@@ -458,9 +472,9 @@ input[type="password"]:focus {
 .custom-table-I {
   width: 100%;
   border-collapse: collapse;
-  border-radius: 8px;
-  margin-top: 20px;
-  background-color: #ffffff;
+  margin-bottom: 2rem;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .custom-table-I th,

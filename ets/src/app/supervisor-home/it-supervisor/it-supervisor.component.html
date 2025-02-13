@@ -1,6 +1,4 @@
 <div class="container my-4">
-    <h2 class="mb-4 text-center">Technical Supervisor</h2>
-
   <div class="filter-container">
     <label for="search">Search:</label>
     <input id="search" type="text" [(ngModel)]="searchTerm" (input)="filterReports()" placeholder="Search by name or issue">
@@ -10,6 +8,8 @@
   <div class="loader"></div>
   <p>Loading data...</p>
 </div>
+<div class="table-container">
+  <h3 class="pending-request-header">Technical Supervisor</h3>
   <table class="job-request-task" *ngIf="!isLoading">
     <thead>
       <tr>
@@ -53,7 +53,7 @@
       </ng-container>
     </tbody>
   </table>
-    
+  </div>  
 </div>
 
   

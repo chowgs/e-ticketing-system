@@ -21,7 +21,8 @@ export class HomeComponent implements OnInit {
   };
 
   isLoading: boolean = false;
-
+  isDropdownActive: boolean = false;
+  isSidebarVisible = false;
   // Permission flags
   showItPersonnelSection: boolean = false;
   showDashboardSection: boolean = false;
@@ -111,5 +112,12 @@ export class HomeComponent implements OnInit {
         console.log('Password changed successfully');
       }
     });
+  }
+
+  toggleDropdown() {
+    this.isDropdownActive = !this.isDropdownActive;
+  }
+  toggleSidebar() {
+    this.isSidebarVisible = !this.isSidebarVisible;
   }
 }

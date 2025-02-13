@@ -17,7 +17,8 @@
           <label>Designation</label>
           <input formControlName="designation" type="text" />
         </div>
-        <div class="form-column">
+        <!-- <div class="form-column"> -->
+        <div>
           <label>Department</label>
           <select formControlName="office">
             <option *ngFor="let office of offices" [value]="office.office_id">
@@ -44,63 +45,7 @@
     </section>
   </div>
 
-  <!-- Change Password Modal -->
-  <div class="modal" *ngIf="isPasswordModalVisible" (click)="closeChangePasswordDialog()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <span class="close" (click)="closeChangePasswordDialog()">×</span>
-      <h2>Change Password</h2>
-      <form [formGroup]="passwordForm">
-        <div class="form-column">
-          <input formControlName="currentPassword" type="password" placeholder="Current Password" />
-          <input formControlName="newPassword" type="password" placeholder="New Password"/>
-        </div>
-        <div class="form-column">
-          <input formControlName="confirmPassword" type="password" placeholder="Confirm New Password"/>
-        </div>
-        <div class="form-column full-width">
-          <button type="button" (click)="changePassword()" [disabled]="isChangingPassword">
-            <span *ngIf="isChangingPassword" class="button-spinner"></span>
-            <span *ngIf="!isChangingPassword">Change Password</span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
 
-  <!-- Permissions Modal -->
-  <div class="modal-I" *ngIf="isPermissionsModalVisible" (click)="closePermissionsDialog()">
-    <div class="modal-I-content" (click)="$event.stopPropagation()">
-      <span class="close" (click)="closePermissionsDialog()">×</span>
-      <h2>Manage Permissions</h2>
-      <div class="permissions">
-        <div *ngFor="let permission of allPermissions">
-          <label>
-            <input
-              type="checkbox"
-              [checked]="selectedPermissions.includes(permission.id)"
-              (change)="togglePermission(permission.id, permission.children)"
-            />
-            {{ permission.label }}
-          </label>
-
-          <div *ngIf="permission.children" class="nested-permissions">
-            <label *ngFor="let child of permission.children">
-              <input
-                type="checkbox"
-                [checked]="selectedPermissions.includes(child.id)"
-                (change)="togglePermission(child.id)"
-              />
-              {{ child.label }}
-            </label>
-          </div>
-        </div>
-      </div>
-      <button type="button" (click)="savePermissions()" [disabled]="isAddingPerms">
-        <span *ngIf="isAddingPerms" class="button-spinner"></span>
-        <span *ngIf="!isAddingPerms">Add Permissions</span>
-      </button>
-    </div>
-  </div>
 </div>
 
 <div class="user-management-container" *ngIf="showUserManagement" >
@@ -118,6 +63,7 @@
         <div class="loader"></div>
         <p>Loading data...</p>
       </div>
+      <div class="table-container">
       <table *ngIf="!isLoadingFetch" class="custom-table">
         <thead>
           <tr>
@@ -144,6 +90,7 @@
           </tr>
         </tbody>
       </table>
+      </div>
   
       <!-- Pagination Controls -->
       <div class="pagination">
@@ -355,6 +302,7 @@
           <div class="loader"></div>
           <p>Loading data...</p>
         </div>
+        <div class="table-container">
             <table *ngIf="!isLoadingFetch" class="custom-table-I">
               <thead>
                 <tr>
@@ -377,7 +325,7 @@
                 </tr>
               </tbody>              
             </table>
-
+        </div>
         <!-- Pagination Controls -->
         <div class="pagination">
           <button class="pagination-buttons" (click)="changeDeptPage('prev')" [disabled]="currentDeptPage === 1">
@@ -395,6 +343,118 @@
       </section>
     </div>
 </div>
+
+<div class="division-management-container" *ngIf="showOfficeManagement">
+  <div class="flex-sections">
+      <section>
+          <!-- Add New Office Button -->
+        <div class="add-user-btn-container">
+          <button (click)="openDivisionModal()" class="open-modal-btn">Add Division +</button>
+        </div>
+        <div *ngIf="isLoadingFetch" class="spinner-container">
+          <div class="loader"></div>
+          <p>Loading data...</p>
+        </div>
+        <div class="table-container">
+            <table *ngIf="!isLoadingFetch" class="custom-table-I">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Division</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let division of getPaginatedDivisions()">
+                  <td>{{ division.division_id }}</td>
+                  <td>{{ division.division_name }}</td>
+                  <td class="actions-column">
+                    <a (click)="openEditDivisionModal(division)" class="edit-btn">
+                      Edit
+                    </a>
+                  </td>
+                </tr>
+              </tbody>              
+            </table>
+        </div>
+      <!-- No Divisions Found Message -->
+      <p *ngIf="!isLoadingFetch && divisions.length === 0">No divisions available.</p>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+          <button class="pagination-buttons" (click)="changeDivPage('prev')" [disabled]="currentDivPage === 1">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="16px" fill="#FFFFFF">
+              <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/>
+            </svg>
+          </button>
+          <span>Page {{ currentDivPage }}</span>
+          <button class="pagination-buttons" (click)="changeDivPage('next')" [disabled]="(currentDivPage * rowsPerDivPage) >= divisions.length">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="16px" fill="#FFFFFF">
+              <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+    </div>
+</div>
+
+  <!-- Change Password Modal -->
+  <div class="modal" *ngIf="isPasswordModalVisible" (click)="closeChangePasswordDialog()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <span class="close" (click)="closeChangePasswordDialog()">×</span>
+      <h2>Change Password</h2>
+      <form [formGroup]="passwordForm">
+        <div class="form-column">
+          <input formControlName="currentPassword" type="password" placeholder="Current Password" />
+          <input formControlName="newPassword" type="password" placeholder="New Password"/>
+        </div>
+        <div class="form-column">
+          <input formControlName="confirmPassword" type="password" placeholder="Confirm New Password"/>
+        </div>
+        <div class="form-column full-width">
+          <button type="button" (click)="changePassword()" [disabled]="isChangingPassword">
+            <span *ngIf="isChangingPassword" class="button-spinner"></span>
+            <span *ngIf="!isChangingPassword">Change Password</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Permissions Modal -->
+  <div class="modal-I" *ngIf="isPermissionsModalVisible" (click)="closePermissionsDialog()">
+    <div class="modal-I-content" (click)="$event.stopPropagation()">
+      <span class="close" (click)="closePermissionsDialog()">×</span>
+      <h2>Manage Permissions</h2>
+      <div class="permissions">
+        <div *ngFor="let permission of allPermissions">
+          <label>
+            <input
+              type="checkbox"
+              [checked]="selectedPermissions.includes(permission.id)"
+              (change)="togglePermission(permission.id, permission.children)"
+            />
+            {{ permission.label }}
+          </label>
+
+          <div *ngIf="permission.children" class="nested-permissions">
+            <label *ngFor="let child of permission.children">
+              <input
+                type="checkbox"
+                [checked]="selectedPermissions.includes(child.id)"
+                (change)="togglePermission(child.id)"
+              />
+              {{ child.label }}
+            </label>
+          </div>
+        </div>
+      </div>
+      <button type="button" (click)="savePermissions()" [disabled]="isAddingPerms">
+        <span *ngIf="isAddingPerms" class="button-spinner"></span>
+        <span *ngIf="!isAddingPerms">Add Permissions</span>
+      </button>
+    </div>
+  </div>
 
 <!-- Add New Office Modal -->
 <div *ngIf="isModalOpen" class="modal-overlay" (click)="closeModal()">
@@ -457,59 +517,6 @@
       <button type="button" (click)="closeEditModal()">Cancel</button>
     </form>
   </div>
-</div>
-
-<div class="division-management-container" *ngIf="showOfficeManagement">
-  <div class="flex-sections">
-      <section>
-          <!-- Add New Office Button -->
-        <div class="add-user-btn-container">
-          <button (click)="openDivisionModal()" class="open-modal-btn">Add Division +</button>
-        </div>
-        <div *ngIf="isLoadingFetch" class="spinner-container">
-          <div class="loader"></div>
-          <p>Loading data...</p>
-        </div>
-            <table *ngIf="!isLoadingFetch" class="custom-table-I">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Division</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let division of getPaginatedDivisions()">
-                  <td>{{ division.division_id }}</td>
-                  <td>{{ division.division_name }}</td>
-                  <td class="actions-column">
-                    <a (click)="openEditDivisionModal(division)" class="edit-btn">
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-              </tbody>              
-            </table>
-
-      <!-- No Divisions Found Message -->
-      <p *ngIf="!isLoadingFetch && divisions.length === 0">No divisions available.</p>
-
-        <!-- Pagination Controls -->
-        <div class="pagination">
-          <button class="pagination-buttons" (click)="changeDivPage('prev')" [disabled]="currentDivPage === 1">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="16px" fill="#FFFFFF">
-              <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/>
-            </svg>
-          </button>
-          <span>Page {{ currentDivPage }}</span>
-          <button class="pagination-buttons" (click)="changeDivPage('next')" [disabled]="(currentDivPage * rowsPerDivPage) >= divisions.length">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="16px" fill="#FFFFFF">
-              <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/>
-            </svg>
-          </button>
-        </div>
-      </section>
-    </div>
 </div>
 
 <!-- Add New Division Modal -->

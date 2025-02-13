@@ -60,22 +60,30 @@
 
 
 /* General Styles */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f8f9fa;
-  margin: 0;
+* {
   padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* font-family: "poppins", sans-serif; */
+}
+body {
+  background-color: #f8f9fa;
 }
 
-h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 1.5rem;
+.pending-request-header {
+  text-align: center;  
+  margin-top: 20px;
+  margin-bottom: 20px;  
+  font-size: 24px;  
+  font-weight: bold; 
+}
+.table-container{
+  width: 100%;
+  overflow-x: auto;
 }
 
 /* Table Styles */
-.job-request-task {
+table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 2rem;
@@ -194,6 +202,16 @@ div.no-reports-message {
   display: none;
 }
 
+/* Ensure form fields are responsive */
+.edit-dialog .form-row {
+  flex-wrap: wrap;  /* Allow the items to wrap to the next line on smaller screens */
+}
+
+.edit-dialog .form-group {
+  flex: 1 1 45%; /* Allows the form fields to take up 45% of the space on smaller screens */
+  min-width: 200px; /* Prevents the fields from getting too small */
+}
+
 /* Edit Dialog Styling */
 .edit-dialog-overlay {
   position: fixed;
@@ -213,8 +231,14 @@ div.no-reports-message {
   padding: 10px;
   width: 700px;
   max-width: 95%;
+  max-height: 90vh; /* Limit the height to 90% of the viewport */
+  overflow-y: auto; /* Add vertical scrolling */
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#datetime_accomplished {
+  width: 100%; /* Adjust width to 100% to use available space */
 }
 
 .form-row {
@@ -307,7 +331,8 @@ button:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   max-width: 60%;
   width: 400px;
-
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .barcode-container {
@@ -782,6 +807,85 @@ background-color: #5f5f5f ;
   color: white;
 }
 
+
+@media (max-width: 1200px) {
+}
+
+@media (max-width: 768px) {
+/* Adjust table styling for smaller screens */
+table {
+  font-size: 12px;  /* Slightly smaller text on smaller screens */
+}
+
+
+.main-table-head, .main-table-row-data {
+  padding: 10px;  /* Adjust padding for better fit */
+}
+
+.action-btn {
+  font-size: 0.9rem;  /* Reduce button text size */
+  padding: 6px 10px;  /* Reduce button padding */
+}
+
+.view-dialog {
+  max-width: 95%; /* Ensure modal width is smaller on mobile */
+  width: auto;
+  margin: 10px;
+}
+
+/* Adjust text size and layout for mobile */
+.form-logo {
+  width: 40px; /* Smaller logo for mobile */
+}
+
+.title-form {
+  font-size: 16px; /* Adjust title size */
+}
+
+.sub-title-form {
+  font-size: 12px; /* Adjust subtitle size */
+}
+
+/* Make sure tables and content fit inside */
+.details-table,
+.client-table,
+.client-table-data {
+  width: 100%; /* Full width for mobile */
+}
+
+.textarea-like {
+  width: 100%; /* Ensure text areas are responsive */
+  padding: 8px;
+}
+
+.row {
+  flex-direction: column; /* Stack columns vertically */
+  gap: 10px;
+}
+
+.half-width {
+  width: 100%; /* Make columns take full width on mobile */
+}
+
+.barcode-container {
+  width: 100%;
+}
+
+}
+@media (max-width: 480px) {
+  table {
+    font-size: 11px;  /* Further reduce text size */
+  }
+
+  .main-table-head, .main-table-row-data {
+    padding: 8px;  /* Reduce padding for compact layout */
+  }
+
+  .action-btn {
+    font-size: 0.85rem;  /* Smaller action button size */
+    padding: 5px 8px;  /* Further reduce padding */
+  }
+}
 
 
 
