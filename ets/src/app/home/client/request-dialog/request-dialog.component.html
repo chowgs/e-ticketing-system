@@ -9,9 +9,8 @@
 
     <ng-template #formTemplate>
       <h2 class="form-title">Generate Service Request</h2>
-    
       <div class="select-search-type">
-        <label for="request">REQUEST IT</label><br>
+        <label for="request">Request Technical Support</label><br>
         <select id="select_request" [(ngModel)]="selectedRequestDivision" required>
           <option value="" disabled selected>Select Division</option>
           <option *ngFor="let requestDivision of requestDivisions" [value]="requestDivision.requestDiv_Id">{{ requestDivision.requestDiv_Name }}</option>

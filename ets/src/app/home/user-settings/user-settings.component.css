@@ -88,6 +88,8 @@ section {
   text-align: left; 
   overflow-y: auto;
   position: relative;
+  max-height: 70vh;  /* Adjust based on your layout */
+  overflow-y: auto;
 }
 
 /* Close Button for change pass, edit perms, add new user,  */

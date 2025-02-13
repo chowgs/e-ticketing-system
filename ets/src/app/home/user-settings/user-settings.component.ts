@@ -366,44 +366,6 @@ export class UserSettingsComponent implements OnInit{
     }
   }
   
-
-  // toggleSelectedUserPerms(permission: number, children?: { id: number }[]): void {
-  //   const index = this.selectedPermissions.indexOf(permission);
-  
-  //   if (index > -1) {
-  //     // If permission is already selected, remove it
-  //     this.selectedPermissions.splice(index, 1);
-  
-  //     // If it has children, remove them as well
-  //     if (children) {
-  //       children.forEach(child => {
-  //         const childIndex = this.selectedPermissions.indexOf(child.id);
-  //         if (childIndex > -1) {
-  //           this.selectedPermissions.splice(childIndex, 1);
-  //         }
-  //       });
-  //     }
-  //   } else {
-  //     // Add the selected permission
-  //     this.selectedPermissions.push(permission);
-  
-  //     // If it has children, add them as well
-  //     if (children) {
-  //       children.forEach(child => {
-  //         if (!this.selectedPermissions.includes(child.id)) {
-  //           this.selectedPermissions.push(child.id);
-  //         }
-  //       });
-  //     }
-  
-  //     // If a child is selected, ensure the parent (Administrator) is also selected
-  //     const parent = this.allPermissions.find(p => p.children?.some(child => child.id === permission));
-  //     if (parent && !this.selectedPermissions.includes(parent.id)) {
-  //       this.selectedPermissions.push(parent.id);
-  //     }
-  //   }
-  // }
-  
   // save current user's permissions 
   savePermissions(): void {
     this.isAddingPerms = true;

@@ -12,7 +12,8 @@
   font-size: 1.5rem;
   font-weight: bold;
   background-color: #de4a25;
-  padding: 6px;
+  padding: 20px;
+  width: 100%;
   border-radius: 4px;
   color: white;
 }
@@ -47,13 +48,6 @@
   margin-top: 5px;
 }
 
-button {
-  background-color: green;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 2px;
-}
-
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -69,3 +63,53 @@ button {
   vertical-align: middle;
 }
 
+select#select_request {
+  padding: 10px;
+  background-color: beige;
+  border-radius: 6px;
+}
+
+button {
+  padding: 10px;
+  background-color: #de4a25;
+  width: 100%;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+}
+button:hover {
+  background-color: #ff8161;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .request-form {
+    max-width: 100%; /* Allow full width on smaller screens */
+    gap: 15px; /* Reduced gap for mobile */
+  }
+
+  .form-column {
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .half-width {
+    width: 100%; /* Full width on mobile */
+  }
+
+  .form-actions {
+    width: 100%; /* Make button width full on mobile */
+    margin-top: 10px;
+  }
+
+  .mat-spinner {
+    margin: 0 auto;
+  }
+
+  select#select_request {
+    width: 100%; /* Make select input full width */
+    padding: 12px;
+  }
+}
