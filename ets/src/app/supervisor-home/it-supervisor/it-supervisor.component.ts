@@ -22,8 +22,11 @@ export class ItSupervisorComponent implements OnInit {
   approvedReports: any[] = [];
   selectedReport: any = null;
   filteredReports: any[] = [];
-
+  paginatedReports: any[] = []; 
   searchTerm: string = '';
+  currentPage: number = 1;
+  itemsPerPage: number = 2;  // Adjust the number of items per page as needed
+  totalPages: number = 1;
 
   @ViewChild('reviewDialog', { static: false }) reviewDialog!: TemplateRef<any>;
   @ViewChild('confirmDialog', { static: false }) confirmDialog!: TemplateRef<any>;
@@ -44,6 +47,8 @@ export class ItSupervisorComponent implements OnInit {
           console.log('Approved Reports:', response.data);
           this.approvedReports = response.data;
           this.filteredReports = this.approvedReports; // Initialize filtered reports
+          this.totalPages = Math.ceil(this.filteredReports.length / this.itemsPerPage); // Calculate total pages
+          this.updatePagination();
         } else {
           console.error('Failed to fetch approved reports');
         }
@@ -54,6 +59,19 @@ export class ItSupervisorComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+  updatePagination(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedReports = this.filteredReports.slice(startIndex, endIndex);  // Display only the current page
+  }
+
+  changePage(pageNumber: number): void {
+    if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+      this.currentPage = pageNumber;
+      this.updatePagination();
+    }
   }
 
   openReviewDialog(report: any): void {
@@ -109,5 +127,8 @@ export class ItSupervisorComponent implements OnInit {
 
       return matchesSearch;
     });
-  }  
+    this.totalPages = Math.ceil(this.filteredReports.length / this.itemsPerPage); // Recalculate pages after filtering
+    this.currentPage = 1; // Reset to the first page after filtering
+    this.updatePagination();
+  }
 }

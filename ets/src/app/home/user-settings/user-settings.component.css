@@ -1,35 +1,22 @@
-  /* General Styles */
-  * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    /* font-family: "poppins", sans-serif; */
-  }
-    body {
-      background-color: #f8f9fa;
-    }
-  
-/* Settings Container */
-.settings-container {
-    /* max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
-  }
-
+/* General Styles */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* font-family: "poppins", sans-serif; */
+}
+body {
+  background-color: #f8f9fa;
+}
 .top-section {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
-
 .top-section section {
   flex: 1;
   min-width: 300px;
-}
-  
+} 
 section {
   padding: 20px;
   background-color: #fff;
@@ -37,7 +24,6 @@ section {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 }
-
 /* Change Password Modal */
 .modal {
   position: fixed;
@@ -51,7 +37,6 @@ section {
   align-items: center;
   z-index: 1000;
 }
-
 /* Modal Content */
 .modal-content {
   background-color: #fff;
@@ -62,7 +47,6 @@ section {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
-
 /* Edit Permissions Overlay */
 .modal-I {
   position: fixed;
@@ -76,7 +60,6 @@ section {
   align-items: center;
   z-index: 1000;
 }
-
 /* Edit Permissions Modal Content */
 .modal-I-content {
   background-color: #fff;
@@ -91,7 +74,6 @@ section {
   max-height: 70vh;  /* Adjust based on your layout */
   overflow-y: auto;
 }
-
 /* Close Button for change pass, edit perms, add new user,  */
 .close {
   position: absolute;
@@ -102,22 +84,15 @@ section {
   color: #333;
   cursor: pointer;
 }
-
-.close:hover{
-  color: #ff0000; /* Change color on hover */
-}
-
 .close-btn {
   font-size: 24px;
   font-weight: bold;
   cursor: pointer;
   color: #333;
 }
-
-.close-btn:hover {
+.close:hover, .close-btn:hover{
   color: #ff0000; /* Change color on hover */
 }
-
 
 /* H2 Change pass, Edit pass  */
 .h2 {
@@ -125,31 +100,26 @@ section {
   font-size: 24px;
   color: #333;
 }
-
 /* account settings form */
 .settings-form {
   display: grid;
   grid-template-columns: 1fr 1fr; /* Two columns */
   gap: 20px;
 }
-
 /* division columns for account settings  */
 .form-column {
   display: flex;
   flex-direction: column;
 }
-
 .form-column.form-column.full-width {
   grid-column: span 2; /* Makes the Save button span across both columns */
 }
-
 /* all labels  */
 label {
   margin: 10px 0 5px;
   font-size: 16px;
   color: #555;
 }  
-
 input[type="text"] {
   padding: 10px;
   border: 1px solid #ccc;
@@ -157,12 +127,10 @@ input[type="text"] {
   font-size: 14px;
   transition: border-color 0.3s;
 } 
-
 input[type="text"]:focus {
   border-color: #007bff;
   outline: none;
 }
-
 /* all buttons  */
 button {
   margin-top: 20px;
@@ -174,7 +142,6 @@ button {
   cursor: pointer;
   transition: background-color 0.3s;
 }
-
 button:hover {
   background-color: #252525;
 }
@@ -260,42 +227,32 @@ button:hover {
   }
 }
 
-  
-
-  .nested-permissions {
-    margin-left: 20px;
-    padding-left: 20px;
-    border-left: 2px solid #ddd;
-    margin-top: 10px;
-  }
-
-  .nested-permissions label {
-    font-size: 14px;
-    color: #777;
-  }
-  
-  /* Permissions Section */
-  .permissions {
-    margin-bottom: 20px;
-
-  }
-  
-  .permission-column {
-    flex: 1;
-    min-width: 200px;
-  }
-  
-  .permissions label {
-    display: block;
-    margin: 12px 0;
-    font-size: 16px;
-    color: #555;
-    line-height: 1.5;
-    padding-left: 30px; /* Align labels with checkboxes */
-    position: relative;
-  }
-
-/* Custom Checkbox Style */
+.nested-permissions {
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 2px solid #ddd;
+  margin-top: 10px;
+}  
+.nested-permissions label {
+  font-size: 14px;
+  color: #777;
+}
+.permissions {
+  margin-bottom: 20px;
+}
+.permission-column {
+  flex: 1;
+  min-width: 200px;
+}
+.permissions label {
+  display: block;
+  margin: 12px 0;
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5;
+  padding-left: 30px;
+  position: relative;
+}
 .permissions input[type="checkbox"] {
   position: absolute;
   left: 0;
@@ -305,12 +262,9 @@ button:hover {
   cursor: pointer;
   accent-color: #007bff; /* Blue checkboxes */
 }
-
-/* Permission Checkbox Hover Effect */
 .permissions input[type="checkbox"]:hover {
   background-color: #f0f8ff; /* Light blue background on hover */
 }
-
 /* Division Dropdown Styling */
 select {
   padding: 12px 14px;
@@ -324,26 +278,22 @@ select {
   cursor: pointer;
   box-sizing: border-box;
 }
-
 /* Focus state of the dropdown */
 select:focus {
   border-color: #007bff;
   outline: none;
   background-color: #e9f4fe; /* Light blue background when focused */
 }
-
 /* Dropdown Option Styling */
 select option {
   padding: 10px;
   font-size: 14px;
   color: #333;
 }
-
 /* Custom arrow for dropdown */
 select::-ms-expand {
   display: none; /* Remove default arrow in IE */
 }
-
 /* Custom style for dropdown arrow */
 select::after {
   content: '▼';
@@ -589,79 +539,7 @@ a:hover {
   background-color: #252525;
 }
 
-/* Modal overlay and content styling */
-.addusermodal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-/* Modal Content */
-.addusermodal-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  width: 100%;
-  animation: slide-down 0.3s ease-out;
-}
-
-.addpersonnelmodal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5); /* Transparent dark background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999; /* Ensure it's on top */
-}
-
-.addpersonnelmodal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px; /* Adjust size as needed */
-  position: relative; /* To position the close button */
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.addusermodal-content label {
-  margin-top: 10px;
-  font-weight: bold;
-  font-size: 14px;
-  color: #555;
-  text-align: left;
-}
-
-.addusermodal-content input,
-.addusermodal-content select {
-  margin-top: 5px;
-  padding: 8px;
-  font-size: 14px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  width: 100%;
-}
 
 .add-user-button:disabled {
   background-color: #ccc;
@@ -701,14 +579,16 @@ a:hover {
   align-items: center;
   z-index: 9999;
 }
-
 .modal-content {
   background: #fff;
   width: 60%;
   max-width: 800px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   animation: slide-down 0.3s ease-out;
 }
 
@@ -728,74 +608,231 @@ a:hover {
   top: 10px; /* Distance from top */
   right: 10px; /* Distance from right */
 }
-
 .modal-body {
-  padding: 20px;
+  font-size: 1rem;
+  color: #333;
+  max-height: 300px;
+  overflow-y: auto;
 }
-
 .form-fields {
   display: flex;
-  gap: 20px;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
 }
-
-.modal-footer {
-  background: #f9f9f9;
-  padding: 15px;
-  text-align: right;
+.user-info-fields {
+  flex: 1 1 calc(50% - 15px);
 }
-
-/* Main permissions container */
-.newuser-permissions {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto; 
-}
-
-/* Header for the permissions section */
-.newuser-permission-header {
-  font-size: 20px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 10px;
-}
-
-/* Header for each section */
-.newuser-permission-column h5 {
-  font-size: 18px;
+.newuser-perms-header h4 {
+  font-size: 1.2rem;
   font-weight: bold;
-  color: #2572de;
-  margin-bottom: 15px;
-  margin-top: 15px;
-}
-
-/* Hover effect on checkboxes */
-.newuser-permission-column input[type="checkbox"]:hover {
-  transform: scale(1.1);
-}
-
-/* Sub-permissions label style */
-.newuser-sub-permissions label {
-  font-size: 14px;
   color: #555;
+  margin-bottom: 10px;
+}
+
+.newuser-perms-column-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.newuser-perms-column {
+  flex: 1;
+}
+
+.newuser-perms-column h5 {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.newuser-perms-column label {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.newuser-sub-perms {
+  padding-left: 20px;
+  font-size: 0.9rem;
+}
+
+.newuser-sub-perms label {
   margin-bottom: 5px;
 }
 
-/* Responsive layout */
+/* Button Styles */
+.save-btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.save-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.save-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Spinner Animation */
+.button-spinner-I {
+  border: 2px solid #fff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+/* Permissions Section */
+.permission {
+  margin-top: 20px;
+  max-height: 350px;
+  overflow-y: auto; /* Scrollable if too many permissions */
+}
+
+.permission label {
+  font-size: 1rem;
+  color: #333;
+  display: block;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.nested-permission {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.nested-permission label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Button Styles */
+.submit-btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+.editName {
+  text-align: left;
+}
+
+
+/* Responsiveness */
 @media (max-width: 768px) {
-  .newuser-permission-columns {
+  .modal-content {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .modal-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .user-info-fields {
+    flex: 1 1 100%;
+  }
+
+  .newuser-perms-column-container {
     flex-direction: column;
   }
 
-  .newuser-permission-column {
+  .newuser-perms-column {
     width: 100%;
-    margin-bottom: 20px;
+  }
+
+  .save-btn {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+
+  .submit-btn {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+  }
+
+  .nested-permission label {
+    font-size: 0.8rem;
+  }
+
+  .permission {
+    max-height: 300px;
   }
 }
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .form-fields input,
+  .form-fields select {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .save-btn {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+
+  .submit-btn {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+
+  .nested-permission label {
+    font-size: 0.7rem;
+  }
+
+  .permission {
+    max-height: 250px;
+  }
+}
+
+
+
+
+

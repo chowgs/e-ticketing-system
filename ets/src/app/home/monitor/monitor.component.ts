@@ -15,6 +15,9 @@ export class MonitorComponent implements OnInit {
   reports: any[] = [];
   personnelNames: any[] = []; // Store personnel names
   isLoading: boolean = true; // Initialize loading flag
+  currentPage = 1;
+  itemsPerPage = 8;
+
 
   constructor(private authService: AuthService, private notificationService: NotificationService) {}
 
@@ -61,32 +64,58 @@ export class MonitorComponent implements OnInit {
     );
   }
 
-assignPersonnel(report: any): void {
-  if (!report.selectedPersonnelId) {
-    this.notificationService.showNotification('Please select a personnel', 'warning');
-    return;
+  assignPersonnel(report: any): void {
+    if (!report.selectedPersonnelId) {
+      this.notificationService.showNotification('Please select a personnel', 'warning');
+      return;
+    }
+
+    // Set assigning state for the specific report
+    report.isAssigning = true;
+
+    this.authService.assignPersonnelToReport(report.control_no, report.selectedPersonnelId).subscribe(
+      (response) => {
+        if (response.status === 'success') {
+          this.notificationService.showNotification('Personnel has been assigned', 'success');
+          report.personnel_id = report.selectedPersonnelId; // Update displayed personnel_id
+        } else {
+          this.notificationService.showNotification('Failed to assign personnel', 'error');
+        }
+        report.isAssigning = false; // Reset assigning state
+      },
+      (error) => {
+        console.error("Error assigning personnel:", error);
+        this.notificationService.showNotification('An error has occured while trying to assign personnel', 'error');
+        report.isAssigning = false; // Reset assigning state
+      }
+    );
   }
 
-  // Set assigning state for the specific report
-  report.isAssigning = true;
+  // Get the paginated reports
+  get paginatedReports() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.reports.slice(startIndex, endIndex);
+  }
 
-  this.authService.assignPersonnelToReport(report.control_no, report.selectedPersonnelId).subscribe(
-    (response) => {
-      if (response.status === 'success') {
-        this.notificationService.showNotification('Personnel has been assigned', 'success');
-        report.personnel_id = report.selectedPersonnelId; // Update displayed personnel_id
-      } else {
-        this.notificationService.showNotification('Failed to assign personnel', 'error');
-      }
-      report.isAssigning = false; // Reset assigning state
-    },
-    (error) => {
-      console.error("Error assigning personnel:", error);
-      this.notificationService.showNotification('An error has occured while trying to assign personnel', 'error');
-      report.isAssigning = false; // Reset assigning state
+  // Navigate to next page
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
     }
-  );
-}
+  }
+
+  // Navigate to previous page
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  // Calculate the total number of pages
+  get totalPages() {
+    return Math.ceil(this.reports.length / this.itemsPerPage);
+  }
 }
 
 

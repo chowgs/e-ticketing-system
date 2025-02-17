@@ -1,6 +1,6 @@
 
 
-<div class="settings-container" *ngIf="showAccountSettingsSection"> 
+<div *ngIf="showAccountSettingsSection"> 
   <div *ngIf="isLoadingFetch" class="spinner-container">
     <div class="loader"></div>
     <p>Loading data...</p>
@@ -44,8 +44,6 @@
       </form>
     </section>
   </div>
-
-
 </div>
 
 <div class="user-management-container" *ngIf="showUserManagement" >
@@ -114,19 +112,14 @@
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <span class="close" (click)="closeAddUserModal()">×</span>
+        <h3>Add New User</h3>
       </div>
       <div class="modal-body">
         <form [formGroup]="addUserForm">
-          <!-- Form Fields: 2 Column Layout -->
           <div class="form-fields">
-            <div class="">
-              <!-- <label for="id_number">ID No.</label> -->
+            <div class="user-info-fields">
               <input formControlName="id_number" type="text" placeholder="ID No." />
-
-              <!-- <label for="password">Password</label> -->
               <input formControlName="password" type="password" placeholder="Password" />
-
-              <!-- <label for="division">Division</label> -->
               <select formControlName="division" class="userSelect">
                 <option value="" disabled>Select Division</option>
                 <option *ngFor="let division of divisions" [value]="division.division_id">
@@ -134,14 +127,9 @@
                 </option>
               </select>
             </div>
-            <div class="">
-              <!-- <label for="name">Name</label>  -->
+            <div class="user-info-fields">
               <input formControlName="name" type="text" placeholder="Name"/>
-
-              <!-- <label for="designation">Designation</label> -->
               <input formControlName="designation" type="text" placeholder="Designation"/>
-
-              <!-- <label for="office">Office</label> -->
               <select formControlName="office" class="userSelect">
                 <option value="" disabled>Select Department</option>
                 <option *ngFor="let office of offices" [value]="office.office_id">
@@ -150,20 +138,20 @@
               </select>
             </div>
           </div>
-
           <!-- Permissions Section -->
-          <div class="newuser-permissions">
-            <div class="newuser-permission-header">
-              <h4>Manage Permissions</h4>
+          <div class="newuser-perms-container">
+            <div class="newuser-perms-header">
+              <h4>Add Permissions</h4>
             </div>
-            <div class="newuser-permission-columns">
-              <div class="newuser-permission-column">
+            <div class="newuser-perms-column-container">
+              <!-- Administrator Permissions -->
+              <div class="newuser-perms-column">
                 <h5>Administrator</h5>
                 <label>
                   <input type="checkbox" [checked]="selectedAddPermissions.includes(1.6)" (change)="toggleUserPermission(1.6)" />
                   Enable Administrator
                 </label>
-                <div class="newuser-sub-permissions">
+                <div class="newuser-sub-perms">
                   <label *ngFor="let adminPermission of adminSubPermissions">
                     <input
                       type="checkbox"
@@ -174,8 +162,9 @@
                   </label>
                 </div>
               </div>
-          
-              <div class="newuser-permission-column">
+  
+              <!-- Other Permissions -->
+              <div class="newuser-perms-column">
                 <h5>Other Permissions</h5>
                 <label>
                   <input type="checkbox" [checked]="selectedAddPermissions.includes(0)" (change)="toggleUserPermission(0)" />
@@ -196,7 +185,6 @@
               </div>
             </div>
           </div>
-          
         </form>
       </div>
       <div class="modal-footer">
@@ -207,10 +195,11 @@
       </div>
     </div>
   </div>
+  
 
   <!-- Add New Personnel Modal -->
-  <div *ngIf="isAddPersonnelModalOpen" class="addpersonnelmodal-overlay" (click)="closeAddPersonnelModal()">
-    <div class="addpersonnelmodal-content" (click)="$event.stopPropagation()">
+  <div *ngIf="isAddPersonnelModalOpen" class="modal-overlay" (click)="closeAddPersonnelModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header-personnel">
       </div>
       <form [formGroup]="addPersonnelForm">
@@ -239,48 +228,46 @@
 
 <div class="modal-overlay" *ngIf="isUserEditModalOpen" (click)="closeUserEditModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <h3>Edit User</h3>
     <form (ngSubmit)="updateUser()">
-      <label for="">Name</label>
+      <label class="editName">Name</label>
       <input
        id="editUserName"
        [(ngModel)]="selectedUser.name"
        name="editUserName"
        required
        />
-       <label for="">Designation</label>
+       <label class="editDesignation">Designation</label>
        <input
          id="editUserDesignation"
          [(ngModel)]="selectedUser.designation"
          name="editUserDesignation"
          readonly
-       />
-
-      <h3>Manage Permissions</h3>
-      <div class="permission">
-        <div *ngFor="let permission of allPermissions">
-          <label>
-            <input 
-              type="checkbox"
-              [checked]="selectedPermissions.includes(permission.id)"
-              (change)="toggleSelectedUserPermission(permission.id, permission.children)" 
-            />
-            {{ permission.label }}
-          </label>
-          
-          <!-- Nested Permissions -->
-          <div class="nested-permission" *ngIf="permission.children?.length">
-            <label *ngFor="let child of permission.children">
-              <input 
-                type="checkbox" 
-                [checked]="selectedPermissions.includes(child.id)"
-                (change)="toggleSelectedUserPermission(child.id)"
-              />
-              {{ child.label }}
-            </label>
-          </div>
-        </div>
-      </div>
+       />      
+       <h3>Manage Permissions</h3>
+       <div class="permission">
+         <div *ngFor="let permission of allPermissions">
+           <label>
+             <input 
+               type="checkbox"
+               [checked]="selectedPermissions.includes(permission.id)"
+               (change)="toggleSelectedUserPermission(permission.id, permission.children)" 
+             />
+             {{ permission.label }}
+           </label>
+           
+           <!-- Nested Permissions -->
+           <div class="nested-permission" *ngIf="permission.children?.length">
+             <label *ngFor="let child of permission.children">
+               <input 
+                 type="checkbox" 
+                 [checked]="selectedPermissions.includes(child.id)"
+                 (change)="toggleSelectedUserPermission(child.id)"
+               />
+               {{ child.label }}
+             </label>
+           </div>
+         </div>
+       </div>
 
       <button type="submit" class="submit-btn" [disabled]="isChangingPassword">
         <span *ngIf="isChangingPassword" class="spinner"></span>

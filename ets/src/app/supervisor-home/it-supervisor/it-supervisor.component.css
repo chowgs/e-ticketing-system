@@ -244,6 +244,11 @@ table.job-request-task tr:nth-child(even) td {
   background-color: #218838;
 }
 
+.page-item {
+  margin-right: 20px;
+}
+
+
 @media (max-width: 1200px) {
 }
 

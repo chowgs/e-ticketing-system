@@ -18,7 +18,7 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let report of reports">
+      <ng-container *ngFor="let report of paginatedReports">
         <tr *ngIf="!report.personnel_id">
           <td class="main-table-row-data">{{ report.name }}</td>
           <td class="main-table-row-data">{{ report.issue_request }}</td>
@@ -46,4 +46,10 @@
       </ng-container>
     </tbody>
   </table>
+  
+  <div class="pagination-controls">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+  </div>
 </div>

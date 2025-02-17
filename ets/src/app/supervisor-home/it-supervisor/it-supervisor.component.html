@@ -20,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let report of filteredReports">
+      <ng-container *ngFor="let report of paginatedReports">
         <tr *ngIf="report.accept !== '1'">
           <td class="main-table-row-data">{{ report.name }}</td>
           <td class="main-table-row-data">{{ report.issue_request }}</td>
@@ -53,6 +53,30 @@
       </ng-container>
     </tbody>
   </table>
+
+  <nav *ngIf="totalPages > 1" aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <!-- Previous Button -->
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <button class="page-link" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+          Previous
+        </button>
+      </li>
+  
+      <!-- Current Page Info -->
+      <li class="page-item disabled">
+        <span class="page-link">Page {{currentPage}} of {{totalPages}}</span>
+      </li>
+  
+      <!-- Next Button -->
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <button class="page-link" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+          Next
+        </button>
+      </li>
+    </ul>
+  </nav>
+  
   </div>  
 </div>
 
