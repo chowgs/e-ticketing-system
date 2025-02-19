@@ -1,4 +1,49 @@
-.access-denied {
-    text-align: center;
-    margin-top: 50px;
+/* Access Denied Page Style */
+.access-denied-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.access-denied-heading {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #f44336;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.access-denied-message {
+  font-size: 1.5rem;
+  color: #555;
+  text-align: center;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .access-denied-heading {
+    font-size: 2.5rem;
   }
+
+  .access-denied-message {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .access-denied-heading {
+    font-size: 2rem;
+  }
+
+  .access-denied-message {
+    font-size: 1rem;
+    margin: 0 10px;
+  }
+}

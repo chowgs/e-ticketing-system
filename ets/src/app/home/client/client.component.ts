@@ -148,35 +148,6 @@ export class ClientComponent {
   closeLoginForm(): void {
     this.isLoginVisible = false; // Close the login form
   }
-  
-
-
- // onLogin(): void {
-  //   if (this.loginForm.invalid) {
-  //     this.notificationService.showNotification('Please fill out all required fields.', 'error');
-  //     return;
-  //   }
-  
-  //   this.isLoginLoading = true;
-
-  //   this.authService.login(this.loginForm.value).subscribe(
-  //     (response: any) => {
-  //       this.isLoginLoading = false;
-  //       if (response.status === 'success') {
-  //         this.notificationService.showNotification('Login Successful!', 'success');
-  //         setTimeout(() => this.router.navigate(['/dashboard']), 2500);
-
-  //       } else {
-  //         this.notificationService.showNotification(response.message, 'error');
-  //       }
-  //     },
-  //     (error) => {
-  //       this.isLoginLoading = false;
-  //       this.notificationService.showNotification('An error occurred. Please try again later.', 'error');
-
-  //     }
-  //   );
-  // }
 
   
 }

@@ -14,6 +14,7 @@ const httpOptions = {
 })
 export class AuthService {
   private readonly AUTH_TOKEN_KEY = 'authToken'; // Store token locally (or session)
+  private readonly USER_PERMISSIONS_KEY = 'permissions'; // New key for permissions
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -26,7 +27,17 @@ export class AuthService {
   getAuthToken(): string | null {
     return localStorage.getItem(this.AUTH_TOKEN_KEY);
   }
-
+  setUserPermissions(permissions: string[]): void {
+    localStorage.setItem(this.USER_PERMISSIONS_KEY, JSON.stringify(permissions)); // Store permissions as JSON string
+  }
+  getCurrentUserPermissions(): Observable<string[]> {
+    const permissions = JSON.parse(localStorage.getItem(this.USER_PERMISSIONS_KEY) || '[]');
+    return new Observable((observer) => {
+      observer.next(permissions);
+      observer.complete();
+    });
+  }
+  
   // Check if the user is logged in by verifying session or token for auth
   isLoggedIn(): boolean {
     return !!localStorage.getItem('authToken'); 
@@ -40,6 +51,7 @@ export class AuthService {
   // Clear auth token during logout
   clearAuthToken(): void {
     localStorage.removeItem(this.AUTH_TOKEN_KEY);
+    localStorage.removeItem(this.USER_PERMISSIONS_KEY);
   }
 
   login(userData: any): Observable<any> {
@@ -47,6 +59,9 @@ export class AuthService {
       tap((response: any) => {
         if (response.status === 'success') {
           this.setAuthToken(response.token); // Store token on success
+          this.setUserPermissions(response.permissions);
+          console.log('User permissions set:', response.permissions); // Log permissions
+
         }
       })
     );
