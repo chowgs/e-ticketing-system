@@ -25,7 +25,7 @@ export class ItSupervisorComponent implements OnInit {
   paginatedReports: any[] = []; 
   searchTerm: string = '';
   currentPage: number = 1;
-  itemsPerPage: number = 2;  // Adjust the number of items per page as needed
+  itemsPerPage: number = 5;  // Adjust the number of items per page as needed
   totalPages: number = 1;
 
   @ViewChild('reviewDialog', { static: false }) reviewDialog!: TemplateRef<any>;

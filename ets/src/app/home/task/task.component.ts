@@ -33,13 +33,13 @@ export class TaskComponent implements OnInit {
   isEditDialogOpen: boolean = false;
   isForReleaseDialogOpen: boolean = false;
 
-  filteredReports: any[] = [];
   selectedStatus: string = 'Pending'; // Default status filter
   
   isConfirmationDialogOpen: boolean = false; // Tracks if the confirmation dialog is open
   currentDate: string = ''; // Stores the current date
   currentReport: any = null; // Stores the report being accepted  
-
+  
+  filteredReports: any[] = [];
   paginatedReports: any[] = [];
   searchQuery: string = '';
   currentPage: number = 1;
@@ -452,14 +452,14 @@ export class TaskComponent implements OnInit {
     this.totalPages = Math.ceil(this.filteredReports.length / this.itemsPerPage);
     this.changePage(1); // Reset to the first page
   }
-  
+
   changePage(page: number): void {
     this.currentPage = page;
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.paginatedReports = this.filteredReports.slice(startIndex, endIndex);
   }
-
+  
   acceptReport(report: any): void {
     this.openConfirmationDialog(report); // Open confirmation dialog 
   }  

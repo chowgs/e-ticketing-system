@@ -16,7 +16,7 @@ export class MonitorComponent implements OnInit {
   personnelNames: any[] = []; // Store personnel names
   isLoading: boolean = true; // Initialize loading flag
   currentPage = 1;
-  itemsPerPage = 8;
+  itemsPerPage = 5;
 
 
   constructor(private authService: AuthService, private notificationService: NotificationService) {}
@@ -109,6 +109,13 @@ export class MonitorComponent implements OnInit {
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
+    }
+  }
+
+  // Change the current page manually
+  changePage(pageNumber: number): void {
+    if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+      this.currentPage = pageNumber;
     }
   }
 

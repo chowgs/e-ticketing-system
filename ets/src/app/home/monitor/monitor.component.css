@@ -327,6 +327,63 @@
     flex-grow: 1
   }
 
+  /* Pagination Container */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  padding: 0;
+}
+
+/* Page Item */
+.page-item {
+  list-style-type: none;
+}
+
+/* Page Link */
+.page-link {
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  padding: 8px 16px;
+  color: #de4a25;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover Effect */
+.page-link:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Disabled State */
+.page-item.disabled .page-link {
+  background-color: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+  border-color: #e9ecef;
+}
+
+/* Active Page (Current Page) */
+.page-item.disabled .page-link {
+  font-weight: bold;
+  background-color: #333;
+  color: white;
+}
+
+/* Previous and Next Buttons */
+.page-link:focus, .page-link:active {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.6);
+}
+
+/* Optional Custom Styling for the navigation container */
+nav {
+  font-family: 'Arial', sans-serif;
+}
+
 
   @media (max-width: 1200px) {
   }

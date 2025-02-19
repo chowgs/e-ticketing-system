@@ -96,11 +96,29 @@
       </tfoot>
     </table> 
   </div>
-  <div class="pagination">
-    <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">Previous</button>
-    <span>Page {{ currentPage }} of {{ totalPages }}</span>
-    <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">Next</button>
-  </div>
+<!-- Pagination -->
+<nav *ngIf="totalPages > 1" aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    <!-- Previous Button -->
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <button class="page-link" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+        Previous
+      </button>
+    </li>
+
+    <!-- Current Page Info -->
+    <li class="page-item disabled">
+      <span class="page-link">Page {{currentPage}} of {{totalPages}}</span>
+    </li>
+
+    <!-- Next Button -->
+    <li class="page-item" [class.disabled]="currentPage === totalPages">
+      <button class="page-link" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+        Next
+      </button>
+    </li>
+  </ul>
+</nav>
 </div>
 
 <div *ngIf="isLoading" class="spinner-container">
