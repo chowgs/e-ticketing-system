@@ -27,9 +27,11 @@ export class AuthService {
   getAuthToken(): string | null {
     return localStorage.getItem(this.AUTH_TOKEN_KEY);
   }
+  
   setUserPermissions(permissions: string[]): void {
     localStorage.setItem(this.USER_PERMISSIONS_KEY, JSON.stringify(permissions)); // Store permissions as JSON string
   }
+
   getCurrentUserPermissions(): Observable<string[]> {
     const permissions = JSON.parse(localStorage.getItem(this.USER_PERMISSIONS_KEY) || '[]');
     return new Observable((observer) => {

@@ -63,10 +63,15 @@
   vertical-align: middle;
 }
 
-select#select_request {
+/* select#select_request {
   padding: 10px;
   background-color: beige;
   border-radius: 6px;
+} */
+.request-div{
+  border: none;
+  color: #de4a25;
+  font-weight: 700;
 }
 
 button {
@@ -81,6 +86,15 @@ button:hover {
   background-color: #ff8161;
 }
 
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+  margin-left: 10px;
+}
+
+.cancel-btn:hover {
+  background-color: #aaa;
+}
 
 /* Responsive Styles */
 @media (max-width: 768px) {
@@ -108,8 +122,8 @@ button:hover {
     margin: 0 auto;
   }
 
-  select#select_request {
-    width: 100%; /* Make select input full width */
+  /* select#select_request {
+    width: 100%; 
     padding: 12px;
-  }
+  } */
 }

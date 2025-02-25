@@ -11,10 +11,18 @@
       <h2 class="form-title">Generate Service Request</h2>
       <div class="select-search-type">
         <label for="request">Request Technical Support</label><br>
-        <select id="select_request" [(ngModel)]="selectedRequestDivision" required>
+        <!-- <select id="select_request" [(ngModel)]="selectedRequestDivision" required>
           <option value="" disabled selected>Select Division</option>
           <option *ngFor="let requestDivision of requestDivisions" [value]="requestDivision.requestDiv_Id">{{ requestDivision.requestDiv_Name }}</option>
-        </select>
+        </select> -->
+        <input 
+          type="text" 
+          class="request-div"
+          [(ngModel)]="selectedRequestDivision" 
+          required 
+          [readonly]="true" 
+          [value]="requestDivisions.length > 0 ? requestDivisions[0].requestDiv_Name : 'No Division Found'" />
+
       </div>
       <br>
     
@@ -46,7 +54,6 @@
         </div>
     
         <div class="form-column">
-          <!-- Office Selection Field -->
           <mat-form-field class="half-width">
             <mat-label>Department</mat-label>
             <select matNativeControl [(ngModel)]="office_name" name="office_id" required>
@@ -55,7 +62,6 @@
             </select>
           </mat-form-field>
 
-          <!-- Division Selection Field -->
           <mat-form-field class="half-width">
             <mat-label>Division</mat-label>
             <select matNativeControl [(ngModel)]="division_name" name="division_id" required>
@@ -81,6 +87,10 @@
             <ng-template #loadingSpinner>
               <mat-spinner diameter="20" color="accent"></mat-spinner>
             </ng-template>
+          </button>
+
+          <button mat-raised-button type="button" (click)="closeDialog()" class="cancel-btn">
+            Cancel
           </button>
         </div>
     

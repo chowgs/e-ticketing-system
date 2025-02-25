@@ -32,7 +32,9 @@ export class RequestDialogComponent implements OnInit {
   division_name: string = '';
   issue_request: string = '';
 
-  constructor(public dialogRef: MatDialogRef<RequestDialogComponent>, private clientService: ClientService, private notificationService: NotificationService) {}
+  constructor(public dialogRef: MatDialogRef<RequestDialogComponent>, private clientService: ClientService, private notificationService: NotificationService) {
+    this.dialogRef.disableClose = true;
+  }
 
   ngOnInit(): void {
     this.loadData();
@@ -50,8 +52,13 @@ export class RequestDialogComponent implements OnInit {
       this.clientService.getRequestDivisions().subscribe(
         (response: any) => {
           if (response.status === 'success') {
-            // this.divisions = response.data;
-            this.requestDivisions = response.data;
+            // this.requestDivisions = response.data; this will display all request divisions 
+            this.requestDivisions = response.data.filter((division: any) => division.requestDiv_Id === "1");
+
+         // If there is a division available, set the selectedRequestDivision
+          if (this.requestDivisions.length > 0) {
+            this.selectedRequestDivision = this.requestDivisions[0].requestDiv_Name;
+          }
             resolve();
           } else {
             console.error('Failed to fetch divisions');
@@ -108,7 +115,6 @@ export class RequestDialogComponent implements OnInit {
   }
 
   submitRequest(): void {
-    // if (!this.selectedDivision) {
     if (!this.selectedRequestDivision) {
       this.notificationService.showNotification('Please select a division before submitting the request.', 'error');
       return;

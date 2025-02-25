@@ -1,1 +1,281 @@
-<p>log works!</p>
+<h3 class="head-title">Preventive Maintenance Checklist</h3>
+
+<div class="container mt-5">    
+    <form>
+        <div class="form-group">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="date">
+        </div>
+        <div class="form-group">
+            <label for="accountablePerson" class="form-label">Accountable Person</label>
+            <input type="text" class="form-control" id="accountablePerson">
+        </div>
+        <div class="form-group">
+            <label for="departmentOffice" class="form-label">Department/Office</label>
+            <input type="text" class="form-control" id="departmentOffice">
+        </div>
+        <div class="form-group">
+            <label for="designation" class="form-label">Designation</label>
+            <input type="text" class="form-control" id="designation">
+        </div>
+        <div class="form-group">
+            <label for="division" class="form-label">Division</label>
+            <input type="text" class="form-control" id="division">
+        </div>
+        <div class="form-group">
+            <label for="equipmentType" class="form-label">Equipment Type</label>
+            <input type="text" class="form-control" id="equipmentType">
+        </div>
+        <div class="form-group">
+            <label for="status" class="form-label">Status</label>
+            <input type="text" class="form-control" id="status">
+        </div>       
+        <div class="form-group">
+            <label for="par" class="form-label">Property Number (ICS/PAR)</label>
+            <input type="text" class="form-control" id="par">
+        </div>
+
+        <!-- Hardware Information  -->
+        <div class="container mt-5">
+            <h3 class="sub-head-title">Hardware Information</h3>        
+            <!-- Hardware Information Table -->
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Hardware Information</th>
+                        <th>Brand/Specification</th>
+                        <th>Serial Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="hardware-label">Motherboard</td>
+                        <td><input type="text" class="form-control" value=""></td>
+                        <td><input type="text" class="form-control" value=""></td>
+                    </tr>
+                    <tr>
+                        <td class="hardware-label">Processor</td>
+                        <td><input type="text" class="form-control" value=""></td>
+                        <td><input type="text" class="form-control" value=""></td>
+                    </tr>
+        
+                    <!-- Memory Variations -->
+                    <tr>
+                        <td rowspan="2" class="hardware-label">Memory<br>
+                            <span class="text-muted">Slot #1</span><br>
+                            <span class="text-muted">Slot #2</span>
+                        </td>
+                        <td><input type="text" class="form-control" value=""></td>
+                        <td><input type="text" class="form-control" value=""></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control" value=""></td>
+                        <td><input type="text" class="form-control" value=""></td>
+                    </tr>
+        
+                    <!-- Storage Variations -->
+                    <tr>
+                        <td rowspan="2" class="hardware-label">Storage<br>
+                            <span class="text-muted">HDD</span><br>
+                            <span class="text-muted">SSD</span>
+                        </td>
+                        <td><input type="text" class="form-control" value=""></td>
+                        <td><input type="text" class="form-control" value=""></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control" value=""></td>
+                        <td><input type="text" class="form-control" value=""></td>
+                    </tr>
+        
+                    <!-- Display Variations -->
+                    <tr>
+                        <td rowspan="2" class="hardware-label">Display<br>
+                            <span class="text-muted">Monitor</span><br>
+                            <span class="text-muted">Graphics Card</span>
+                        </td>
+                        <td><input type="text" class="form-control" value=""></td>
+                        <td><input type="text" class="form-control" value=""></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control" value=""></td>
+                        <td><input type="text" class="form-control" value=""></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="hardware-label">UPS</td>
+                        <td><input type="text" class="form-control" value=""></td>
+                        <td><input type="text" class="form-control" value=""></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Network Information  -->
+        <div class="container mt-5">
+            <h3 class="sub-head-title">Network Information</h3>        
+
+            <!-- Network Table -->
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Network</th>
+                        <th>Internet Status</th>
+                        <th>Connection Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="hardware-label">IP Address</td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="internetWith">
+                                <label class="form-check-label" for="internetWith">With Internet</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="wired">
+                                <label class="form-check-label" for="wired">Wired</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="hardware-label">MAC Address</td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="internetWithout">
+                                <label class="form-check-label" for="internetWithout">Without Internet</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="wireless">
+                                <label class="form-check-label" for="wireless">Wireless</label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Software Information -->
+        <div class="container mt-5">
+            <h3 class="sub-head-title mb-4">Software Information</h3>
+        
+            <!-- Software Details Table -->
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="hardware-label">Operating System/Device Name</td>
+                        <td><input type="text" class="form-control"></td>
+                        <td class="hardware-label">System Installed</td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr    >
+                    <tr>
+                        <td class="hardware-label">Microsoft Office</td>
+                        <td><input type="text" class="form-control"></td>
+                        <td>Others</td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <!-- Task Checklist Table -->
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>No.</th>
+                        <th>Task</th>
+                        <th>Check Box (if done)</th>
+                        <th>Findings/Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Delete .tmp files, old .zip files etc.</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Uninstall unnecessary programs</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Run the system information for windows</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Check the health status of the HDD or SSD</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Update and run antivirus software</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Change computer name according to IT equipment number</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Change admin password (if applicable)</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Set PGQ wallpaper</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>Clean the exterior/interior part of the system unit</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>Check printer connection</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>Check internet connection</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>Update maintenance monitoring slip</td>
+                        <td><input type="checkbox" class="form-check-input"></td>
+                        <td><input type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="font-weight: bold;">Recommendation:
+                            <input type="text" class="form-control">
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- <button type="submit" class="btn btn-primary btn-block">Submit</button> -->
+    </form>
+</div>
+
